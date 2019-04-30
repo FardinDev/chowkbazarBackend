@@ -869,13 +869,30 @@ h2.title {
 }
 
 .productinfo img {
-    width: 100%;
+    max-width: 100%;
+    height: auto;
 }
 
 .productinfo {
     position: relative;
+
 }
 
+.img {
+    position: relative;
+    width:  255px;
+    height: 300px;
+    background-repeat:   no-repeat;
+    background-size:     contain;
+}
+
+.c-img {
+    position: relative;
+    width:  150px;
+    height: 150px;
+    background-repeat:   no-repeat;
+    background-size:     contain;
+}
 .product-overlay {
     background: rgba(254, 152, 15, .8);
     top: 0;
