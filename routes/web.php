@@ -12,6 +12,7 @@
 */
 
 Route::get('/', 'UserController@home')->name('home');
+Route::get('/product/{id}', 'UserController@viewProduct')->name('product');
 
 
 Route::group(['prefix' => 'admin'], function () {

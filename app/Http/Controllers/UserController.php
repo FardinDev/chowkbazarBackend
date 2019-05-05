@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\SliderInfo;
 use App\ProductCategory;
 use App\Product;
-
+use DB;
 
 class UserController extends Controller
 {
@@ -21,12 +21,14 @@ class UserController extends Controller
         $cats = ProductCategory::with('childs')->where('parent_id', NULL)->get();
         $products = Product::orderBy('id')->get();
         $sliders = SliderInfo::where('is_active', 1)->get();
+        $brands = Product::select('brand', DB::raw('count(*) as count'))->groupBy('brand')->get();
+
         return view('user.home')->with(
             [
                 'sliders' => $sliders,
                 'cats' => $cats,
-                'products' => $products
-            
+                'products' => $products,
+                'brands' => $brands
                 ]);
     }
     /**
@@ -34,9 +36,23 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function viewProduct($id)
     {
-        //
+        $cats = ProductCategory::with('childs')->where('parent_id', NULL)->get();
+        $product = Product::where('id', $id)->first();
+        $products = Product::orderBy('id')->get();
+        $brands = Product::select('brand', DB::raw('count(*) as count'))->groupBy('brand')->get();
+
+    
+        return view('user.product-view')->with(
+            [
+           
+                'cats' => $cats,
+                'product' => $product,
+                'products' => $products,
+                'brands' => $brands
+            
+                ]);;
     }
 
 
