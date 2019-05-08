@@ -18,7 +18,38 @@
                         <div class="panel-body">
                             <ul>
                                 @foreach ($cat->childs as $subcat)
-                                <li><a href="#">{{$subcat->name}} </a></li>
+                                
+                                @if ($subcat->childs->count()>0)
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordian-1" href="#{{$subcat->id}}" style="font-size:small">
+                                                <span class="badge pull-right"><i class="fa fa-plus"></i></span>
+                                                {{$subcat->name}}
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="{{$subcat->id}}" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <ul>
+                                                @foreach ($subcat->childs as $subsubcat)
+                                                <li><a href="#" id="{{ $subsubcat->id }}">{{$subsubcat->name}} </a></li>
+                                                @endforeach
+                                                
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>	
+                                @else
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title"><a href="#" id="{{ $subsubcat->id }}">{{$subcat->name}}</a></h4>
+                                    </div>
+                                </div>
+                                        
+                                @endif
+
+
                                 @endforeach
                                 
                             </ul>
@@ -28,7 +59,7 @@
                 @else
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h4 class="panel-title"><a href="#">{{$cat->name}}</a></h4>
+                        <h4 class="panel-title"><a href="#" id="{{ $subsubcat->id }}">{{$cat->name}}</a></h4>
                     </div>
                 </div>
                         

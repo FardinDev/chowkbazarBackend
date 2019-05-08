@@ -18,7 +18,7 @@ class UserController extends Controller
      */
     public function home()
     {
-        $cats = ProductCategory::with('childs')->where('parent_id', NULL)->get();
+        $cats = ProductCategory::where('parent_id', NULL)->get();
         $products = Product::orderBy('id')->get();
         $sliders = SliderInfo::where('is_active', 1)->get();
         $brands = Product::select('brand', DB::raw('count(*) as count'))->groupBy('brand')->get();

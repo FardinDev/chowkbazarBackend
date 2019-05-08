@@ -112,7 +112,7 @@
 						</div>
 						<div class="mainmenu pull-left">
 							<ul class="nav navbar-nav collapse navbar-collapse">
-							<li><a href="index.html" class="{{ Route::is('home') ? 'active' : '' }}">Home</a></li>
+							<li><a href="{{route('home')}}" class="{{ Route::is('home') ? 'active' : '' }}">Home</a></li>
 								<li class="dropdown"><a href="#" class="{{ Route::is('product') ? 'active' : '' }}">Shop<i class="fa fa-angle-down "></i></a>
                                     <ul role="menu" class="sub-menu">
                                         <li><a href="shop.html">Products</a></li>

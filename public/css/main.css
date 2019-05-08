@@ -1190,6 +1190,21 @@ h2.title {
     display: inline-block;
 }
 
+.panel-body ul li a:hover{
+    color: #FE980F;
+    
+}
+
+.active{
+    color: #FE980F !important;
+    
+}
+
+.category-products .panel-default .panel-heading .panel-title a:hover{
+    color: #FE980F;
+
+}
+
 .view-product {
     position: relative;
 }

@@ -32,18 +32,6 @@
                                               @endforeach
                                       
                                           </div>
-                                          <div class="item">
-                                                @foreach ($thumbnails as $thumbnail)
-                                              <div class="t-img" style="background-image:url('{{voyager::image($thumbnail) }}');"></div>
-                                             
-                                                @endforeach
-                                          </div>
-                                          <div class="item">
-                                                @foreach ($thumbnails as $thumbnail)
-                                              <div class="t-img" style="background-image:url('{{voyager::image($thumbnail) }}');"></div>
-                                                
-                                                @endforeach
-                                          </div>
                                           
                                       </div>
   
@@ -63,10 +51,23 @@
 							<div class="product-information"><!--/product-information-->
 								<img src="images/product-details/new.jpg" class="newarrival" alt="" />
 								<h2>{{$product->name}}</h2>
-                                <p>Category : {{$product->category->name}}</p>
+                                <p>Category : 
+																	@if ($product->category->parent)
+																				@if ($product->category->parent->parent)
+																					
+																				{{$product->category->parent->parent->name.' 🡆 '.$product->category->parent->name.' 🡆 '.$product->category->name}}</p>
+
+																				@else
+																				
+																				{{$product->category->parent->name.' 🡆 '.$product->category->name}}</p>
+																				@endif
+
+																	@else
+																			{{$product->category->name}}</p>
+																	@endif
 								<img src="../images/product-details/rating.png" alt="" />
 								<span>
-									<span>Range : {{$product->start_price.'-'.$product->end_price}} BDT</span>
+									<span>Range : {{number_format($product->start_price).' BDT - '.number_format($product->end_price)}} BDT</span>
                                 <label>Minimum Orders : {{$product->minimum_orders}}</label>
 					
 								</span>
@@ -284,10 +285,26 @@
 
 
     @section('script')
-    <script src="{{asset('js/jquery.js')}}"></script>
-	<script src="{{asset('js/bootstrap.min.js')}}"></script>
-	<script src="{{asset('js/jquery.scrollUp.min.js')}}"></script>
-	<script src="{{asset('js/price-range.js')}}"></script>
-    <script src="{{asset('js/jquery.prettyPhoto.js')}}"></script>
-    <script src="{{asset('js/main.js')}}"></script>
+		<script src="{{asset('js/jquery.js')}}"></script>
+		<script src="{{asset('js/bootstrap.min.js')}}"></script>
+		<script src="{{asset('js/jquery.scrollUp.min.js')}}"></script>
+		<script src="{{asset('js/price-range.js')}}"></script>
+		<script src="{{asset('js/jquery.prettyPhoto.js')}}"></script>
+		<script src="{{asset('js/main.js')}}"></script>
+
+
+		<script>
+		$(document).ready(function() {
+
+var category = {{$product->category->id}};
+
+$('#'+category).addClass('active');
+var col = $('#'+category);
+// col.closest('.collapse').removeClass('collapse');
+col.parents().removeClass('collapse');
+col.parents().addClass('in');
+console.log(col);
+		});
+		
+		</script>
     @endsection
