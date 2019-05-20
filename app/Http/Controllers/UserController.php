@@ -17,7 +17,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function home()
-    {
+    {   
         $cats = ProductCategory::where('parent_id', NULL)->get();
         $products = Product::orderBy('id')->get();
         $sliders = SliderInfo::where('is_active', 1)->get();
