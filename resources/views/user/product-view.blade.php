@@ -53,7 +53,7 @@
 																			<div class="exzoom hidden" id="exzoom">
 																					<div class="exzoom_img_box">
 																							<ul class='exzoom_img_ul'>
-																									<li><img src="{{voyager::image($product->primary_image) }}"/></li>
+																									<li><img src="{{$product->primary_image}}"/></li>
 																									@if (!empty($product->other_images))
 
 																										@php
@@ -64,7 +64,7 @@
 																										@foreach ($thumbnails as $thumbnail)
 			
 																										{{-- <a href=""><img src="{{voyager::image($thumbnail)}}" alt=""></a> --}}
-																										<li><img src="{{voyager::image($thumbnail) }}"/></li>
+																										<li><img src="{{$thumbnail }}"/></li>
 			
 																										{{-- <div class="t-img" style="background-image:url('{{voyager::image($thumbnail) }}');"></div> --}}
 			

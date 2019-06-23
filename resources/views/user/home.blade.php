@@ -193,7 +193,7 @@
 
 									<div class="productinfo text-center">
 
-										<img src="{{ Voyager::image( $product->primary_image ) }}" alt="">
+										<img src="{{  $product->primary_image  }}" alt="">
 
 										<b style="color: #FE980F;">{{number_format($product->start_price).'-'.number_format($product->end_price)}} <small>BDT</small></b>  <br>
 
