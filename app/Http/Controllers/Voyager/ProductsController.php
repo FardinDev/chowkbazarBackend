@@ -257,7 +257,7 @@ class productsController extends VoyagerBaseController
         if (view()->exists("voyager::$slug.edit-add")) {
             $view = "voyager::$slug.edit-add";
         }
-
+               
         return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
     }
 
@@ -429,6 +429,7 @@ foreach ($pics as $p) {
         $id = $data->id;
 
         $getData = DB::table('products')->where('id', $id)->update([
+            'web_url' => $url,
             'name' => $name,
             'primary_image' => $primaryImage,
             'other_images' => json_encode($otherImages),

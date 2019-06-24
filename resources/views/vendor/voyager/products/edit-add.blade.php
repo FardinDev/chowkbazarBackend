@@ -51,8 +51,8 @@
                             @endif
                             <div class="form-group  col-md-12 ">
                                     
-                                <label class="control-label" for="name">URL</label>
-                                <input type="text" class="form-control" name="url" required="true" step="any" placeholder="Enter URL" value="">
+                            <label class="control-label" for="name">URL (Only alibaba.com's product URL)</label>
+                            <input type="text" class="form-control" name="url" required="true" step="any" placeholder="Enter URL" value="{{$dataTypeContent->web_url != null ? $dataTypeContent->web_url : ''}}">
 
                                 
                           </div>
