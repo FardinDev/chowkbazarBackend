@@ -11,6 +11,11 @@ use DB;
 class UserController extends Controller
 {
 
+
+    private function getCat(){
+        return ProductCategory::where('parent_id', NULL)->get();
+    }
+
      /**
      * Display a listing of the resource.
      *
@@ -18,7 +23,7 @@ class UserController extends Controller
      */
     public function home()
     {   
-        $cats = ProductCategory::where('parent_id', NULL)->get();
+        $cats = $this->getCat();
         $products = Product::orderBy('id')->get();
         $sliders = SliderInfo::where('is_active', 1)->get();
         $brands = Product::select('brand', DB::raw('count(*) as count'))->groupBy('brand')->get();
@@ -38,7 +43,7 @@ class UserController extends Controller
      */
     public function viewProduct($id)
     {
-        $cats = ProductCategory::with('childs')->where('parent_id', NULL)->get();
+        $cats = $this->getCat();
         $product = Product::where('id', $id)->first();
         $products = Product::orderBy('id')->get();
         $brands = Product::select('brand', DB::raw('count(*) as count'))->groupBy('brand')->get();
@@ -73,9 +78,31 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function sourceProduct()
+    
     {
-        //
+        $cats = $this->getCat();
+
+        return view('user.source', compact('cats'));
+
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function sourceProductStore(Request $request)
+    
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|max:15',
+            'phone' => 'required',
+            'file' => 'mimes:jpg,jpeg,png,bmp|max:20000'
+        ]);
+        dd($request->all());
     }
 
     /**

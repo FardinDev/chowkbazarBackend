@@ -13,6 +13,8 @@
 
 Route::get('/', 'UserController@home')->name('home');
 Route::get('/product/{id}', 'UserController@viewProduct')->name('product');
+Route::get('/source-product', 'UserController@sourceProduct')->name('product.source');
+Route::post('/source-product', 'UserController@sourceProductStore')->name('product.source.store');
 
 
 Route::group(['prefix' => 'admin'], function () {
