@@ -6,12 +6,14 @@ use Illuminate\Http\Request;
 use App\SliderInfo;
 use App\ProductCategory;
 use App\Product;
+use App\Source_product;
 use DB;
+use App\Source_product_file;
 
 class UserController extends Controller
 {
 
-
+    private $sourceFileLocation = 'images/source-product-files/';
     private function getCat(){
         return ProductCategory::where('parent_id', NULL)->get();
     }
@@ -98,11 +100,35 @@ class UserController extends Controller
     
     {
         $validatedData = $request->validate([
-            'name' => 'required|max:15',
-            'phone' => 'required',
-            'file' => 'mimes:jpg,jpeg,png,bmp|max:20000'
+            'user_name' => 'required|max:15',
+            'user_phone' => 'required'
         ]);
-        dd($request->all());
+        $data['user_name'] = $request->user_name;
+        $data['user_phone'] = $request->user_phone;
+        $data['product_name'] = $request->product_name;
+        $data['product_quantity'] = $request->product_quantity;
+        $data['product_description'] = $request->product_description;
+        $data['product_url'] = $request->product_url;
+
+        
+        if($request->hasFile('file'))
+            $files = $request->file;
+            $productImages = [];
+            $i = 1;
+            {
+                foreach ($files as $file) {
+                    $filename = $i.'_'.$file->getClientOriginalName();
+                    $file->move($this->sourceFileLocation, $filename);
+                    
+                    array_push($productImages, $this->sourceFileLocation.''.$filename);
+
+                    $i++;
+                }
+            }
+            
+            $data['product_images'] = json_encode($productImages);
+            $source = Source_product::create($data);
+       return redirect()->back()->with('success','Your request is submitted! We will contact you at the given number.');;
     }
 
     /**
