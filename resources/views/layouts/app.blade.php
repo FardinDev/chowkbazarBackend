@@ -130,7 +130,13 @@
 						<div class="shop-menu clearfix pull-right">
 
 						
-						<button type="button" class="btn btn-default source" onclick="window.location.href='{{route('product.source')}}'">Source Product</button>
+						@if (Route::is('product.source'))
+
+							<button type="button" class="btn btn-default btn-lg source" onclick="window.location.href='{{route('product.source')}}'">Source Product</button>
+							@else
+
+							<button type="button" class="btn btn-default source" onclick="window.location.href='{{route('product.source')}}'">Source Product</button>
+						@endif
 
 						</div>
 

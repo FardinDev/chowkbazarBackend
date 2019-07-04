@@ -7,10 +7,7 @@
 
 @section('css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    
-    <link rel="stylesheet" href="{{asset('css/selectize.default.css')}}">
-    @stop
-
+@stop
 
 @section('page_title', __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->display_name_singular)
 
@@ -23,30 +20,28 @@
 @stop
 
 @section('content')
+    <div class="page-content edit-add container-fluid">
+        <div class="row">
+            <div class="col-md-12">
 
-{{-- <input type="text" id="input-tags" class="demo-default selectized" value="" tabindex="-1"> --}}
-<div class="page-content edit-add container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            
-            <div class="panel panel-bordered">
-                <!-- form start -->
-                <form role="form"
-                class="form-edit-add"
-                action="{{ $edit ? route('voyager.'.$dataType->slug.'.update', $dataTypeContent->getKey()) : route('voyager.'.$dataType->slug.'.store') }}"
-                method="POST" enctype="multipart/form-data">
-                <!-- PUT Method if we are editing -->
-                @if($edit)
-                {{ method_field("PUT") }}
-                @endif
-                
-                <!-- CSRF TOKEN -->
-                {{ csrf_field() }}
-                
-                <div class="panel-body">
+                <div class="panel panel-bordered">
+                    <!-- form start -->
+                    <form role="form"
+                            class="form-edit-add"
+                            action="{{ $edit ? route('voyager.'.$dataType->slug.'.update', $dataTypeContent->getKey()) : route('voyager.'.$dataType->slug.'.store') }}"
+                            method="POST" enctype="multipart/form-data">
+                        <!-- PUT Method if we are editing -->
+                        @if($edit)
+                            {{ method_field("PUT") }}
+                        @endif
 
-                    @if (count($errors) > 0)
-                    <div class="alert alert-danger">
+                        <!-- CSRF TOKEN -->
+                        {{ csrf_field() }}
+
+                        <div class="panel-body">
+
+                            @if (count($errors) > 0)
+                                <div class="alert alert-danger">
                                     <ul>
                                         @foreach ($errors->all() as $error)
                                             <li>{{ $error }}</li>
@@ -58,14 +53,6 @@
                                     
                             <label class="control-label" for="name">URL (Only alibaba.com's product URL)</label>
                             <input type="text" class="form-control" name="url" required="true" step="any" placeholder="Enter URL" value="{{$dataTypeContent->web_url != null ? $dataTypeContent->web_url : ''}}">
-
-                                
-                          </div>
-                            <div class="form-group  col-md-12 ">
-                                    
-                            <label class="control-label" for="name">Tags</label>
-                            {{-- <input type="text" class="form-control" name="url" required="true" step="any" placeholder="Enter URL" value="{{$dataTypeContent->web_url != null ? $dataTypeContent->web_url : ''}}"> --}}
-                            <input type="text" id="input-tags" class="demo-default selectized" value="">
 
                                 
                           </div>
@@ -152,26 +139,9 @@
     </div>
     <!-- End Delete File Modal -->
 @stop
-<script>
- 
-</script>
-@section('javascript')
-<script type="text/javascript" src="{{asset('js/microplugin.js')}}"></script>
-<script type="text/javascript" src="{{asset('js/selectize.js')}}"></script>
-    <script>
-               $(function() {
-	$('#input-tags').selectize({
-    delimiter: ',',
-    persist: false,
-    create: function(input) {
-        return {
-            value: input,
-            text: input
-        }
-    }
-    });
-});
 
+@section('javascript')
+    <script>
         var params = {};
         var $file;
 

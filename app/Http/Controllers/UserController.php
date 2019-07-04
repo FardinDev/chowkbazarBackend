@@ -110,10 +110,11 @@ class UserController extends Controller
         $data['product_description'] = $request->product_description;
         $data['product_url'] = $request->product_url;
 
+        $productImages = [];
         
-        if($request->hasFile('file'))
+        if(!empty($request->file)){
+
             $files = $request->file;
-            $productImages = [];
             $i = 1;
             {
                 foreach ($files as $file) {
@@ -125,6 +126,7 @@ class UserController extends Controller
                     $i++;
                 }
             }
+        }
             
             $data['product_images'] = json_encode($productImages);
             $source = Source_product::create($data);
