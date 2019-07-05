@@ -284,9 +284,16 @@ class productsController extends VoyagerBaseController
         // Check permission
         $this->authorize('edit', $data);
 
+        // dd($request->tags);
         // Validate fields with ajax
         $val = $this->validateBread($request->all(), $dataType->editRows, $dataType->name, $id)->validate();
-        $this->insertUpdateData($request, $slug, $dataType->editRows, $data);
+        $updateData = $this->insertUpdateData($request, $slug, $dataType->editRows, $data);
+
+        $id = $updateData->id;
+
+        $getData = DB::table('products')->where('id', $id)->update([
+            'tags' => $request->tags
+        ]);
 
         event(new BreadDataUpdated($dataType, $data));
 
@@ -352,6 +359,8 @@ class productsController extends VoyagerBaseController
      */
     public function store(Request $request)
     {
+
+        
         
         include_once('simple_html_dom.php');
 
@@ -379,31 +388,39 @@ foreach($html->find('div.thumb') as $thumb) {
         
     }
         
+        
+$description = $html->find('div.module-productSpecification', 0);
 
-$description = $html->find('div.scc-wrapper.detail-module.module-productSpecification', 0);
-
-foreach ($description->find('noscript') as $pic) {
+for ($i=0; $i < sizeof($description->find('img'))-1; $i++) { 
     
-    array_push($pics, $pic->innertext);
-}
-
-foreach ($description->find('img') as $pic) {
-    
-    $pic->src = '';
-}
-$c = 0;
-
-$count = 0;
-foreach ($pics as $p) {
-
-   if($count < sizeof($pics)-1){
-
-        $description->find('img[data-src]', $count)->innertext = $p;
-        $count++;
-   }
-
+        $description->find('img', $i)->src = $description->find('img', $i+1)->src;
     
 }
+
+// $description = $html->find('div.scc-wrapper.detail-module.module-productSpecification', 0);
+
+// foreach ($description->find('noscript') as $pic) {
+    
+//     array_push($pics, $pic->innertext);
+// }
+
+// foreach ($description->find('img') as $pic) {
+    
+//     $pic->src = '';
+// }
+// $c = 0;
+
+// $count = 0;
+// foreach ($pics as $p) {
+
+//   if($count < sizeof($pics)-1){
+
+//         $description->find('img[data-src]', $count)->innertext = $p;
+//         $count++;
+//   }
+
+    
+// }
 
 // echo $name .'<br>';
 // echo $primaryImage .'<br>';
@@ -433,7 +450,8 @@ foreach ($pics as $p) {
             'name' => $name,
             'primary_image' => $primaryImage,
             'other_images' => json_encode($otherImages),
-            'description' => $description
+            'description' => $description,
+            'tags' => $request->tags
         ]);
 
         
