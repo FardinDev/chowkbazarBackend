@@ -66,8 +66,7 @@
 																										{{-- <a href=""><img src="{{voyager::image($thumbnail)}}" alt=""></a> --}}
 																										<li><img src="{{$thumbnail }}"/></li>
 			
-																										{{-- <div class="t-img" style="background-image:url('{{voyager::image($thumbnail) }}');"></div> --}}
-			
+																										
 																										@endforeach
 
 																									@endif
@@ -134,7 +133,17 @@
 
 									<span>Range : {{number_format($product->start_price).' BDT - '.number_format($product->end_price)}} BDT</span>
 
-                                <label>Minimum Orders : {{$product->minimum_orders}}</label>
+								<label>Minimum Orders : {{$product->minimum_orders}}</label>
+								<br>
+								@if ($product->tags)
+									
+								@php
+									$tags = explode(',', $product->tags)
+								@endphp
+								@foreach ($tags as $tag)
+									<label class="label label-warning text-light" style="color:white !important">{{$tag}}</label>								
+								@endforeach
+								@endif
 
 					
 
@@ -192,101 +201,15 @@
 
 							<div class="tab-pane fade" id="tag" >
 
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery1.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-
-											</div>
-
-										</div>
-
-									</div>
-
-								</div>
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery2.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-
-											</div>
-
-										</div>
-
-									</div>
-
-								</div>
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery3.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-
-											</div>
-
-										</div>
-
-									</div>
-
-								</div>
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery4.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-
-											</div>
-
-										</div>
-
-									</div>
-
-								</div>
+								@if ($product->tags)
+									
+								@php
+									$tags = explode(',', $product->tags)
+								@endphp
+								@foreach ($tags as $tag)
+									<label class="label label-warning text-light" style="color:white !important">{{$tag}}</label>								
+								@endforeach
+								@endif
 
 							</div>
 

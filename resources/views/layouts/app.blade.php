@@ -53,7 +53,7 @@
 
 
 <body>
-
+	<div class="se-pre-con"></div> 
 	<header id="header"><!--header-->
 
 		{{-- <div class="header_top"><!--header_top-->
@@ -417,7 +417,13 @@
 
   @yield('script')
 
-   
+  <script>
+    
+    $(window).on('load', function() {
+		// Animate loader off screen
+		$(".se-pre-con").fadeOut("slow");;
+	});
+    </script>
 
 </body>
 

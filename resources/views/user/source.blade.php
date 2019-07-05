@@ -60,9 +60,9 @@ input[type="text"], input[type="number"], input[type="file"] {
             <div class="form-group">
               <label class="col-md-4 control-label" for="phone">Your Phone</label>  
               <div class="col-md-5">
-              <input id="user_phone" name="user_phone" type="text" placeholder="Enter Your Phone Number" class="form-control input-md" required="">
+              <input id="user_phone" name="user_phone" type="text" placeholder="Enter Your Phone Number" class="form-control input-md" required="" minlength="11">
               <div class="invalid-feedback">
-                Please Enter Your Phone Number
+                Please Enter Your valid Phone Number
             </div>
               </div>
             </div>
@@ -171,11 +171,29 @@ input[type="text"], input[type="number"], input[type="file"] {
    
 
             $( "#source-form" ).submit(function( event ) {
+
+               
+                    var phoneno = /^(?:\+88|01)?(?:\d{11}|\d{13})$/;
+                    if($('#user_phone').val().match(phoneno)) {
+                        $('#user_phone').removeClass('is-invalid');
+                        
+                    }
+                    else {
+                        alert("Please Enter a Valid Number");
+                        $('#user_phone').addClass('is-invalid');
+                        event.preventDefault();
+                       
+                    }
+                    
+
+
                 var $fileUpload = $("input[type='file']");
                 if (parseInt($fileUpload.get(0).files.length)>5){
                 alert("You can only upload a maximum of 5 files");
                     event.preventDefault();
                 }
+
+
                     
             });
             

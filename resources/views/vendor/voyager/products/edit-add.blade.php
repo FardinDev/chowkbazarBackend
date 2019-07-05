@@ -69,6 +69,36 @@
 
                                 
                           </div>
+
+                          <div class="form-group  col-md-12 ">
+                                    
+                            <label class="control-label" for="name">Other Images</label>
+                        <br>
+{{-- @foreach ($dataTypeContent->other_images as $item)
+    {{$item}}
+@endforeach --}}
+
+@php $images = json_decode($dataTypeContent->other_images); @endphp
+
+@if($images)
+
+    
+
+    @foreach($images as $image)
+
+        <div class="img_settings_container" data-field-name="other_images" style="float:left;padding-right:15px;">
+            <a href="#" class="voyager-x remove-multi-image" style="position: absolute;"></a>
+            <img src="{{$image}}" data-file-name="{{$image}}" data-id="{{$dataTypeContent->id}}" style="max-width:200px; height:auto; clear:both; display:block; padding:2px; border:1px solid #ddd; margin-bottom:5px;">
+        </div>
+    @endforeach
+
+@endif
+       
+    <div class="clearfix"></div>
+
+                            
+                                                                                                </div>
+
                             <!-- Adding / Editing -->
                             @php
                                 $dataTypeRows = $dataType->{($edit ? 'editRows' : 'addRows' )};
@@ -140,7 +170,7 @@
                 </div>
 
                 <div class="modal-body">
-                    <h4>{{ __('voyager::generic.are_you_sure_delete') }} '<span class="confirm_delete_name"></span>'</h4>
+                <h4>{{ __('voyager::generic.are_you_sure_delete') }}? <img src="" class="del-img" style="width:100px" alt=""></h4>
                 </div>
 
                 <div class="modal-footer">
@@ -188,7 +218,8 @@
                 _token: '{{ csrf_token() }}'
             }
 
-            $('.confirm_delete_name').text(params.filename);
+            // $('.confirm_delete_name').text(params.filename);
+            $('.del-img').attr('src', params.filename);
             $('#confirm_delete_modal').modal('show');
           };
         }
