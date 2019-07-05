@@ -95,7 +95,7 @@
 
 							<div class="product-information"><!--/product-information-->
 
-								<img src="images/product-details/new.jpg" class="newarrival" alt="" />
+							{{-- <img src="{{asset('images/product-details/new.jpg')}}" class="newarrival" alt="" /> --}}
 
 								<h2>{{$product->name}}</h2>
 
@@ -155,11 +155,47 @@
 
 								<p><b>Brand:</b> {{$product->brand}}</p>
 
-								<button type="button" class="btn btn-fefault query">
-										<i class="fa fa-question"></i>
+							<a id="formButton"  class="btn btn-fefault query">
+									
 										Send Query
-									</button>
+								</a>
+								<form class="form-horizontal col-12" id="form1">
+									
+									
+								
+									
+									<!-- Text input-->
+									<div class="form-group">
+							
+									  <div class="col-md-5">
+									  <input id="user_name" name="user_name" type="text" placeholder="Enter Your Name" class="form-control input-md" required="">
+									  </div>
+									 
+									  <div class="col-md-5">
+									  <input id="phone_number" name="phone_number" type="text" placeholder="Enter Phone Number" class="form-control input-md" required="">
+								
+									  </div>
+									</div>
+						
+									<!-- Textarea -->
+									<div class="form-group">
+									  <div class="col-md-10">                     
+										<textarea class="form-control" id="query" name="query" placeholder="Write Your Query Here"></textarea>
+									  </div>
+									</div>
+									
+									<!-- Button -->
+									<div class="form-group">
+									  
+									  <div class="col-md-12">
+										<button id="" name="" class="btn btn-fefault query col-md-10">Submit Query</button>
+									  </div>
+									</div>
+			
+									</form>
 							</div><!--/product-information-->
+							
+
 
 						</div>
 
@@ -175,13 +211,11 @@
 
 								<li class="active"><a href="#details" data-toggle="tab">Details</a></li>
 
-								{{-- <li><a href="#companyprofile" data-toggle="tab">Company Profile</a></li> --}}
+					
 
 								<li><a href="#tag" data-toggle="tab">Tag</a></li>
 
-								<li><a href="#reviews" data-toggle="tab">Send Query</a></li>
-
-								{{-- <li><a href="#reviews" data-toggle="tab">Reviews (5)</a></li> --}}
+						
 
 							</ul>
 
@@ -213,146 +247,6 @@
 
 							</div>
 
-							{{-- <div class="tab-pane fade " id="sendQuery" >
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery1.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-
-											</div>
-
-										</div>
-
-									</div>
-
-								</div>
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery2.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-
-											</div>
-
-										</div>
-
-									</div>
-
-								</div>
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery3.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-
-											</div>
-
-										</div>
-
-									</div>
-
-								</div>
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery4.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-
-											</div>
-
-										</div>
-
-									</div>
-
-								</div>
-
-							</div> --}}
-
-							<div class="tab-pane fade" id="reviews" >
-
-								<div class="col-sm-12">
-
-									<ul>
-
-										<li><a href=""><i class="fa fa-clock-o"></i>12:41 PM</a></li>
-
-										<li><a href=""><i class="fa fa-calendar-o"></i>31 DEC 2014</a></li>
-
-									</ul>
-
-									<p><b>Send Query about this Product</b></p>
-
-									
-
-									<form action="#">
-
-										<span>
-
-											<input type="text" placeholder="Your Name"/>
-
-											<input type="email" placeholder="Email Address" required/>
-
-										</span>
-
-										<textarea name="" ></textarea>
-
-
-										<button type="button" class="btn btn-default pull-right">
-
-											Send
-
-										</button>
-
-									</form>
-
-								</div>
-
-							</div>
 
 							
 
@@ -420,7 +314,9 @@
 		<script>
 
 		$(document).ready(function() {
-
+			$("#formButton").click(function() {
+    $("#form1").slideToggle();
+  });
 
 
 var category = {{$product->category->id}};
@@ -437,7 +333,7 @@ col.parents().removeClass('collapse');
 
 col.parents().addClass('in');
 
-console.log(col);
+// console.log(col);
 
 		});
 
