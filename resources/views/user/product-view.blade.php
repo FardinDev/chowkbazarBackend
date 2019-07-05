@@ -155,10 +155,7 @@
 
 								<p><b>Brand:</b> {{$product->brand}}</p>
 
-							<a id="formButton"  class="btn btn-fefault query">
-									
-										Send Query
-								</a>
+							<a id="formButton"  class="btn btn-fefault query">Send Query</a>
 								<form class="form-horizontal col-12" id="form1">
 									
 									
@@ -315,8 +312,11 @@
 
 		$(document).ready(function() {
 			$("#formButton").click(function() {
-    $("#form1").slideToggle();
-  });
+				$("#form1").slideToggle();
+				$(this).text(function(i, v){
+               		return v === 'Send Query' ? 'Hide Section' : 'Send Query'
+            })
+			});
 
 
 var category = {{$product->category->id}};
