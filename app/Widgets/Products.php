@@ -32,7 +32,7 @@ class Products extends BaseDimmer
                 'text' => 'View All Products',
                 'link' => route('voyager.products.index'),
             ],
-            'image' => voyager_asset('images/widget-backgrounds/03.jpg'),
+            'image' => asset('images/widgets/product.jpg'),
         ]));
     }
 
