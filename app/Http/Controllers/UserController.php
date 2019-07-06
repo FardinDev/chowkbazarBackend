@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\SliderInfo;
 use App\ProductCategory;
 use App\Product;
+use App\Product_query;
 use App\Source_product;
 use DB;
 use App\Source_product_file;
@@ -149,9 +150,23 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function sendQuery($id)
+    public function sendQuery(Request $request, $id)
     {
-        dd(product::find($id));
+        $validatedData = $request->validate([
+            'user_name' => 'required|max:15',
+            'phone_number' => 'required|min:11',
+            'product_query' => 'required|max:1000'
+        ]);
+
+$data['product_id'] = $id;
+$data['user_name'] = $request->user_name;
+$data['phone_number'] = $request->phone_number;
+$data['product_query'] = $request->product_query;
+
+Product_query::create($data);
+
+return redirect()->back()->with('success', 'Query Sent Successfully! We will contact you at the given number.');
+
     }
 
     /**

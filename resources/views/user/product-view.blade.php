@@ -44,7 +44,24 @@
 <section>
 
     <div class="container">
+    @if ($errors->any())
+       
+         
+        @foreach ($errors->all() as $error)
+        <div class="alert alert-danger alert-block">
+            <button type="button" class="close" data-dismiss="alert">×</button>	
+                <strong>{{ $error }}</strong>
+        </div>
+        @endforeach
+         
+    @endif
 
+    @if ($message = Session::get('success'))
+        <div class="alert alert-success alert-block">
+            <button type="button" class="close" data-dismiss="alert">×</button>	
+                <strong>{{ $message }}</strong>
+        </div>
+    @endif
         <div class="row">
 
             {{-- sidebar --}}
@@ -134,22 +151,19 @@
                         <p><b>Brand:</b> {{$product->brand}}</p>
 
                         <a id="formButton" class="btn btn-fefault query">Send Query</a>
-                        <form class="form-horizontal col-12" id="form1">
-
-
-
-
+                    <form class="form-horizontal col-12" id="form1" action="{{route('product.send-query', $product->id)}}" method="POST">
+                            {{ csrf_field() }}
                             <!-- Text input-->
                             <div class="form-group">
 
                                 <div class="col-md-5">
                                     <input id="user_name" name="user_name" type="text" placeholder="Enter Your Name"
-                                        class="form-control input-md" required="">
+                                        class="form-control input-md" required>
                                 </div>
 
                                 <div class="col-md-5">
                                     <input id="phone_number" name="phone_number" type="text"
-                                        placeholder="Enter Phone Number" class="form-control input-md" required="">
+                                        placeholder="Enter Phone Number" class="form-control input-md" required>
 
                                 </div>
                             </div>
@@ -157,8 +171,8 @@
                             <!-- Textarea -->
                             <div class="form-group">
                                 <div class="col-md-10">
-                                    <textarea class="form-control" id="query" name="query"
-                                        placeholder="Write Your Query Here"></textarea>
+                                    <textarea class="form-control" id="product_query" name="product_query"
+                                        placeholder="Write Your Query Here" required></textarea>
                                 </div>
                             </div>
 
@@ -301,6 +315,24 @@
                 return v === 'Send Query' ? 'Hide Section' : 'Send Query'
             })
         });
+
+        $( "#form1" ).submit(function( event ) {
+
+               
+            var phoneno = /^(?:\+88|01)?(?:\d{11}|\d{13})$/;
+            if($('#phone_number').val().match(phoneno)) {
+            
+                
+            }
+            else {
+                alert("Please Enter a Valid Number");
+                event.preventDefault();
+            
+            }
+
+
+            });
+
 
 
         var category = {{$product->category->id}};
