@@ -12,6 +12,8 @@
 */
 
 Route::get('/', 'UserController@home')->name('home');
+Route::get('/products', 'UserController@allProducts')->name('product.all');
+Route::get('/get-parent-category', 'UserController@getParentCat')->name('get.parent_cat');
 Route::get('/product/{id}', 'UserController@viewProduct')->name('product');
 Route::post('/product/{id}/send-query', 'UserController@sendQuery')->name('product.send-query');
 Route::get('/source-product', 'UserController@sourceProduct')->name('product.source');

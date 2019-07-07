@@ -188,7 +188,7 @@
 								</ul>
 
 							</li> 	
-							<li><a href="{{route('home')}}" class="{{ Route::is('product') ? 'active' : '' }}">Products</a></li>
+							<li><a href="{{route('product.all')}}" class="{{ Route::is('product') ? 'active' : '' }} {{ Route::is('product.all') ? 'active' : '' }}">Products</a></li>
 
 								{{-- <li class="dropdown"><a href="#" class="{{ Route::is('product') ? 'active' : '' }}">Products<i class="fa fa-angle-down "></i></a>
 

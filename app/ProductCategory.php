@@ -13,4 +13,12 @@ class ProductCategory extends Model
     public function parent(){
         return $this->belongsTo('App\ProductCategory', 'parent_id');
     }
+
+    public function products()
+    {
+        return $this->hasManyThrough(
+            'App\Product', 'App\ProductCategory',
+            'parent_id', 'id'
+        );
+    }
 }

@@ -181,6 +181,75 @@ return redirect()->back()->with('success', 'Query Sent Successfully! We will con
     }
 
     /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function allProducts()
+    {
+    //     $check = [];
+
+    //    $pro = ProductCategory::with('childs')->where('parent_id', 29)->get();
+
+    //    foreach ($pro as $k) {
+    //        array_push($check, $k->id);
+    //        if($k->childs){
+
+    //            foreach ($k->childs as $c) {
+    //                array_push($check, $c->id);
+    //            }
+    //        }
+    //    }
+        // dd($check);
+        $products = Product::inRandomOrder()->take(5)->get();
+        $cats = $this->getCat();
+
+        return view('user.all_product', compact('cats', 'products'));
+
+
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getParentCat(Request $request)
+    {
+        if($request->id){
+
+            $parent_id = $request->id;
+            $check = [];
+    
+           $pro = ProductCategory::with('childs')->where('parent_id', $parent_id)->get();
+    
+           foreach ($pro as $k) {
+               array_push($check, $k->id);
+               if($k->childs){
+    
+                   foreach ($k->childs as $c) {
+                       array_push($check, $c->id);
+                   }
+               }
+           }
+    
+           return response()->json($check);
+        }
+
+        elseif ($request->data) {
+            $data = $request->data;
+            
+            $products = Product::select('id', 'name', 'primary_image', 'start_price', 'end_price')->whereIn('category_id', $data)->get();
+
+           return response()->json($products);
+
+
+        }
+    }
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
