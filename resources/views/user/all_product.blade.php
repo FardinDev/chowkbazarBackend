@@ -3,7 +3,7 @@
 @section('title', 'Home')
 
 @section('content')
-<div class="row">
+<div class="row" style="margin:0">
     @include('components.sidebar')
 
     <div class="col-sm-9">
@@ -102,7 +102,8 @@
                                             $.each(data, function (index, value) {
 
 
-                                            var card = `<div class="col-sm-3"> <div class="product-image-wrapper" onclick="window.location.href='{{url("/product/`+value.id+`")}}'"> <div class="single-products"> <div class="productinfo text-center"> <img src="`+value.primary_image+`" alt="">  <b style="color: #FE980F;">{{number_format($product->start_price).'-'.number_format($product->end_price)}} <small>BDT</small></b> <br>  <small style="text-overflow: ellipsis;">`+value.name+`</small> </div> </div> </div> </div>`;
+                                                var card = `<div class="col-sm-3"> <div class="product-image-wrapper" onclick="window.location.href='{{url("/product/`+value.id+`")}}'"> <div class="single-products"> <div class="productinfo text-center"> <img src="`+value.primary_image+`" alt="">  <b style="color: #FE980F;">`+Number(value.start_price)+`-`+Number(value.end_price)+` <small>BDT</small></b> <br>  <small style="text-overflow: ellipsis;">`+value.name+`</small> </div> </div> </div> </div>`;
+
 
                                             $('#mainrow').append(card).hide();
                                             $('#mainrow').fadeIn('normal');
@@ -164,7 +165,7 @@
                                             $.each(data, function (index, value) {
 
 
-                                            var card = `<div class="col-sm-3"> <div class="product-image-wrapper" onclick="window.location.href='{{url("/product/`+value.id+`")}}'"> <div class="single-products"> <div class="productinfo text-center"> <img src="`+value.primary_image+`" alt="">  <b style="color: #FE980F;">{{number_format($product->start_price).'-'.number_format($product->end_price)}} <small>BDT</small></b> <br>  <small style="text-overflow: ellipsis;">`+value.name+`</small> </div> </div> </div> </div>`;
+                                            var card = `<div class="col-sm-3"> <div class="product-image-wrapper" onclick="window.location.href='{{url("/product/`+value.id+`")}}'"> <div class="single-products"> <div class="productinfo text-center"> <img src="`+value.primary_image+`" alt="">  <b style="color: #FE980F;">`+Number(value.start_price)+`-`+Number(value.end_price)+` <small>BDT</small></b> <br>  <small style="text-overflow: ellipsis;">`+value.name+`</small> </div> </div> </div> </div>`;
 
                                             $('#mainrow').append(card).hide();
                                             $('#mainrow').fadeIn('normal');
