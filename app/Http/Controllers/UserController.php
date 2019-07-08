@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Events\MyEvent;
+use App\Events\StatusLiked;
 use App\SliderInfo;
 use App\ProductCategory;
 use App\Product;
@@ -10,7 +12,7 @@ use App\Product_query;
 use App\Source_product;
 use DB;
 use App\Source_product_file;
-
+use Pusher\Pusher;
 class UserController extends Controller
 {
 
@@ -261,6 +263,17 @@ return redirect()->back()->with('success', 'Query Sent Successfully! We will con
         //
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function test()
+    {
+        event(new MyEvent('hello world'));
+        return 'sent';
+    }
     /**
      * Remove the specified resource from storage.
      *

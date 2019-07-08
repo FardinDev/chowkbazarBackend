@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\App;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +19,13 @@ Route::get('/product/{id}', 'UserController@viewProduct')->name('product');
 Route::post('/product/{id}/send-query', 'UserController@sendQuery')->name('product.send-query');
 Route::get('/source-product', 'UserController@sourceProduct')->name('product.source');
 Route::post('/source-product', 'UserController@sourceProductStore')->name('product.source.store');
+Route::get('/notification', function(){
+return view('notification');
+});
 
+Route::get('/test', function(){
+    event(new App\Events\MyEvent('hi'));
+});
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
