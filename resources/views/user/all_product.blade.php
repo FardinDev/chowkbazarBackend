@@ -53,134 +53,85 @@
 <script src="{{asset('js/main.js')}}"></script>
 
 <script>
-    $(document).ready(function () {
+
+function getRemoteData(category, onload){
+    $.ajax({
+            type: 'get',
+            url: '{{route("get.parent_cat")}}',
+            data: {
+                _token: '{{csrf_token()}}',
+                data: category
+            },
+            beforeSend: function() {
+                    $('.load').fadeIn();
+            },
+            success: function (data) {
+                // console.log(data);
+                if(data.length == 0){
+                    $('#mainrow').html('');
+                    var card = onload;
+                    $('#mainrow').append(card).hide();
+                    
+                }else{
+                    $('#mainrow').html('');
+                    $.each(data, function (index, value) {
+                    var card = `<div class="col-sm-3"> 
+                                    <div class="product-image-wrapper" onclick="window.location.href='{{url("/product/`+value.id+`")}}'">
+                                        <div class="single-products"> 
+                                            <div class="productinfo text-center">
+                                                <img src="`+value.primary_image+`" alt="">
+                                                <b style="color: #FE980F;">`+Number(value.start_price)+`-`+Number(value.end_price)+` <small>BDT</small></b>
+                                                <br>
+                                                <small style="text-overflow: ellipsis;">`+value.name+`</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`;
+                    $('#mainrow').append(card).hide();
+                    });
+                }
+            $('#mainrow').fadeIn('normal');
+            },
+            complete: function(){
+                $('.load').fadeOut();
+            }
+        });
+};
+
+function checkUncheck(id, check, onload){
+    $.ajax({
+            type: 'get',
+            url: '{{route("get.parent_cat")}}',
+            data: {
+                _token: '{{csrf_token()}}',
+                id: id
+            },
+            success: function (data) {
+                $.each(data, function (index, value) {
+                    $('#' + value).prop("checked", check);
+                });
+                var category = [];
+                $.each($("input[name='cat']:checked"), function () {
+                    category.push($(this).attr('id'));
+                });
+                // console.log(category);
+                getRemoteData(category, onload);
+            }
+        });
+};
+
+$(document).ready(function () {
         var onload = $('#mainrow').html();
         $("input:checkbox").change(function () {
-
+            var id = $(this).attr('id');
             if ($(this).is(':checked')) {
                 //check
-                var id = $(this).attr('id');
-
-                $.ajax({
-                    type: 'get',
-                    url: '{{route("get.parent_cat")}}',
-                    data: {
-                        _token: '{{csrf_token()}}',
-                        id: id
-                    },
-                    success: function (data) {
-                  
-                        $.each(data, function (index, value) {
-                            $('#' + value).prop("checked", true);
-                        });
-                        var category = [];
-                        $.each($("input[name='cat']:checked"), function () {
-                            category.push($(this).attr('id'));
-                        });
-                        console.log(category);
-                        $.ajax({
-                                    type: 'get',
-                                    url: '{{route("get.parent_cat")}}',
-                                    data: {
-                                        _token: '{{csrf_token()}}',
-                                        data: category
-                                    },
-                                    beforeSend: function() {
-                                         
-                                            $('.load').fadeIn();
-                                    },
-                                    success: function (data) {
-                                       console.log(data);
-                                       if(data.length == 0){
-                                        $('#mainrow').html('');
-                                            var card = onload;
-                                            $('#mainrow').append(card).hide();
-                                            $('#mainrow').fadeIn('normal');
-                                        }else{
-                                            $('#mainrow').html('');
-
-                                            $.each(data, function (index, value) {
-
-
-                                                var card = `<div class="col-sm-3"> <div class="product-image-wrapper" onclick="window.location.href='{{url("/product/`+value.id+`")}}'"> <div class="single-products"> <div class="productinfo text-center"> <img src="`+value.primary_image+`" alt="">  <b style="color: #FE980F;">`+Number(value.start_price)+`-`+Number(value.end_price)+` <small>BDT</small></b> <br>  <small style="text-overflow: ellipsis;">`+value.name+`</small> </div> </div> </div> </div>`;
-
-
-                                            $('#mainrow').append(card).hide();
-                                            $('#mainrow').fadeIn('normal');
-
-
-                                            });
-                                            
-                                    }
-                                    },
-                                    complete: function(){
-                                        $('.load').fadeOut();
-                                    }
-                                });
-                    }
-                });
-
-
+                var check = true;
+                checkUncheck(id, check, onload);
             } else {
                 //remove
-                var id = $(this).attr('id');
-                $.ajax({
-                    type: 'get',
-                    url: '{{route("get.parent_cat")}}',
-                    data: {
-                        _token: '{{csrf_token()}}',
-                        id: id
-                    },
-                    success: function (data) {
-                        $.each(data, function (index, value) {
-                            $('#' + value).prop("checked", false);
-                        });
-                        var category = [];
-                        $.each($("input[name='cat']:checked"), function () {
-                            category.push($(this).attr('id'));
-                        });
-                        console.log(category);
-                                $.ajax({
-                                        type: 'get',
-                                        url: '{{route("get.parent_cat")}}',
-                                        data: {
-                                            _token: '{{csrf_token()}}',
-                                            data: category
-                                        },
-                                        beforeSend: function() {
-                                         
-                                         $('.load').fadeIn();
-                                     },
-                                        success: function (data) {
-                                            
-                                            console.log(data);
-                                       if(data.length == 0){
-                                        $('#mainrow').html('');
-                                            var card = onload;
-                                            $('#mainrow').append(card).hide();
-                                            $('#mainrow').fadeIn('normal');
-                                        }else{
-                                            $('#mainrow').html('');
-
-                                            $.each(data, function (index, value) {
-
-
-                                            var card = `<div class="col-sm-3"> <div class="product-image-wrapper" onclick="window.location.href='{{url("/product/`+value.id+`")}}'"> <div class="single-products"> <div class="productinfo text-center"> <img src="`+value.primary_image+`" alt="">  <b style="color: #FE980F;">`+Number(value.start_price)+`-`+Number(value.end_price)+` <small>BDT</small></b> <br>  <small style="text-overflow: ellipsis;">`+value.name+`</small> </div> </div> </div> </div>`;
-
-                                            $('#mainrow').append(card).hide();
-                                            $('#mainrow').fadeIn('normal');
-
-
-                                            });
-                                            
-                                    }
-                                        },
-                                    complete: function(){
-                                        $('.load').fadeOut();
-                                    }
-                        });
-                    }
-                });
+                var check = false;
+                checkUncheck(id, check, onload);
 
             }
 
