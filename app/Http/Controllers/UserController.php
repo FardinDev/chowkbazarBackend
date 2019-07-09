@@ -284,4 +284,53 @@ return redirect()->back()->with('success', 'Query Sent Successfully! We will con
     {
         //
     }
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function searchProduct(Request $request)
+    {
+        if($request->get('query'))
+        {
+         $query = $request->get('query');
+   
+         $data = DB::table('products')
+           ->where('name', 'LIKE', "%{$query}%")
+           ->orWhere('tags', 'LIKE', "%{$query}%")
+           ->take(5)
+           ->get();
+           if(sizeof($data) > 0){
+
+               $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+               foreach($data as $row)
+               {
+                $output .= '
+                <li>
+                <a href="'.route('product', $row->id).'" style="white-space: normal !important; display: flex">
+                <img src="'.$row->primary_image.'" style="height:60px">
+                <div>
+                <label class="name">'.$row->name.'</label>
+                <label class="name price" >'.$row->start_price.'-'.$row->end_price.' <small>BDT</small></label>
+                </div>
+                </a>
+                </li>
+                ';
+               }
+               $output .= '</ul>';
+           }else{
+            $output = '
+            <ul class="dropdown-menu" style="display:block; position:relative; width:293px; text-align: -webkit-center">
+                <li>
+                <div>
+                <label>No products Found for '.$query.'!!</label>
+                </div>
+                </li>
+            </ul>';
+            
+        }
+        echo $output;
+        }
+    }
 }

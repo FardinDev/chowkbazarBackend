@@ -28,6 +28,9 @@
 
 	<link href="{{asset('css/responsive.css')}}" rel="stylesheet">
 
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	
+
 
 
     <!--[if lt IE 9]>
@@ -234,7 +237,10 @@
 
 						<div class="search_box pull-right">
 
-							<input type="text" placeholder="Search"/>
+							<input type="text" id="search_box" placeholder="Search Products"/>
+							<div id="countryList" style="position:absolute">
+									
+							</div>
 
 						</div>
 
@@ -413,16 +419,55 @@
 
 	
 
+	<script src="{{asset('js/jquery.js')}}"></script>
 
+	<script src="{{asset('js/bootstrap.min.js')}}"></script>
 
+	<script src="{{asset('js/jquery.scrollUp.min.js')}}"></script>
+
+	<script src="{{asset('js/price-range.js')}}"></script>
+
+	<script src="{{asset('js/jquery.prettyPhoto.js')}}"></script>
+
+	<script src="{{asset('js/main.js')}}"></script>
+
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   @yield('script')
 
   <script>
     
+
     $(window).on('load', function() {
 		// Animate loader off screen
-		$(".se-pre-con").fadeOut("slow");;
+		$(".se-pre-con").fadeOut("slow");
+	$('#search_box').keyup(function(e){ 
+		if(e.keyCode == 8){
+		$('#countryList').html('');
+		var query = $(this).val();
+
+		}else{
+
+        var query = $(this).val();
+		}
+		console.log(query);
+        if(query.length >= 3)
+        {
+         
+         $.ajax({
+          url:"{{ route('product.search') }}",
+          method:"get",
+          data:{query:query, _token:'{{csrf_field()}}'},
+          success:function(data){
+           $('#countryList').fadeIn();  
+                    $('#countryList').html(data);
+          }
+         });
+        }
+    });
 	});
+
+
+  
     </script>
 
 </body>

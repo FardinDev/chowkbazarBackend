@@ -507,37 +507,47 @@ a#scrollUp i {
 
 .search_box input {
 
-    background: #F0F0E9;
-
     border: medium none;
-
     color: #B2B2B2;
-
+    border: 1px solid lightgray;
     font-family: 'roboto';
-
     font-size: 12px;
-
     font-weight: 300;
-
     height: 35px;
-
     outline: medium none;
-
     padding-left: 10px;
-
-    width: 155px;
-
+    width: 292px;
     background-image: url(../images/home/searchicon.png);
-
     background-repeat: no-repeat;
-
-    background-position: 130px;
+    background-position: 266px;
 
 }
+.name
+{
+    overflow: hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    width:181px;
+    display:inline-block;
+    margin-left:10px;
+    cursor: pointer;
+}
+.price{
+    color:#FE980F;
+}
 
+ul li a:hover .price{
 
+    color: #ffffff;
+    transition: all 0.9s ease 0s;
 
+    -moz-transition: all 0.9s ease 0s;
 
+    -webkit-transition: all 0.9s ease 0s;
+
+    -o-transition: all 0.9s ease 0s;
+
+}
 
 /*  Dropdown menu*/
 
