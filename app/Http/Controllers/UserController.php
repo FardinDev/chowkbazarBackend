@@ -301,9 +301,34 @@ return redirect()->back()->with('success', 'Query Sent Successfully! We will con
            ->orWhere('tags', 'LIKE', "%{$query}%")
            ->take(5)
            ->get();
+           if(sizeof($data) == 0){
+
+            $data = DB::table('product_categories')
+            ->where('name', 'LIKE', "%{$query}%")
+            ->take(5)
+            ->get();
+            
+            if(sizeof($data) > 0){
+            $id = [];
+            foreach($data as $row)
+            {
+                array_push($id, $row->id);
+            }
+            $data = DB::table('products')
+            ->whereIn('category_id', $id)
+            ->take(5)
+            ->get();
+            
+               
+            }
+
+
+           }
+
+          
            if(sizeof($data) > 0){
 
-               $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+               $output = '<ul class="dropdown-menu" style="display:block; position:relative width:293px;">';
                foreach($data as $row)
                {
                 $output .= '

@@ -438,9 +438,14 @@
     
 
     $(window).on('load', function() {
+$('body').on('click', function(){
+	$('#countryList').hide();
+
+});
 		// Animate loader off screen
 		$(".se-pre-con").fadeOut("slow");
 	$('#search_box').keyup(function(e){ 
+		$('#countryList').show();
 		if(e.keyCode == 8){
 		$('#countryList').html('');
 		var query = $(this).val();
@@ -458,7 +463,9 @@
           method:"get",
           data:{query:query, _token:'{{csrf_field()}}'},
           success:function(data){
+			 
            $('#countryList').fadeIn();  
+
                     $('#countryList').html(data);
           }
          });
