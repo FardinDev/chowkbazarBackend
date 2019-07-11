@@ -17,39 +17,21 @@
 					<div id="slider-carousel" class="carousel slide" data-ride="carousel">
 
 						<ol class="carousel-indicators">
-
-						
-
                             @for($i = 0; $i < sizeof($sliders); $i++)
-
                             <li data-target="#slider-carousel" data-slide-to="{{$i}}"></li>
-
-
-
                             @endfor
-
 						</ol>
 
 						
 
 						<div class="carousel-inner">
 
-							
-
                             @php
-
                             $count = 0;    
-
                             @endphp
-
-                            
-
                             @foreach($sliders as $slider)
-
                             <div class="item {{$count == 0 ? 'active' : ''}}">
-
 								<div class="col-sm-6">
-
 									<h1>{{$slider->title}}</h1>
 
 									<h2>{{$slider->subtitle}}</h2>
@@ -62,13 +44,17 @@
 
 								<div class="col-sm-6">
 
-									<img src="{{ Voyager::image( $slider->main_image ) }}" class="girl img-responsive" alt="" />
+									<img src="{{ Voyager::image( $slider->main_image ) }}" class="girl img-responsive"  alt="" />
 
 									<img src="{{ Voyager::image( $slider->pricing_image ) }}"  class="pricing" alt="" />
 
 								</div>
 
-                            </div>
+							</div>
+							
+							{{-- <div class="item {{$count == 0 ? 'active' : ''}}" style="width:100%;">
+									<img src="{{ Voyager::image( $slider->main_image ) }}" alt="Los Angeles" style="height:300px">
+							</div> --}}
 
                             @php
 

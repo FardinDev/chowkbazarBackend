@@ -237,7 +237,7 @@
 {{-- search --}}
 						<div class="search_box pull-right">
 						<form action="{{route('product.all')}}" method="get">
-							{{ csrf_field() }}
+							{{-- {{ csrf_field() }} --}}
 							<input type="text" id="search_box" name="search_query" placeholder="Search Products" autocomplete="off"/>
 						</form>
 							<div id="countryList" style="position:absolute">
