@@ -13,10 +13,12 @@ use App\Source_product;
 use DB;
 use App\Source_product_file;
 use Pusher\Pusher;
+use Illuminate\Database\Eloquent\Builder;
 class UserController extends Controller
 {
 
     private $sourceFileLocation = 'images/source-product-files/';
+    public $query = '';
     private function getCat(){
         return ProductCategory::where('parent_id', NULL)->get();
     }
@@ -294,36 +296,39 @@ return redirect()->back()->with('success', 'Query Sent Successfully! We will con
     {
         if($request->get('query'))
         {
-         $query = $request->get('query');
+            $this->query = $request->get('query');
    
-         $data = DB::table('products')
-           ->where('name', 'LIKE', "%{$query}%")
-           ->orWhere('tags', 'LIKE', "%{$query}%")
-           ->take(5)
+            $data = Product::whereHas('category', function (Builder $q) {
+               $q->where('name', 'like', "%{$this->query}%");
+           })
+           ->orWhere('name', 'like', "%{$this->query}%")
+           ->orWhere('tags', 'like', "%{$this->query}%")
            ->get();
-           if(sizeof($data) == 0){
 
-            $data = DB::table('product_categories')
-            ->where('name', 'LIKE', "%{$query}%")
-            ->take(5)
-            ->get();
+
+        //    if(sizeof($data) == 0){
+
+        //     $data = DB::table('product_categories')
+        //     ->where('name', 'LIKE', "%{$query}%")
+        //     ->take(5)
+        //     ->get();
             
-            if(sizeof($data) > 0){
-            $id = [];
-            foreach($data as $row)
-            {
-                array_push($id, $row->id);
-            }
-            $data = DB::table('products')
-            ->whereIn('category_id', $id)
-            ->take(5)
-            ->get();
+        //     if(sizeof($data) > 0){
+        //     $id = [];
+        //     foreach($data as $row)
+        //     {
+        //         array_push($id, $row->id);
+        //     }
+        //     $data = DB::table('products')
+        //     ->whereIn('category_id', $id)
+        //     ->take(5)
+        //     ->get();
             
                
-            }
+        //     }
 
 
-           }
+        //    }
 
           
            if(sizeof($data) > 0){
@@ -349,7 +354,7 @@ return redirect()->back()->with('success', 'Query Sent Successfully! We will con
             <ul class="dropdown-menu" style="display:block; position:relative; width:293px; text-align: -webkit-center">
                 <li>
                 <div>
-                <label>No products Found for '.$query.'!!</label>
+                <label>No products Found for '.$this->query.'!!</label>
                 </div>
                 </li>
             </ul>';
@@ -358,4 +363,20 @@ return redirect()->back()->with('success', 'Query Sent Successfully! We will con
         echo $output;
         }
     }
+
+
+    public function eloquent(Request $request){
+
+        $this->query = $request->get('query');
+   
+         $data = Product::whereHas('category', function (Builder $q) {
+            $q->where('name', 'like', "%{$this->query}%");
+        })
+        ->orWhere('name', 'like', "%{$this->query}%")
+        ->orWhere('tags', 'like', "%{$this->query}%")
+        ->get();
+
+        dd($data);
+    }
+
 }
