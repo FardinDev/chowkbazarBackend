@@ -192,20 +192,16 @@
 								<div class="single-products">
 
 									<div class="productinfo text-center">
-
 										<img src="{{  $product->primary_image  }}" alt="">
-
-										<b style="color: #FE980F;">{{number_format($product->start_price).'-'.number_format($product->end_price)}} <small>BDT</small></b>  <br>
-
-										<small style="text-overflow: ellipsis;">{{$product->name}}</small>
-
-									
 									</div>
-
-									
+								</div>
+								<span class="product-price">
+									<b style="color: #FE980F;">{{number_format($product->start_price).'-'.number_format($product->end_price)}} <small>BDT</small></b>  <br>
+								</span>
+								<div class="product-info">
+									<small>{{$product->name}}</small>
 
 								</div>
-
 							</div>
 
 						</div>
