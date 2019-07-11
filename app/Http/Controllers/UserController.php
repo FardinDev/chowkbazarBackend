@@ -190,7 +190,7 @@ return redirect()->back()->with('success', 'Query Sent Successfully! We will con
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function allProducts()
+    public function allProducts(Request $request)
     {
     //     $check = [];
 
@@ -206,7 +206,21 @@ return redirect()->back()->with('success', 'Query Sent Successfully! We will con
     //        }
     //    }
         // dd($check);
-        $products = Product::inRandomOrder()->take(5)->get();
+
+        if(isset($request->search_query)){
+            $this->query = $request->search_query;
+   
+            $products = Product::whereHas('category', function (Builder $q) {
+               $q->where('name', 'like', "%{$this->query}%");
+           })
+           ->orWhere('name', 'like', "%{$this->query}%")
+           ->orWhere('tags', 'like', "%{$this->query}%")
+           ->get();
+        }else{
+
+            $products = Product::inRandomOrder()->take(5)->get();
+        }
+
         $cats = $this->getCat();
 
         return view('user.all_product', compact('cats', 'products'));

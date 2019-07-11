@@ -234,10 +234,12 @@
 					</div>
 
 					<div class="col-sm-3">
-
+{{-- search --}}
 						<div class="search_box pull-right">
-
-							<input type="text" id="search_box" placeholder="Search Products"/>
+						<form action="{{route('product.all')}}" method="get">
+							{{ csrf_field() }}
+							<input type="text" id="search_box" name="search_query" placeholder="Search Products" autocomplete="off"/>
+						</form>
 							<div id="countryList" style="position:absolute">
 									
 							</div>
