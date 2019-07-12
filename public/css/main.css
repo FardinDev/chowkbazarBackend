@@ -577,12 +577,48 @@ ul li a:hover .price{
 
     display: block;
 
-    -webkit-animation: fadeInUp 400ms;
+    /* -webkit-animation: fadeInUp 400ms;
 
-    animation: fadeInUp 400ms;
+    animation: fadeInUp 400ms; */
 
 }
 
+.nav.navbar-nav>li>ul>li:hover>ul.sub-sub-menu {
+
+    display: block;
+
+    /* -webkit-animation: slide 400ms;
+
+    animation: slide 400ms; */
+
+}
+
+.nav.navbar-nav>li>ul>li>ul>li:hover>ul.sub-sub-sub-menu {
+
+    display: block;
+/* 
+    -webkit-animation: fadeInUp 400ms;
+
+    animation: fadeInUp 400ms; */
+
+}
+
+/* .dropdown>a:hover>ul.sub-sub-menu{
+
+    display: block;
+
+    -webkit-animation: fadeInUp 400ms;
+
+    animation: fadeInUp 400ms;
+} */
+.sub-menu>li, .sub-sub-menu>li, .sub-sub-sub-menu>li{
+    height: 45px;
+    padding: auto !important;
+}
+.sub-menu>li:hover, .sub-sub-menu>li:hover, .sub-sub-sub-menu>li:hover{
+    /* background-color: #FE980F; */
+    background: rgba(254,152,15, 0.9);
+}
 
 
 ul.sub-menu {
@@ -601,7 +637,38 @@ ul.sub-menu {
 
     margin: 0;
 
-    width: 220px;
+    width: 320px;
+
+    -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
+
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
+
+    display: none;
+
+    z-index: 999;
+
+    /* filter: blur(8px);
+
+    -webkit-filter: blur(8px); */
+}
+
+ul.sub-sub-menu {
+
+    position: absolute;
+
+    top: 0px;
+
+    left: 320px;
+
+    background: rgba(0, 0, 0, 0.6);
+
+    list-style: none;
+
+    padding: 0;
+
+    margin: 0;
+
+    width: 320px;
 
     -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
 
@@ -613,6 +680,33 @@ ul.sub-menu {
 
 }
 
+ul.sub-sub-sub-menu {
+
+    position: absolute;
+
+    top: 0px;
+
+    left: 320px;
+
+    background: rgba(0, 0, 0, 0.6);
+
+    list-style: none;
+
+    padding: 0;
+
+    margin: 0;
+
+    width: 320px;
+
+    -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
+
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
+
+    display: none;
+
+    z-index: 999;
+
+}
 
 
 .dropdown ul.sub-menu li .active {
@@ -651,7 +745,7 @@ ul.sub-menu {
 
 .navbar-nav li ul.sub-menu li a:hover {
 
-    color: #FDB45E;
+    /* color: #FDB45E; */
 
 }
 
@@ -1277,9 +1371,18 @@ ul.sub-menu {
 
     font-weight: 300;
 
-
+    animation: shadow-pulse 1s 5;
 }
 
+@keyframes shadow-pulse
+{
+     0% {
+          box-shadow: 0 0 0 0px rgba(254,152,15, 0.6);
+     }
+     100% {
+          box-shadow: 0 0 0 40px rgba(0, 0, 0, 0);
+     }
+}
 
 
 .item button:hover {

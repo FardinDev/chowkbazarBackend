@@ -176,7 +176,7 @@
 
         
 
-        <div class="price-range"><!--price-range-->
+        {{-- <div class="price-range"><!--price-range-->
 
             <h2>Price Range</h2>
 
@@ -188,7 +188,7 @@
 
             </div>
 
-        </div><!--/price-range-->
+        </div><!--/price-range--> --}}
 
         
 

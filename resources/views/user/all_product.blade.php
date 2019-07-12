@@ -9,8 +9,15 @@
     <div class="col-sm-9">
         
         <div class="row" id="mainrow">
-        <div class="load"></div> 
-            @foreach ($products as $product)
+        <div class="load"></div>
+        @if (count($products) == 0)
+        <div style="position: relative;height: 50vh;">
+        <span style="position: absolute;top: 45%;width: -webkit-fill-available;text-align: -webkit-center;">
+            <h1>No Products Found! :(</h1>
+        </span> 
+        </div>
+        @else
+        @foreach ($products as $product)
             
         <div class="col-sm-3">
                 <div class="product-image-wrapper" onclick="window.location.href='{{route('product', $product->id)}}'">
@@ -29,6 +36,8 @@
                 </div>
             </div>
         @endforeach
+        @endif 
+           
     </div>
     
     </div>
