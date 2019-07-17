@@ -13,13 +13,25 @@ input[type="text"], input[type="number"], input[type="file"] {
     font-size:18px;
 }
 
-
+.main-section{
+            margin:0 auto;
+            padding: 20px;
+            margin-top: 100px;
+            background-color: #fff;
+            box-shadow: 0px 0px 20px #c1c1c1;
+        }
+        .file-caption-main,
+        .fileinput-upload{
+            display: none;
+        }
 
 </style>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+{{-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
+ --}}
+ <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" media="all" rel="stylesheet" type="text/css"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.7/css/fileinput.css" media="all" rel="stylesheet" type="text/css"/>
 <div class="container">
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -106,9 +118,16 @@ input[type="text"], input[type="number"], input[type="file"] {
 </div>
             <!-- File Button --> 
             <div class="form-group">
-                <label class="col-md-4 control-label" for="file">Select image(s)</label>
-                <div class="col-md-4">
-                <input id="file" name="file[]" class="input-file" accept="image/x-png,image/gif,image/jpeg" type="file" multiple>
+                    <label class="col-md-12 text-center" for="file" style="
+                    /* margin: 27px; */
+                    /* margin: 42px 0; */
+                    padding: 42px 0;
+                    border-top: 1px dotted;
+                    border-bottom: 1px dotted;
+                    cursor:pointer;
+                ">Click Here To Select image(s)</label>
+                <div class="col-md-4 file-loading">
+                <input id="file" name="file[]" class="file" accept="image/x-png,image/gif,image/jpeg" type="file" multiple>
                 <div class="help-block">
                     Maximum 5 Images
                 </div>
@@ -117,9 +136,10 @@ input[type="text"], input[type="number"], input[type="file"] {
 
             <!-- Button -->
             <div class="form-group">
-                <label class="col-md-4 control-label" for="singlebutton"></label>
-                <div class="col-md-5">
-                <button type="submit" class="btn btn-success btn-lg pull-right">Submit</button>
+                <label class="col-md-3 control-label" for="singlebutton"></label>
+               
+                <div class="col-md-6">
+                <button type="submit" class="btn btn-success btn-lg pull-right col-md-12">Submit</button>
                 </div>
             </div>
             
@@ -146,8 +166,12 @@ input[type="text"], input[type="number"], input[type="file"] {
 
     	<script src="{{asset('js/jquery.prettyPhoto.js')}}"></script>
 
-		<script src="{{asset('js/main.js')}}"></script>
+        <script src="{{asset('js/main.js')}}"></script>
         
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.7/js/fileinput.js" type="text/javascript"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.7/themes/fa/theme.js" type="text/javascript"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" type="text/javascript"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" type="text/javascript"></script>
         <script>
         (function() {
   'use strict';
@@ -196,6 +220,18 @@ input[type="text"], input[type="number"], input[type="file"] {
 
                     
             });
+
+            $("#file").fileinput({
+            theme: 'fa',
+            showRemove: true,
+            allowedFileExtensions: ['jpg', 'png', 'gif'],
+
+            maxFileSize:2000,
+            maxFilesNum: 10,
+            slugCallback: function (filename) {
+                return filename.replace('(', '_').replace(']', '_');
+            }
+        });
             
             });
         
