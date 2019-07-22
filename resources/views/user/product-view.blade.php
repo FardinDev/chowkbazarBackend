@@ -130,7 +130,7 @@
 								BDT
 							</span>
 
-                            <label>Minimum Orders : {{$product->minimum_orders}}</label>
+                            <label>Minimum Orders : {{$product->minimum_orders}} {{$product->unit}}</label>
                             <br>
                             @if ($product->tags)
 

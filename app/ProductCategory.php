@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ProductCategory extends Model
 {
     public function childs(){
-        return $this->hasMany('App\ProductCategory', 'parent_id', 'id');
+        return $this->hasMany('App\ProductCategory', 'parent_id', 'id')->orderBy('name');
     }
 
     public function parent(){

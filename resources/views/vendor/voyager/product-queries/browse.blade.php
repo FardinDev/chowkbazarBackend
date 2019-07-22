@@ -3,6 +3,15 @@
 @section('page_title', __('voyager::generic.viewing').' '.$dataType->display_name_plural)
 
 @section('page_header')
+<style>
+
+.new{
+    background-color: lightgray !important;
+    font-weight: bold;
+    color: black;
+}
+
+</style>
     <div class="container-fluid">
         <h1 class="page-title">
             <i class="{{ $dataType->icon }}"></i> {{ $dataType->display_name_plural }}
@@ -102,7 +111,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach($dataTypeContent as $data)
-                                    <tr>
+                                <tr class="{{$data->is_read == 0 ? 'new' : ''}}">
                                         @can('delete',app($dataType->model_name))
                                             <td>
                                                 <input type="checkbox" name="row_id" id="checkbox_{{ $data->getKey() }}" value="{{ $data->getKey() }}">
@@ -247,7 +256,7 @@
                                                 <i class="voyager-trash"></i> 
                                                 <span class="hidden-xs hidden-sm">Delete</span>
                                         </a>
-                                        <a href="/admin/product-queries/{{$data->id}}" title="View" class="btn btn-sm btn-warning pull-right view">
+                                    <a href="{{url('/admin/product-queries/'.$data->id)}}" title="View" class="btn btn-sm btn-warning pull-right view">
                                                 <i class="voyager-eye"></i> 
                                                 <span class="hidden-xs hidden-sm">View</span>
                                         </a>

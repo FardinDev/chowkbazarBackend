@@ -20,7 +20,7 @@ class UserController extends Controller
     private $sourceFileLocation = 'images/source-product-files/';
     public $query = '';
     private function getCat(){
-        return ProductCategory::where('parent_id', NULL)->get();
+        return ProductCategory::where('parent_id', NULL)->orderBy('name')->get();
     }
 
      /**

@@ -507,7 +507,7 @@
                                                     <i class="voyager-trash"></i> 
                                                     <span class="hidden-xs hidden-sm">Delete</span>
                                             </a>
-                                            <a href="/admin/source-products/{{$data->id}}" title="View" class="btn btn-sm btn-warning pull-right view">
+                                            <a href="{{url('/admin/source-products/'.$data->id)}}" title="View" class="btn btn-sm btn-warning pull-right view">
                                                     <i class="voyager-eye"></i> 
                                                     <span class="hidden-xs hidden-sm">View</span>
                                             </a>
