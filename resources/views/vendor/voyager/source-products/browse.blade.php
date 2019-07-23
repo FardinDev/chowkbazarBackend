@@ -7,7 +7,15 @@
 
 
 @section('page_header')
+<style>
 
+    .new{
+        background-color: lightgray !important;
+        font-weight: bold;
+        color: black;
+    }
+    
+    </style>
     <div class="container-fluid">
 
         <h1 class="page-title">
@@ -206,7 +214,7 @@
 
                                     @foreach($dataTypeContent as $data)
 
-                                    <tr>
+                                    <tr class="{{$data->is_read == 0 ? 'new' : ''}}">
 
                                         @can('delete',app($dataType->model_name))
 
@@ -324,11 +332,11 @@
 
                                                         @if($data->{$row->field})
 
-                                                            <span class="label label-info">{{ $row->details->on }}</span>
+                                                            <span class="label label-warning">{{ $row->details->on }}</span>
 
                                                         @else
 
-                                                            <span class="label label-primary">{{ $row->details->off }}</span>
+                                                            <span class="label label-success">{{ $row->details->off }}</span>
 
                                                         @endif
 

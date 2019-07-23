@@ -52,6 +52,7 @@ class UserController extends Controller
     {
         $cats = $this->getCat();
         $product = Product::where('id', $id)->first();
+        $product->increment('views');
         $products = Product::orderBy('id')->get();
         $brands = Product::select('brand', DB::raw('count(*) as count'))->groupBy('brand')->get();
 

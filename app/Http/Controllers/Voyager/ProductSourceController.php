@@ -16,7 +16,7 @@ use TCG\Voyager\Http\Controllers\VoyagerBaseController;
 use TCG\Voyager\Http\Controllers\Traits\BreadRelationshipParser;
 
 
-class productsController extends VoyagerBaseController
+class ProductSourceController extends VoyagerBaseController
 {
     use BreadRelationshipParser;
 
@@ -34,7 +34,6 @@ class productsController extends VoyagerBaseController
 
     public function index(Request $request)
     {
-        
         // GET THE SLUG, ex. 'posts', 'pages', etc.
         $slug = $this->getSlug($request);
 
@@ -160,7 +159,7 @@ class productsController extends VoyagerBaseController
 
     public function show(Request $request, $id)
     {
-        
+        Db::table('source_products')->where('id', $id)->update(['is_read' => 1]);
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -221,6 +220,7 @@ class productsController extends VoyagerBaseController
 
     public function edit(Request $request, $id)
     {
+        
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -259,7 +259,7 @@ class productsController extends VoyagerBaseController
         if (view()->exists("voyager::$slug.edit-add")) {
             $view = "voyager::$slug.edit-add";
         }
-               
+
         return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
     }
 
@@ -286,16 +286,9 @@ class productsController extends VoyagerBaseController
         // Check permission
         $this->authorize('edit', $data);
 
-        // dd($request->tags);
         // Validate fields with ajax
         $val = $this->validateBread($request->all(), $dataType->editRows, $dataType->name, $id)->validate();
-        $updateData = $this->insertUpdateData($request, $slug, $dataType->editRows, $data);
-
-        $id = $updateData->id;
-
-        $getData = DB::table('products')->where('id', $id)->update([
-            'tags' => $request->tags
-        ]);
+        $this->insertUpdateData($request, $slug, $dataType->editRows, $data);
 
         event(new BreadDataUpdated($dataType, $data));
 
@@ -361,79 +354,6 @@ class productsController extends VoyagerBaseController
      */
     public function store(Request $request)
     {
-
-        
-        
-        include_once('simple_html_dom.php');
-
-        $url = $request->url;
-
-        $html = file_get_html($url);
-$articles=[];
-$pics[] = '';
-$otherImages = [];
-$name = $html->find('h1.ma-title', 0)->innertext;
-
-foreach($html->find('img.pic') as $pic) {
- 
-
-   $primaryImage = str_replace("_350x350.jpg", '', $pic->src);
-    
-}
-
-foreach($html->find('div.thumb') as $thumb) {
- 
-    foreach($thumb->find('img') as $item){
-
-        array_push($otherImages, str_replace("50x50","350x350", $item->src));
-    }
-        
-    }
-        
-        
-$description = $html->find('div.module-productSpecification', 0);
-
-for ($i=0; $i < sizeof($description->find('img'))-1; $i++) { 
-    
-        $description->find('img', $i)->src = $description->find('img', $i+1)->src;
-    
-}
-
-// $description = $html->find('div.scc-wrapper.detail-module.module-productSpecification', 0);
-
-// foreach ($description->find('noscript') as $pic) {
-    
-//     array_push($pics, $pic->innertext);
-// }
-
-// foreach ($description->find('img') as $pic) {
-    
-//     $pic->src = '';
-// }
-// $c = 0;
-
-// $count = 0;
-// foreach ($pics as $p) {
-
-//   if($count < sizeof($pics)-1){
-
-//         $description->find('img[data-src]', $count)->innertext = $p;
-//         $count++;
-//   }
-
-    
-// }
-
-// echo $name .'<br>';
-// echo $primaryImage .'<br>';
-
-
-// echo $description .'<br>';
-
-// dd($otherImages);
-
-// die();
-
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -444,19 +364,6 @@ for ($i=0; $i < sizeof($description->find('img'))-1; $i++) {
         // Validate fields with ajax
         $val = $this->validateBread($request->all(), $dataType->addRows)->validate();
         $data = $this->insertUpdateData($request, $slug, $dataType->addRows, new $dataType->model_name());
-
-        $id = $data->id;
-
-        $getData = DB::table('products')->where('id', $id)->update([
-            'web_url' => $url,
-            'name' => $name,
-            'primary_image' => $primaryImage,
-            'other_images' => json_encode($otherImages),
-            'description' => $description,
-            'tags' => $request->tags
-        ]);
-
-        
 
         event(new BreadDataAdded($dataType, $data));
 
@@ -740,7 +647,8 @@ for ($i=0; $i < sizeof($description->find('img'))-1; $i++) {
         $search = $request->input('search', false);
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
 
-        foreach ($dataType->editRows as $key => $row) {
+        $rows = $request->input('method', 'add') == 'add' ? $dataType->addRows : $dataType->editRows;
+        foreach ($rows as $key => $row) {
             if ($row->field === $request->input('type')) {
                 $options = $row->details;
                 $skip = $on_page * ($page - 1);
