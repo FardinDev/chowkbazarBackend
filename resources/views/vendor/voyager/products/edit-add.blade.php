@@ -206,6 +206,7 @@
         var $file;
 
         function deleteHandler(tag, isMulti) {
+            
           return function() {
             $file = $(this).siblings(tag);
 
@@ -250,6 +251,7 @@
             $('.form-group').on('click', '.remove-single-file', deleteHandler('a', false));
 
             $('#confirm_delete').on('click', function(){
+                console.log(params);
                 $.post('{{ route('voyager.media.remove') }}', params, function (response) {
                     if ( response
                         && response.data
