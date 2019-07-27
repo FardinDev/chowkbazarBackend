@@ -175,7 +175,9 @@ a#scrollUp i {
 
 }
 
-
+.fa-envelope:hover {
+    background: red;
+}
 
 .social-icons ul li a {
 
@@ -1367,11 +1369,34 @@ ul.sub-sub-sub-menu {
 
     font-family: 'Roboto', sans-serif;
 
-    font-size: 16px;
+    font-size: 17px;
 
     font-weight: 300;
 
     animation: shadow-pulse 1s 5;
+
+    transition: all 0.4s ease 0s;
+
+    -moz-transition: all 0.4s ease 0s;
+
+    -webkit-transition: all 0.4s ease 0s;
+
+    -o-transition: all 0.4s ease 0s;
+}
+
+
+.source:hover{
+
+
+    color: black;
+
+    transition: all 0.4s ease 0s;
+
+    -moz-transition: all 0.4s ease 0s;
+
+    -webkit-transition: all 0.4s ease 0s;
+
+    -o-transition: all 0.4s ease 0s;
 }
 
 @keyframes shadow-pulse

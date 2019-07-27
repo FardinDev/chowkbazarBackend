@@ -130,18 +130,27 @@
 
 					<div class="col-md-8 clearfix">
 
-						<div class="shop-menu clearfix pull-right">
+							<div class="col-sm-12">
 
-						
-						@if (Route::is('product.source'))
-
-							<button type="button" class="btn btn-default btn-lg source" onclick="window.location.href='{{route('product.source')}}'">Source Product</button>
-							@else
-
-							<button type="button" class="btn btn-default source" onclick="window.location.href='{{route('product.source')}}'">Source Product</button>
-						@endif
-
-						</div>
+									<div class="social-icons pull-right">
+			
+										<ul class="nav navbar-nav" style="display: inline !important;">
+			
+											<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+											
+											<li><a href="#"><i class="fa fa-envelope"></i></a></li>
+											@if (!Route::is('product.source'))
+											<li>
+											<button type="button" class="btn btn-default source" onclick="window.location.href='{{route('product.source')}}'">Source Product</button>
+											</li>
+											@endif
+										
+										</ul>
+			
+									</div>
+			
+								</div>
+	
 
 					</div>
 
