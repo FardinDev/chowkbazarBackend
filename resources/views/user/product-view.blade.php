@@ -171,11 +171,11 @@
 
                         <p><b>Minimum Orders :</b> {{$product->minimum_orders}} {{$product->unit}}</p>
 
-                        <p><b>{{ $product->text_one_title ? $product->text_one_title.':' : ''}}</b> {{$product->text_one_text}}</p>
+                        <p><b>{{ $product->text_one_title ? $product->text_one_title.' :' : ''}}</b> {{$product->text_one_text}}</p>
 
-                        <p><b>{{ $product->text_two_title ? $product->text_two_title.':' : ''}}</b> {{$product->text_two_text}}</p>
+                        <p><b>{{ $product->text_two_title ? $product->text_two_title.' :' : ''}}</b> {{$product->text_two_text}}</p>
 
-                        <p><b>{{ $product->text_three_title ? $product->text_three_title.':' : ''}}</b> {{$product->text_three_text}}</p>
+                        <p><b>{{ $product->text_three_title ? $product->text_three_title.' :' : ''}}</b> {{$product->text_three_text}}</p>
 
                         <a id="formButton" class="btn btn-fefault query">Send Query</a>
                     <form class="form-horizontal col-12" id="form1" action="{{route('product.send-query', $product->id)}}" method="POST">
