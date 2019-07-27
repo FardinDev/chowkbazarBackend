@@ -5248,4 +5248,10 @@ if it's not present, don't show loader */
 	background: url(../images/preloader.gif) center no-repeat #fff;
 }
 
+p>a{
+    color: #FE980F;
+}
 
+p>a:hover{
+    color: rgb(240, 189, 122);
+}

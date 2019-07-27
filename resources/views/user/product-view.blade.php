@@ -76,7 +76,7 @@
 
 
 
-            <div class="col-sm-10 padding-right">
+            <div class="col-sm-12 padding-right">
                 <div class="product-details">
                     <!--product-details-->
                     <div class="col-sm-5">
@@ -112,25 +112,50 @@
                 <div class="col-sm-7">
                     <div class="product-information">
                         <!--/product-information-->
+                        @php
+                            // function append($category){
+                            //     `<a href="{{route('product.all', ['search_query' => `.$category.`])}}">{{`.$category.`}}</a>`
+                                
+                            // }
+                        @endphp
                         <h2>{{$product->name}}</h2>
-                        <p>Category :
-                            @if ($product->category->parent)
+                        <p>Category : 
+                      
+                        @if ($product->category->parent)
                             @if ($product->category->parent->parent)
-                            {{$product->category->parent->parent->name.' 🡆 '.$product->category->parent->name.' 🡆 '.$product->category->name}}
+                            <a href="{{route("product.all", ["search_query" => $product->category->parent->parent->name])}}">
+                                {{$product->category->parent->parent->name}}
+                            </a>
+                            🡆 
+                            <a href="{{route("product.all", ["search_query" => $product->category->parent->name])}}">
+                                {{$product->category->parent->name}}
+                            </a>
+                            🡆 
+                            <a href="{{route("product.all", ["search_query" => $product->category->name])}}">
+                                {{$product->category->name}}
+                            </a>
+                            @else
+                            <a href="{{route("product.all", ["search_query" => $product->category->parent->name])}}">
+                                {{$product->category->parent->name}}
+                            </a>
+                            🡆 
+                            <a href="{{route("product.all", ["search_query" => $product->category->name])}}">
+                                    {{$product->category->name}}
+                            </a>
+         
+                            @endif
+                        @else
+                        <a href="{{route("product.all", ["search_query" => $product->category->name])}}">
+                                {{$product->category->name}}
+                        </a>
+                        @endif
                         </p>
-                        @else
-                        {{$product->category->parent->name.' 🡆 '.$product->category->name}}</p>
-                        @endif
-                        @else
-                        {{$product->category->name}}</p>
-                        @endif
                         <span>
                             <span>Range :
                                 {{number_format($product->start_price).' BDT - '.number_format($product->end_price)}}
 								BDT
 							</span>
 
-                            <label>Minimum Orders : {{$product->minimum_orders}} {{$product->unit}}</label>
                             <br>
                             @if ($product->tags)
 
@@ -138,17 +163,19 @@
                             $tags = explode(',', $product->tags)
                             @endphp
                             @foreach ($tags as $tag)
-                            <label class="label label-warning text-light"
-                                style="color:white !important">{{$tag}}</label>
+                            <a href="{{route('product.all', ['search_query' => $tag])}}"><label class="label label-warning text-light"
+                                style="color:white !important; background-color:#FE980F !important; cursor:pointer">{{$tag}}</label></a>
                             @endforeach
                             @endif
                         </span>
 
-                        <p><b>Availability:</b> In Stock</p>
+                        <p><b>Minimum Orders :</b> {{$product->minimum_orders}} {{$product->unit}}</p>
 
-                        <p><b>Condition:</b> New</p>
+                        <p><b>{{ $product->text_one_title ? $product->text_one_title.':' : ''}}</b> {{$product->text_one_text}}</p>
 
-                        <p><b>Brand:</b> {{$product->brand}}</p>
+                        <p><b>{{ $product->text_two_title ? $product->text_two_title.':' : ''}}</b> {{$product->text_two_text}}</p>
+
+                        <p><b>{{ $product->text_three_title ? $product->text_three_title.':' : ''}}</b> {{$product->text_three_text}}</p>
 
                         <a id="formButton" class="btn btn-fefault query">Send Query</a>
                     <form class="form-horizontal col-12" id="form1" action="{{route('product.send-query', $product->id)}}" method="POST">
@@ -233,12 +260,13 @@
                         @if ($product->tags)
 
                         @php
-                        $tags = explode(',', $product->tags)
-                        @endphp
-                        @foreach ($tags as $tag)
-                        <label class="label label-warning text-light" style="color:white !important">{{$tag}}</label>
-                        @endforeach
-                        @endif
+                            $tags = explode(',', $product->tags)
+                            @endphp
+                            @foreach ($tags as $tag)
+                            <a href="{{route('product.all', ['search_query' => $tag])}}"><label class="label label-warning text-light"
+                                style="color:white !important; background-color:#FE980F !important; cursor:pointer">{{$tag}}</label></a>
+                            @endforeach
+                            @endif
 
                     </div>
 
