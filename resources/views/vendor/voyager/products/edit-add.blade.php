@@ -252,6 +252,7 @@
 
             $('#confirm_delete').on('click', function(){
                 console.log(params);
+                console.log('hi');
                 $.post('{{ route('voyager.media.remove') }}', params, function (response) {
                     if ( response
                         && response.data
