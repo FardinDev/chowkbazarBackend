@@ -38,15 +38,15 @@
 
 									<p>{{$slider->short_description}}</p>
 
-									<button type="button" class="btn btn-default get">Get it now</button>
+								<button type="button" class="btn btn-default get" onclick="window.location.href='{{$slider->button_url}}'">{{$slider->button_text ? ucwords($slider->button_text) : 'Get it now'}}</button>
 
 								</div>
 
-								<div class="col-sm-6">
+								<div class="col-sm-6 peopleCarouselImg">
 
-									<img src="{{ Voyager::image( $slider->main_image ) }}" class="girl img-responsive"  alt="" />
+									<img src="{{ Voyager::image( $slider->main_image ) }}" class="img-responsive main-image" />
 
-									<img src="{{ Voyager::image( $slider->pricing_image ) }}"  class="pricing" alt="" />
+									<img src="{{ Voyager::image( $slider->pricing_image ) }}"  class="pricing img-responsive" alt="" />
 
 								</div>
 

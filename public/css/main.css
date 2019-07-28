@@ -1269,7 +1269,7 @@ ul.sub-sub-sub-menu {
 
     right: 40%;
 
-    top: 52%;
+    top: 45%;
 
 }
 
@@ -5255,3 +5255,8 @@ p>a{
 p>a:hover{
     color: rgb(240, 189, 122);
 }
+.peopleCarouselImg .main-image {
+    width: auto;
+    height: 350px;
+    max-height: 350px;
+  }
