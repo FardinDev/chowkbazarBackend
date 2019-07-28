@@ -31,7 +31,7 @@ class UserController extends Controller
     public function home()
     {   
         $cats = $this->getCat();
-        $products = Product::orderBy('id')->get();
+        $products = Product::orderBy('views', 'desc')->get();
         $sliders = SliderInfo::where('is_active', 1)->get();
         $brands = Product::select('brand', DB::raw('count(*) as count'))->groupBy('brand')->get();
 
