@@ -39,9 +39,9 @@
         @endif 
            
     </div>
-    
-    </div>
 </div>
+</div>
+@include('components.recomended')
 
 
 
@@ -138,6 +138,16 @@ function checkUncheck(id, check, onload){
 };
 
 $(document).ready(function () {
+    $.ajax({
+            type: "GET",
+            url: "{{route('get.recommended.data')}}",
+            data: "data",
+            success: function (response) {
+                console.log(response);
+                $('#active-r').html(response);
+            }
+        });
+
         var onload = $('#mainrow').html();
         $("input:checkbox").change(function () {
             var id = $(this).attr('id');

@@ -75,9 +75,25 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function recommended()
     {
-        //
+        $products = Product::inRandomOrder()->take(6)->get();
+        $string = '';
+
+        foreach ($products as $product) {
+            $string .= '<div class="col-sm-2">
+            <div class="product-image-wrapper-r" onclick="window.location.href=`'.route('product', $product->id).'`">
+                <div class="single-products">
+                    <div class="productinfo text-center">
+                        <img src="'.$product->primary_image.'" alt="" />
+                        <h4>'.$product->start_price.'-'.$product->end_price.'<small> BDT</small></h4>
+                        <p class="ellipsis">'.$product->name.'</p>
+                    </div>
+                </div>
+            </div>
+        </div>';
+        }
+        return $string;
     }
 
     /**

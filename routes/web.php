@@ -21,6 +21,7 @@ Route::get('/source-product', 'UserController@sourceProduct')->name('product.sou
 Route::post('/source-product', 'UserController@sourceProductStore')->name('product.source.store');
 
 Route::get('/search-product', 'UserController@searchProduct')->name('product.search');
+Route::get('/recommended-data', 'UserController@recommended')->name('get.recommended.data');
 Route::get('/eloquent', 'UserController@eloquent');
 
 
