@@ -89,6 +89,95 @@
     </div>
     <!--/category-products-->
 
+
+    <div>
+        <ul class="nav nav-list">
+            @foreach ($cats as $cat)
+           <li><label class="tree-toggler nav-header">{{$cat->name}}<span class="badge pull-right">▼</span></label>
+            
+                @if ($cat->childs->count()>0)
+                <ul class="nav nav-list tree" style="margin-left:20px">
+                    {{childCat($cat->childs, '')}}
+                </ul>
+                @endif
+            </li>
+           @endforeach
+        </ul>
+    </div>
 </div>
 
 </div>
+@php
+    function childCat($cats, $string){
+        foreach($cats as $cat){
+            $string .= '<li><label class="tree-toggler nav-header" style="font-size:small">'.$cat->name.'</label>';
+
+                if($cat->childs->count() > 0){
+                    $string .= '<ul class="nav nav-list tree">';
+                    foreach($cat->childs as $catC){
+                            $string .= '<li><label class="tree-toggler nav-header">---'.$catC->name.'</label>'; 
+                        }
+                    $string .= '</ul>';
+                }
+
+            $string .= '</li>';
+        }
+
+        echo $string;
+    }
+@endphp
+
+{{-- <div>
+        <ul class="nav nav-list">
+                @foreach ($cats as $cat)
+            <li><label class="tree-toggler nav-header">Header 1</label>
+                <ul class="nav nav-list tree">
+                    <li><a href="#">Link</a></li>
+                    <li><a href="#">Link</a></li>
+                    <li><label class="tree-toggler nav-header">Header 1.1</label>
+                        <ul class="nav nav-list tree">
+                            <li><a href="#">Link</a></li>
+                            <li><a href="#">Link</a></li>
+                            <li><label class="tree-toggler nav-header">Header 1.1.1</label>
+                                <ul class="nav nav-list tree">
+                                    <li><a href="#">Link</a></li>
+                                    <li><a href="#">Link</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li class="divider"></li>
+            <li><label class="tree-toggler nav-header">Header 2</label>
+                <ul class="nav nav-list tree">
+                    <li><a href="#">Link</a></li>
+                    <li><a href="#">Link</a></li>
+                    <li><label class="tree-toggler nav-header">Header 2.1</label>
+                        <ul class="nav nav-list tree">
+                            <li><a href="#">Link</a></li>
+                            <li><a href="#">Link</a></li>
+                            <li><label class="tree-toggler nav-header">Header 2.1.1</label>
+                                <ul class="nav nav-list tree">
+                                    <li><a href="#">Link</a></li>
+                                    <li><a href="#">Link</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><label class="tree-toggler nav-header">Header 2.2</label>
+                        <ul class="nav nav-list tree">
+                            <li><a href="#">Link</a></li>
+                            <li><a href="#">Link</a></li>
+                            <li><label class="tree-toggler nav-header">Header 2.2.1</label>
+                                <ul class="nav nav-list tree">
+                                    <li><a href="#">Link</a></li>
+                                    <li><a href="#">Link</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div --}}
