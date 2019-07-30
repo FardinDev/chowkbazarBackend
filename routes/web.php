@@ -23,6 +23,7 @@ Route::post('/source-product', 'UserController@sourceProductStore')->name('produ
 Route::get('/search-product', 'UserController@searchProduct')->name('product.search');
 Route::get('/recommended-data', 'UserController@recommended')->name('get.recommended.data');
 Route::get('/eloquent', 'UserController@eloquent');
+Route::get('/order-by', 'UserController@orderBy')->name('get.order.by');
 
 
 Route::get('/notification', function(){

@@ -1,6 +1,21 @@
 <div class="col-sm-3">
 
 <div class="left-sidebar">
+<div id="order_by_div">
+    <h2>Order By</h2>
+
+    <div class="form-group">
+        <select class="form-control select-dropdown" name="order_by" id="order_by">
+            <option value="def">Default</option>
+            <option disabled style="baackground-color:orange; text-align:center">Price</option>
+            <option value="pl2h">Low to High</option>
+            <option value="ph2l">High to Low</option>
+            <option disabled style="baackground-color:orange; text-align:center">Views</option>
+            <option value="vl2h">Low to High</option>
+            <option value="vh2l">High to Low</option>
+        </select>
+    </div>
+</div>
 
     <h2>Category</h2>
 

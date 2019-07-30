@@ -31,7 +31,7 @@ class UserController extends Controller
     public function home()
     {   
         $cats = $this->getCat();
-        $products = Product::orderBy('views', 'desc')->get();
+        $products = Product::orderBy('views', 'desc')->take(8)->get();
         $sliders = SliderInfo::where('is_active', 1)->get();
         $brands = Product::select('brand', DB::raw('count(*) as count'))->groupBy('brand')->get();
 
@@ -277,7 +277,7 @@ return redirect()->back()->with('success', 'Query Sent Successfully! We will con
         elseif ($request->data) {
             $data = $request->data;
             
-            $products = Product::select('id', 'name', 'primary_image', 'start_price', 'end_price')->whereIn('category_id', $data)->get();
+            $products = Product::select('id', 'name', 'primary_image', 'start_price', 'end_price', 'views')->whereIn('category_id', $data)->get();
 
            return response()->json($products);
 
@@ -408,6 +408,12 @@ return redirect()->back()->with('success', 'Query Sent Successfully! We will con
         ->get();
 
         dd($data);
+    }
+
+    public function orderBy(Request $request){
+
+        return $request->data;
+        
     }
 
 }
