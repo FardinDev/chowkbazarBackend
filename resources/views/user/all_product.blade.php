@@ -40,8 +40,13 @@
             @endif
 
         </div>
+        <div class="pull-right" id="links">
+
+            {{$products->links()}}
+        </div>
     </div>
 </div>
+
 @include('components.recomended')
 
 
@@ -99,7 +104,9 @@
                     // $('#mainrow').append(card).hide();
                     if (document.querySelectorAll('input[type="checkbox"]:checked').length == 0) {
                         $('#mainrow').html(onload);
+                        
                     }
+                    
                 } else {
                     $('#mainrow').html('');
                     $.each(data, function (index, value) {
@@ -145,6 +152,12 @@
                 $.each(data, function (index, value) {
                     $('#' + value).prop("checked", check);
                 });
+
+                if ($(":checkbox:checked").length > 0) {
+                $('#links').hide();
+                }else if($(":checkbox:checked").length == 0){
+                    $('#links').show();
+                }
                 var category = [];
                 $.each($("input[name='cat']:checked"), function () {
                     category.push($(this).attr('id'));
@@ -197,7 +210,6 @@
 
         var onload = $('#mainrow').html();
         $("input:checkbox").change(function () {
-
             var id = $(this).attr('id');
             if ($(this).is(':checked')) {
                 //check
@@ -207,9 +219,9 @@
                 //remove
                 var check = false;
                 checkUncheck(id, check, onload);
-
             }
 
+            
         });
 
         $("#order_by").change(function () {

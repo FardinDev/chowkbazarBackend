@@ -252,14 +252,16 @@
                                             </td>
                                         @endforeach
                                         <td class="no-sort no-click" id="bread-actions">
-                                            <a href="javascript:;" title="Delete" class="btn btn-sm btn-danger pull-right delete" data-id="{{$data->id}}" id="delete-{{$data->id}}">
+                                            <a href="{{url('/admin/product-queries/'.$data->id)}}" title="View" class="btn btn-lg btn-warning pull-right view">
+                                                    <i class="voyager-eye"></i> 
+                                                    <span class="hidden-xs hidden-sm">View</span>
+                                            </a>
+                                            <br>
+                                            <a href="javascript:;" title="Delete" class="btn btn-outline-danger text-danger pull-right delete" data-id="{{$data->id}}" id="delete-{{$data->id}}">
                                                 <i class="voyager-trash"></i> 
                                                 <span class="hidden-xs hidden-sm">Delete</span>
                                         </a>
-                                    <a href="{{url('/admin/product-queries/'.$data->id)}}" title="View" class="btn btn-sm btn-warning pull-right view">
-                                                <i class="voyager-eye"></i> 
-                                                <span class="hidden-xs hidden-sm">View</span>
-                                        </a>
+                                    
                                         </td>
                                     </tr>
                                     @endforeach

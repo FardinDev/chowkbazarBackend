@@ -190,7 +190,7 @@
 
                                 <div class="col-md-5">
                                     <input id="phone_number" name="phone_number" type="text"
-                                        placeholder="Enter Phone Number" class="form-control input-md" required>
+                                        placeholder="Enter Phone / Email" class="form-control input-md" required>
 
                                 </div>
                             </div>
@@ -347,19 +347,28 @@
         $( "#form1" ).submit(function( event ) {
 
                
-            var phoneno = /^(?:\+88|01)?(?:\d{11}|\d{13})$/;
-            if($('#phone_number').val().match(phoneno)) {
+            // var phoneno = /^(?:\+88|01)?(?:\d{11}|\d{13})$/;
+            // if($('#phone_number').val().match(phoneno)) {
             
                 
-            }
-            else {
-                alert("Please Enter a Valid Number");
-                event.preventDefault();
+            // }
+            // else {
+            //     alert("Please Enter a Valid Number");
+            //     event.preventDefault();
             
-            }
+            // }
 
+        var check = $('#phone_number').val();
+        var mail = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        var phoneno = /^(?:\+88|01)?(?:\d{11}|\d{13})$/;
+    
+        if(!mail.test(check) && !phoneno.test(check)){
+            alert("Email Address or Phone number is not valid, Please provide a valid Email or Phone number");
+            $('#phone_number').val('').focus();
+            event.preventDefault();
+        }
 
-            });
+        });
 
 
 

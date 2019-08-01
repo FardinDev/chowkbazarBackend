@@ -152,7 +152,7 @@ class UserController extends Controller
             
             $data['product_images'] = json_encode($productImages);
             $source = Source_product::create($data);
-       return redirect()->back()->with('success','Your request is submitted! We will contact you at the given number.');;
+       return redirect()->back()->with('success','Your request is submitted! We will contact you at the given contact info.');;
     }
 
     /**
@@ -186,7 +186,7 @@ $data['product_query'] = $request->product_query;
 
 Product_query::create($data);
 
-return redirect()->back()->with('success', 'Query Sent Successfully! We will contact you at the given number.');
+return redirect()->back()->with('success', 'Query Sent Successfully! We will contact you at the given contact info.');
 
     }
 
@@ -232,10 +232,10 @@ return redirect()->back()->with('success', 'Query Sent Successfully! We will con
            })
            ->orWhere('name', 'like', "%{$this->query}%")
            ->orWhere('tags', 'like', "%{$this->query}%")
-           ->get();
+           ->paginate(12);
         }else{
 
-            $products = Product::inRandomOrder()->take(5)->get();
+            $products = Product::inRandomOrder()->paginate(12);
         }
 
         $cats = $this->getCat();

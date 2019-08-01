@@ -25,7 +25,7 @@ class SourceProduct extends BaseDimmer
         return view('voyager::dimmer', array_merge($this->config, [
             'icon'   => 'voyager-plus',
             'title'  => "{$count} {$string}",
-            'text'   => 'You have '.$count.' Source Products in your database. Click on button below to view all '.$string,
+            'text'   => 'You have '.$count.' Source Products in your database. Click on button below to view',
             'button' => [
                 'text' => 'View All Source Products',
                 'link' => route('voyager.source-products.index'),

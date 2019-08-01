@@ -69,7 +69,7 @@
 
             <!-- Text input-->
             <div class="form-group">
-                <label class="col-md-4 control-label" for="name">Your Name</label>
+                <label class="col-md-4 control-label" for="name">Your Name<span style="color:red"> *</span></label>
                 <div class="col-md-5">
                     <input id="user_name" name="user_name" type="text" placeholder="Enter Your Name"
                         class="form-control input-md" required="">
@@ -81,7 +81,7 @@
 
             <!-- Text input-->
             <div class="form-group">
-                <label class="col-md-4 control-label" for="phone">Your Phone</label>
+                <label class="col-md-4 control-label" for="phone">Your Phone<span style="color:red"> *</span></label>
                 <div class="col-md-5">
                     <input id="user_phone" name="user_phone" type="text" placeholder="Enter Your Phone Number"
                         class="form-control input-md" required="" minlength="11">
@@ -94,7 +94,7 @@
 
             <!-- Text input-->
             <div class="form-group">
-                <label class="col-md-4 control-label" for="url">Product Name</label>
+                <label class="col-md-4 control-label" for="url">Product Name<span style="color:red"> *</span></label>
                 <div class="col-md-5">
                     <input id="product_name" name="product_name" type="text" placeholder="Enter Product Name"
                         class="form-control input-md" required>
@@ -105,7 +105,7 @@
             </div>
             <!-- Text input-->
             <div class="form-group">
-                <label class="col-md-4 control-label" for="url">Product Quantity</label>
+                <label class="col-md-4 control-label" for="url">Product Quantity<span style="color:red"> *</span></label>
                 <div class="col-md-5">
                     <input id="product_quantity" name="product_quantity" type="number"
                         placeholder="Enter Product Quantity" min="0" class="form-control input-md" required>
@@ -117,11 +117,11 @@
 
             <!-- Textarea -->
             <div class="form-group">
-                <label class="col-md-4 control-label" for="description">Product Description</label>
+                <label class="col-md-4 control-label" for="description">Product Description<span style="color:red"> *</span></label>
                 <div class="col-md-5">
                     <textarea class="form-control" id="product_description" name="product_description" required></textarea>
                     <div class="invalid-feedback">
-                        Please Enter Product Description
+                        Please Enter Product Description 
                     </div>
                 </div>
             </div>
