@@ -88,6 +88,7 @@
             @endforeach
         </div>
         <!--/category-products-->
+        <h2>Tags</h2>
 
         <div class="panel-group category-products" id="tag-pool" style="padding:15px !important">
             <!--category-productsr-->

@@ -814,7 +814,7 @@ ul.sub-sub-sub-menu {
 
 #footer {
 
-    background: #F0F0E9;
+    background: lightgray;
 
 }
 
@@ -1066,7 +1066,7 @@ ul.sub-sub-sub-menu {
 
 .single-widget h2 {
 
-    color: #666663;
+    color: black;
 
     font-family: 'Roboto', sans-serif;
 
@@ -1092,7 +1092,7 @@ ul.sub-sub-sub-menu {
 
 .single-widget ul li a {
 
-    color: #8C8C88;
+    color: black;
 
     font-family: 'Roboto', sans-serif;
 
@@ -1186,7 +1186,7 @@ ul.sub-sub-sub-menu {
 
 .searchform p {
 
-    color: #8C8C88;
+    color: black;
 
     font-family: 'Roboto', sans-serif;
 
@@ -1202,7 +1202,7 @@ ul.sub-sub-sub-menu {
 
 .footer-bottom {
 
-    background: #D6D6D0;
+    background: lightgray;
 
     padding-top: 10px;
 

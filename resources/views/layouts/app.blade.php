@@ -12,7 +12,7 @@
 
     <meta name="author" content="">
 
-    <title>@yield('title') | E-Shopper</title>
+    <title>@yield('title') | chowkbazarbd</title>
 
     <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
 
@@ -58,52 +58,6 @@
 <body>
 	<div class="se-pre-con"></div> 
 	<header id="header"><!--header-->
-
-		{{-- <div class="header_top"><!--header_top-->
-
-			<div class="container">
-
-				<div class="row">
-
-					<div class="col-sm-6">
-
-						<div class="contactinfo">
-
-							<ul class="nav nav-pills">
-
-								<li><a href="#"><i class="fa fa-phone"></i> +2 95 01 88 821</a></li>
-
-								<li><a href="#"><i class="fa fa-envelope"></i> info@domain.com</a></li>
-
-							</ul>
-
-						</div>
-
-					</div>
-
-					<div class="col-sm-6">
-
-						<div class="social-icons pull-right">
-
-							<ul class="nav navbar-nav">
-
-								<li><a href="#"><i class="fa fa-facebook"></i></a></li>
-								
-								<li><a href="#"><i class="fa fa-envelope"></i></a></li>
-
-								
-
-							</ul>
-
-						</div>
-
-					</div>
-
-				</div>
-
-			</div>
-
-		</div><!--/header_top--> --}}
 
 		
 
@@ -292,136 +246,66 @@
 
 
 	<footer id="footer"><!--Footer-->
-
-
 		<div class="footer-widget">
-
 			<div class="container">
-
 				<div class="row">
-
-					<div class="col-sm-2">
-
+					<div class="col-sm-3">
 						<div class="single-widget">
-
-							<h2>Service</h2>
-
+							<h2>About</h2>
 							<ul class="nav nav-pills nav-stacked">
-
-								<li><a href="#">Online Help</a></li>
-
-								<li><a href="#">Contact Us</a></li>
-
-								<li><a href="#">Order Status</a></li>
-
-								<li><a href="#">Change Location</a></li>
-
-								<li><a href="#">FAQ’s</a></li>
-
+								<li><a href="#" data-toggle="modal" data-target="#exampleModalLong">See About</a></li>
+								
 							</ul>
-
 						</div>
-
 					</div>
-
-					<div class="col-sm-2">
-
-						<div class="single-widget">
-
-							<h2>Quock Shop</h2>
-
-							<ul class="nav nav-pills nav-stacked">
-
-								<li><a href="#">T-Shirt</a></li>
-
-								<li><a href="#">Mens</a></li>
-
-								<li><a href="#">Womens</a></li>
-
-								<li><a href="#">Gift Cards</a></li>
-
-								<li><a href="#">Shoes</a></li>
-
-							</ul>
-
-						</div>
-
+					<div class="col-sm-5">
+							<div class="single-widget">
+									<h2>Social</h2>
+									<div class="social-icons">
+			
+											<ul class="nav navbar-nav" style="display: inline !important;">
+												<li><a href="https://www.facebook.com/chowkbazarbd" target="_blank"><i class="fa fa-facebook"></i></a></li>
+				
+												<li><a href="https://www.facebook.com/groups/cbbdcommunity" target="_blank"><i class="fa fa-users"></i></a></li>
+												
+												<li><a href="mailto:chowkbazarbd@gmail.com" target="_blank"><i class="fa fa-envelope"></i></a></li>
+												
+											</ul>
+				
+										</div>
+								</div>
+						
 					</div>
+				
+					<!-- Button trigger modal -->
 
-					<div class="col-sm-2">
-
-						<div class="single-widget">
-
-							<h2>Policies</h2>
-
-							<ul class="nav nav-pills nav-stacked">
-
-								<li><a href="#">Terms of Use</a></li>
-
-								<li><a href="#">Privecy Policy</a></li>
-
-								<li><a href="#">Refund Policy</a></li>
-
-								<li><a href="#">Billing System</a></li>
-
-								<li><a href="#">Ticket System</a></li>
-
-							</ul>
-
-						</div>
-
-					</div>
-
-					<div class="col-sm-2">
-
-						<div class="single-widget">
-
-							<h2>About Shopper</h2>
-
-							<ul class="nav nav-pills nav-stacked">
-
-								<li><a href="#">Company Information</a></li>
-
-								<li><a href="#">Careers</a></li>
-
-								<li><a href="#">Store Location</a></li>
-
-								<li><a href="#">Affillate Program</a></li>
-
-								<li><a href="#">Copyright</a></li>
-
-							</ul>
-
-						</div>
-
-					</div>
-
-					<div class="col-sm-3 col-sm-offset-1">
-
-						<div class="single-widget">
-
-							<h2>About Shopper</h2>
-
-							<form action="#" class="searchform">
-
-								<input type="text" placeholder="Your email address" />
-
-								<button type="submit" class="btn btn-default"><i class="fa fa-arrow-circle-o-right"></i></button>
-
-								<p>Get the most recent updates from <br />our site and be updated your self...</p>
-
-							</form>
-
-						</div>
-
-					</div>
-
-					
-
-				</div>
-
+	  
+	  <!-- Modal -->
+	  <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+		  <div class="modal-content">
+			<div class="modal-header">
+			  <h5 class="modal-title" id="exampleModalLongTitle">About</h5>
+			
 			</div>
+			<div class="modal-body">
+					{!! App\About::select('text')->first()->text !!}
+			</div>
+			<div class="modal-footer">
+			  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		  </div>
+		</div>
+	  </div>
 
+					{{-- <div class="col-sm-3 col-sm-offset-1">
+						<div class="single-widget">
+							<h2>About</h2>
+							
+						</div>
+					</div> --}}
+				</div>
+			</div>
 		</div>
 
 		
@@ -432,7 +316,7 @@
 
 				<div class="row">
 
-					<p class="pull-left">Copyright © 2013 E-SHOPPER Inc. All rights reserved.</p>
+					<p class="pull-left">Copyright © 2019 chowkbazarbd.com All rights reserved.</p>
 
 					
 
@@ -467,6 +351,7 @@
     
 
     $(window).on('load', function() {
+
 $('body').on('click', function(){
 	$('#countryList').hide();
 
