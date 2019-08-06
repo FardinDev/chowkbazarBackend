@@ -206,7 +206,7 @@
 
 								{{-- <li><a href="404.html">404</a></li> --}}
 
-								<li><a href="contact-us.html">Contact</a></li>
+								<li><a href="#" data-toggle="modal" data-target="#exampleModalLong">About</a></li>
 
 							</ul>
 
