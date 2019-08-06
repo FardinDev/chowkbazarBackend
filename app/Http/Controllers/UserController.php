@@ -415,5 +415,23 @@ return redirect()->back()->with('success', 'Query Sent Successfully! We will con
         return $request->data;
         
     }
+    
+    public function tags(Request $request){
+$data = Product::select('tags')->inRandomOrder()->take(10)->get();
+$string = '';
+        foreach($data as $item){
+            if($item->tags != null){
+                $string .= $item->tags.',';
+            }
+        }
+        $string = rtrim($string,',');
+
+        $stringArray = explode(',', $string);
+$finalString = '';
+for ($i=0; $i < sizeof($stringArray); $i++) { 
+    $finalString .= ' <a href="'.route('product.all',['search_query' => $stringArray[$i]]).'"><label class="label label-warning text-light" style="color:white !important; background-color:#FE980F !important; cursor:pointer">'.$stringArray[$i].'</label></a> ';
+}
+        return $finalString;
+    }
 
 }

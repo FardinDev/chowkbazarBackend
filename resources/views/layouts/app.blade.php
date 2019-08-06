@@ -117,7 +117,7 @@
 
 						<div class="logo pull-left">
 
-							<a href="{{route('home')}}"><img src="{{asset('images/home/logo.png')}}" alt="" /></a>
+							<a href="{{route('home')}}"><img style="max-height:50px" src="{{asset('images/home/logo.png')}}" alt="" /></a>
 
 						</div>
 
@@ -135,10 +135,12 @@
 									<div class="social-icons pull-right">
 			
 										<ul class="nav navbar-nav" style="display: inline !important;">
+											<li><a href="https://www.facebook.com/chowkbazarbd" target="_blank"><i class="fa fa-facebook"></i></a></li>
 			
-											<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+											<li><a href="https://www.facebook.com/groups/cbbdcommunity" target="_blank"><i class="fa fa-users"></i></a></li>
 											
-											<li><a href="#"><i class="fa fa-envelope"></i></a></li>
+											<li><a href="mailto:chowkbazarbd@gmail.com" target="_blank"><i class="fa fa-envelope"></i></a></li>
+											
 											@if (!Route::is('product.source'))
 											<li>
 											<button type="button" class="btn btn-default source" onclick="window.location.href='{{route('product.source')}}'">Source Product</button>

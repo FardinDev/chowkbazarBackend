@@ -241,7 +241,7 @@ a#scrollUp i {
 
 
 
-.fa-twitter:hover {
+.fa-users:hover {
 
     background: #5BBCEC;
 
@@ -388,6 +388,21 @@ a#scrollUp i {
     -moz-transform: scale(1.05);
     -webkit-transform: scale(1.05);
     transform: scale(1.05);
+}
+
+.tree-toggler{
+    -moz-transition: all 0.2s;
+    -webkit-transition: all 0.2s;
+    transition: all 0.2s;
+    transition-timing-function: ease;
+}
+
+.tree-toggler:hover {
+    color: #fe980f;
+    
+    /* -moz-transform: scale(1.05);
+    -webkit-transform: scale(1.05); */
+    /* transform: scale(1.05); */
 }
 
 
