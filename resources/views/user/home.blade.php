@@ -8,13 +8,51 @@
 
 <section id="slider"><!--slider-->
 
-		<div class="container">
 
+
+		<div class="container">
+				<div id="myCarousel" class="carousel slide" data-ride="carousel">
+						<!-- Indicators -->
+						<ol class="carousel-indicators">
+							@for($i = 0; $i < sizeof($sliders); $i++)
+							<li data-target="#myCarousel" data-slide-to="{{$i}}"  class="{{$i == 0 ? 'active' : ''}}"></li>
+							@endfor
+						</ol>
+					  
+						<!-- Wrapper for slides -->
+						<div class="carousel-inner">
+								@php
+								$count = 0;    
+								@endphp
+								@foreach($sliders as $slider)
+							<div class="item {{$count == 0 ? 'active' : ''}}">
+							<img src="{{ Voyager::image( $slider->main_image ) }}" onclick="window.location.href='{{$slider->button_url}}'" alt="Los Angeles">
+							{{-- <div class="carousel-caption">
+									<h3>New York</h3>
+									<p>We love the Big Apple!</p>
+							</div> --}}
+						  	</div>
+						  @php
+						  $count++;
+						  @endphp
+							 @endforeach
+						  </div>
+					  
+						<!-- Left and right controls -->
+						<a class="left carousel-control" href="#myCarousel" data-slide="prev">
+						  <span class="glyphicon glyphicon-chevron-left"></span>
+						  <span class="sr-only">Previous</span>
+						</a>
+						<a class="right carousel-control" href="#myCarousel" data-slide="next">
+						  <span class="glyphicon glyphicon-chevron-right"></span>
+						  <span class="sr-only">Next</span>
+						</a>
+				</div>
 			<div class="row">
 
 				<div class="col-sm-12">
 
-					<div id="slider-carousel" class="carousel slide" data-ride="carousel">
+					{{-- <div id="slider-carousel" class="carousel slide" data-ride="carousel">
 
 						<ol class="carousel-indicators">
                             @for($i = 0; $i < sizeof($sliders); $i++)
@@ -52,10 +90,7 @@
 
 							</div>
 							
-							{{-- <div class="item {{$count == 0 ? 'active' : ''}}" style="width:100%;">
-									<img src="{{ Voyager::image( $slider->main_image ) }}" alt="Los Angeles" style="height:300px">
-							</div> --}}
-
+						
                             @php
 
                                 $count++;
@@ -82,10 +117,9 @@
 
 						</a>
 
-					</div>
+					</div> --}}
 
-					
-
+				
 				</div>
 
 			</div>

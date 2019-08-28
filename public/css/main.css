@@ -1272,7 +1272,7 @@ ul.sub-sub-sub-menu {
 
 .item {
 
-    padding-left: 100px;
+    /* padding-left: 100px; */
 
 }
 
@@ -2722,7 +2722,18 @@ bottom: 0;
 
 }
 
+.carousel-inner>.item>img{
+    width: 100% !important;
+    cursor: pointer;
+}
 
+.carousel-control .glyphicon-chevron-right {
+    right: 10% !important;
+}
+
+.carousel-control .glyphicon-chevron-left {
+    left: 10% !important;
+}
 
 #similar-product .carousel-inner .item {
 

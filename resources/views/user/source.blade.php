@@ -107,8 +107,8 @@
             <div class="form-group">
                 <label class="col-md-4 control-label" for="url">Product Quantity<span style="color:red"> *</span></label>
                 <div class="col-md-5">
-                    <input id="product_quantity" name="product_quantity" type="number"
-                        placeholder="Enter Product Quantity" min="0" class="form-control input-md" required>
+                    <input id="product_quantity" name="product_quantity" type="text"
+                        placeholder="Enter Product Quantity" class="form-control input-md" required>
                     <div class="invalid-feedback">
                         Please Enter Product Quantity
                     </div>

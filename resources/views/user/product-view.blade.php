@@ -109,7 +109,7 @@
                     </div>
                 </div>
 
-                <div class="col-sm-7">
+                <div class="col-sm-5">
                     <div class="product-information">
                         <!--/product-information-->
                         @php
@@ -216,9 +216,11 @@
                     <!--/product-information-->
 
 
-
                 </div>
-
+                
+                <div class="col-sm-2">
+                        @include('components.recomended')
+                </div>
             </div>
             <!--/product-details-->
 
@@ -337,6 +339,15 @@
 
 <script>
     $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "{{route('get.recommended.data')}}",
+            data: "data",
+            success: function (response) {
+                $('#active-r').html(response);
+            }
+        });
+        
         $("#formButton").click(function () {
             $("#form1").slideToggle();
             $(this).text(function (i, v) {
