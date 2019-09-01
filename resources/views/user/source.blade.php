@@ -5,7 +5,7 @@
 @section('content')
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
+<link rel="stylesheet" href="{{asset('css/dropzone.css')}}">
 <style>
     form,
     div,
@@ -167,6 +167,7 @@
     </div>
 </div>
 <div class="mb-4"></div>
+<form action="{{ url('user/upload')}}" class="dropzone" id="my-awesome-dropzone"></form>
 @endsection
 
 
@@ -182,6 +183,8 @@
 <script src="{{asset('js/jquery.scrollUp.min.js')}}"></script>
 
 <script src="{{asset('js/price-range.js')}}"></script>
+
+<script src="{{asset('js/dropzone.js')}}"></script>
 
 <script src="{{asset('js/jquery.prettyPhoto.js')}}"></script>
 

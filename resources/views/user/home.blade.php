@@ -6,825 +6,193 @@
 
 
 
-<section id="slider"><!--slider-->
+<section id="slider">
+    <!--slider-->
 
 
 
-		<div class="container">
-				<div id="myCarousel" class="carousel slide" data-ride="carousel">
-						<!-- Indicators -->
-						<ol class="carousel-indicators">
-							@for($i = 0; $i < sizeof($sliders); $i++)
-							<li data-target="#myCarousel" data-slide-to="{{$i}}"  class="{{$i == 0 ? 'active' : ''}}"></li>
-							@endfor
-						</ol>
-					  
-						<!-- Wrapper for slides -->
-						<div class="carousel-inner">
-								@php
-								$count = 0;    
-								@endphp
-								@foreach($sliders as $slider)
-							<div class="item {{$count == 0 ? 'active' : ''}}">
-							<img src="{{ Voyager::image( $slider->main_image ) }}" onclick="window.location.href='{{$slider->button_url}}'" alt="Los Angeles">
-							{{-- <div class="carousel-caption">
+    <div class="container">
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                @for($i = 0; $i < sizeof($sliders); $i++) <li data-target="#myCarousel" data-slide-to="{{$i}}"
+                    class="{{$i == 0 ? 'active' : ''}}">
+                    </li>
+                    @endfor
+            </ol>
+
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+                @php
+                $count = 0;
+                @endphp
+                @foreach($sliders as $slider)
+                <div class="item {{$count == 0 ? 'active' : ''}}">
+                    <img src="{{ Voyager::image( $slider->main_image ) }}"
+                        onclick="window.location.href='{{$slider->button_url}}'" alt="Los Angeles">
+                    {{-- <div class="carousel-caption">
 									<h3>New York</h3>
 									<p>We love the Big Apple!</p>
 							</div> --}}
-						  	</div>
-						  @php
-						  $count++;
-						  @endphp
-							 @endforeach
-						  </div>
-					  
-						<!-- Left and right controls -->
-						<a class="left carousel-control" href="#myCarousel" data-slide="prev">
-						  <span class="glyphicon glyphicon-chevron-left"></span>
-						  <span class="sr-only">Previous</span>
-						</a>
-						<a class="right carousel-control" href="#myCarousel" data-slide="next">
-						  <span class="glyphicon glyphicon-chevron-right"></span>
-						  <span class="sr-only">Next</span>
-						</a>
-				</div>
-			<div class="row">
+                </div>
+                @php
+                $count++;
+                @endphp
+                @endforeach
+            </div>
 
-				<div class="col-sm-12">
+            <!-- Left and right controls -->
+            <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+      
+    </div>
 
-					{{-- <div id="slider-carousel" class="carousel slide" data-ride="carousel">
+</section>
+<!--/slider-->
 
-						<ol class="carousel-indicators">
-                            @for($i = 0; $i < sizeof($sliders); $i++)
-                            <li data-target="#slider-carousel" data-slide-to="{{$i}}"></li>
-                            @endfor
-						</ol>
 
-						
 
-						<div class="carousel-inner">
+<section>
 
-                            @php
-                            $count = 0;    
-                            @endphp
-                            @foreach($sliders as $slider)
-                            <div class="item {{$count == 0 ? 'active' : ''}}">
-								<div class="col-sm-6">
-									<h1>{{$slider->title}}</h1>
+    <div class="container">
 
-									<h2>{{$slider->subtitle}}</h2>
+        <div class="row">
 
-									<p>{{$slider->short_description}}</p>
 
-								<button type="button" class="btn btn-default get" onclick="window.location.href='{{$slider->button_url}}'">{{$slider->button_text ? ucwords($slider->button_text) : 'Get it now'}}</button>
 
-								</div>
+            {{-- sidebar --}}
 
-								<div class="col-sm-6 peopleCarouselImg">
 
-									<img src="{{ Voyager::image( $slider->main_image ) }}" class="img-responsive main-image" />
 
-									<img src="{{ Voyager::image( $slider->pricing_image ) }}"  class="pricing img-responsive" alt="" />
+            {{-- @include('components.sidebar') --}}
 
-								</div>
 
-							</div>
-							
-						
-                            @php
 
-                                $count++;
+            {{-- sidebar --}}
 
-                            @endphp
 
-                            @endforeach
 
-							
+            <div class="col-sm-12 padding-right">
 
-						</div>
-
-						
-
-						<a href="#slider-carousel" class="left control-carousel hidden-xs" data-slide="prev">
-
-							<i class="fa fa-angle-left"></i>
-
-						</a>
-
-						<a href="#slider-carousel" class="right control-carousel hidden-xs" data-slide="next">
-
-							<i class="fa fa-angle-right"></i>
-
-						</a>
-
-					</div> --}}
-
+				<!--features_items-->
+                <div class="features_items">
+                    <h2 class="title text-center">Trending Items</h2>
+                    @foreach ($products as $product)
+                    <div class="col-sm-3">
+                        <div class="product-image-wrapper"
+                            onclick="window.location.href='{{route('product', $product->id)}}'">
+                            <div class="single-products">
+                                <div class="productinfo text-center">
+                                    <img src="{{  $product->primary_image  }}" alt="">
+                                </div>
+                            </div>
+                            <span class="product-price">
+                                <b style="color: #FE980F;">{{number_format($product->start_price).'-'.number_format($product->end_price)}}
+                                    <small>BDT</small></b> <br>
+                            </span>
+                            <div class="product-info">
+                                <small>{{$product->name}}</small>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+				<!--features_items-->
 				
-				</div>
-
-			</div>
-
-		</div>
-
-	</section><!--/slider-->
-
-	
-
-	<section>
-
-		<div class="container">
-
-			<div class="row">
-
-
-
-				{{-- sidebar --}}
-
-
-
-				{{-- @include('components.sidebar') --}}
-
-
-
-				{{-- sidebar --}}
-
-
-
-				<div class="col-sm-12 padding-right">
-
-					<div class="features_items"><!--features_items-->
-
-						<h2 class="title text-center">Trending Items</h2>
-
-
-
-						@foreach ($products as $product)
-
-								
-
-						{{-- <div class="col-sm-4">
-
-							<div class="product-image-wrapper">
-
-								<div class="single-products">
-
-										<div class="productinfo text-center">
-
-									
-
-											<div class="img" style="background-image:url('{{ Voyager::image( $product->primary_image ) }}');"></div>
-
-											<h2>{{$product->start_price.'-'.$product->end_price}} <small>BDT</small> </h2>
-
-											<p>{{$product->name}}</p>
-
-											<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-
-										</div>
-
-										<div class="product-overlay" onclick="window.location.href='{{route('product', $product->id)}}'">
-
-											<div class="overlay-content">
-
-												<h2>{{$product->start_price.'-'.$product->end_price}} <small>BDT</small> </h2>
-
-												<p>{{$product->name}}</p>
-
-												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-
+				<!--Apparel,Textiles & Accessories-->
+				<div class="features_items">
+						<h2 class="title text-center" onclick="window.location.href='{{route('product.all', ['search_query' => 'Apparel,Textiles & Accessories'])}}'" style="cursor:pointer">Apparel,Textiles & Accessories</h2>
+						@foreach ($first as $f)
+							@foreach ($f as $product)
+							<div class="col-sm-3">
+									<div class="product-image-wrapper"
+										onclick="window.location.href='{{route('product', $product->id)}}'">
+										<div class="single-products">
+											<div class="productinfo text-center">
+												<img src="{{  $product->primary_image  }}" alt="">
 											</div>
-
 										</div>
-
+										<span class="product-price">
+											<b style="color: #FE980F;">{{number_format($product->start_price).'-'.number_format($product->end_price)}}
+												<small>BDT</small></b> <br>
+										</span>
+										<div class="product-info">
+											<small>{{$product->name}}</small>
+										</div>
+									</div>
 								</div>
-
+							@endforeach
 						
+						@endforeach
+					</div>
+				<!--Apparel,Textiles & Accessories-->
 
-							</div>
-
-						</div> --}}
-
-
+				<!--Bags, Shoes & Accessories-->
+				<div class="features_items">
+						<h2 class="title text-center" onclick="window.location.href='{{route('product.all', ['search_query' => 'Bags, Shoes & Accessories'])}}'" style="cursor:pointer">Bags, Shoes & Accessories</h2>
+						@foreach ($products as $product)
 						<div class="col-sm-3">
-
-							<div class="product-image-wrapper" onclick="window.location.href='{{route('product', $product->id)}}'">
-
+							<div class="product-image-wrapper"
+								onclick="window.location.href='{{route('product', $product->id)}}'">
 								<div class="single-products">
-
 									<div class="productinfo text-center">
 										<img src="{{  $product->primary_image  }}" alt="">
 									</div>
 								</div>
 								<span class="product-price">
-									<b style="color: #FE980F;">{{number_format($product->start_price).'-'.number_format($product->end_price)}} <small>BDT</small></b>  <br>
+									<b style="color: #FE980F;">{{number_format($product->start_price).'-'.number_format($product->end_price)}}
+										<small>BDT</small></b> <br>
 								</span>
 								<div class="product-info">
 									<small>{{$product->name}}</small>
-
 								</div>
 							</div>
-
 						</div>
-					
 						@endforeach
-
-
-					
-						
-
-					</div><!--features_items-->
-
-					
-
-					{{-- <div class="category-tab"><!--category-tab-->
-
-						<div class="col-sm-12">
-
-							<ul class="nav nav-tabs">
-
-								<li class="active"><a href="#tshirt" data-toggle="tab">T-Shirt</a></li>
-
-								<li><a href="#blazers" data-toggle="tab">Blazers</a></li>
-
-								<li><a href="#sunglass" data-toggle="tab">Sunglass</a></li>
-
-								<li><a href="#kids" data-toggle="tab">Kids</a></li>
-
-								<li><a href="#poloshirt" data-toggle="tab">Polo shirt</a></li>
-
-							</ul>
-
-						</div>
-
-						<div class="tab-content">
-
-							<div class="tab-pane fade active in" id="tshirt" >
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery1.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-
-											</div>
-
-											
-
-										</div>
-
-									</div>
-
-								</div>
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery2.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-
-											</div>
-
-											
-
-										</div>
-
-									</div>
-
-								</div>
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery3.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-
-											</div>
-
-											
-
-										</div>
-
-									</div>
-
-								</div>
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery4.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-
-											</div>
-
-											
-
-										</div>
-
-									</div>
-
-								</div>
-
-							</div>
-
-							
-
-							<div class="tab-pane fade" id="blazers" >
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery4.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-
-											</div>
-
-											
-
-										</div>
-
-									</div>
-
-								</div>
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery3.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-
-											</div>
-
-											
-
-										</div>
-
-									</div>
-
-								</div>
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery2.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-
-											</div>
-
-											
-
-										</div>
-
-									</div>
-
-								</div>
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery1.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-
-											</div>
-
-											
-
-										</div>
-
-									</div>
-
-								</div>
-
-							</div>
-
-							
-
-							<div class="tab-pane fade" id="sunglass" >
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery3.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-
-											</div>
-
-											
-
-										</div>
-
-									</div>
-
-								</div>
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery4.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-
-											</div>
-
-											
-
-										</div>
-
-									</div>
-
-								</div>
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery1.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-
-											</div>
-
-											
-
-										</div>
-
-									</div>
-
-								</div>
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery2.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-
-											</div>
-
-											
-
-										</div>
-
-									</div>
-
-								</div>
-
-							</div>
-
-							
-
-							<div class="tab-pane fade" id="kids" >
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery1.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-
-											</div>
-
-											
-
-										</div>
-
-									</div>
-
-								</div>
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery2.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-
-											</div>
-
-											
-
-										</div>
-
-									</div>
-
-								</div>
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery3.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-
-											</div>
-
-											
-
-										</div>
-
-									</div>
-
-								</div>
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery4.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-
-											</div>
-
-											
-
-										</div>
-
-									</div>
-
-								</div>
-
-							</div>
-
-							
-
-							<div class="tab-pane fade" id="poloshirt" >
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery2.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-
-											</div>
-
-											
-
-										</div>
-
-									</div>
-
-								</div>
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery4.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-
-											</div>
-
-											
-
-										</div>
-
-									</div>
-
-								</div>
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery3.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-
-											</div>
-
-											
-
-										</div>
-
-									</div>
-
-								</div>
-
-								<div class="col-sm-3">
-
-									<div class="product-image-wrapper">
-
-										<div class="single-products">
-
-											<div class="productinfo text-center">
-
-												<img src="images/home/gallery1.jpg" alt="" />
-
-												<h2>$56</h2>
-
-												<p>Easy Polo Black Edition</p>
-
-												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-
-											</div>
-
-											
-
-										</div>
-
-									</div>
-
-								</div>
-
-							</div>
-
-						</div>
-
-					</div><!--/category-tab-->
-
-					
-
-				@include('components.recomended') --}}
-
-					
-
 				</div>
+				<!--Bags, Shoes & Accessories-->
 
-			</div>
+				<!--Electronics & Engineering-->
+				<div class="features_items">
+						<h2 class="title text-center" onclick="window.location.href='{{route('product.all', ['search_query' => 'Electronics & Engineering'])}}'" style="cursor:pointer">Electronics & Engineering</h2>
+						@foreach ($products as $product)
+						<div class="col-sm-3">
+							<div class="product-image-wrapper"
+								onclick="window.location.href='{{route('product', $product->id)}}'">
+								<div class="single-products">
+									<div class="productinfo text-center">
+										<img src="{{  $product->primary_image  }}" alt="">
+									</div>
+								</div>
+								<span class="product-price">
+									<b style="color: #FE980F;">{{number_format($product->start_price).'-'.number_format($product->end_price)}}
+										<small>BDT</small></b> <br>
+								</span>
+								<div class="product-info">
+									<small>{{$product->name}}</small>
+								</div>
+							</div>
+						</div>
+						@endforeach
+				</div>
+				<!--Electronics & Engineering-->
 
-		</div>
+            </div>
 
-	</section>
+        </div>
 
-    
+    </div>
+
+</section>
+
+
 
 @endsection
 

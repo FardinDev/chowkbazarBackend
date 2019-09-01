@@ -177,6 +177,10 @@
 
                         <p><b>{{ $product->text_three_title ? $product->text_three_title.' :' : ''}}</b> {{$product->text_three_text}}</p>
 
+                        <p><b>{{ $product->text_four_title ? $product->text_four_title.' :' : ''}}</b> {{$product->text_four_text}}</p>
+
+                        <p><b>{{ $product->text_five_title ? $product->text_five_title.' :' : ''}}</b> {{$product->text_five_text}}</p>
+
                         <a id="formButton" class="btn btn-fefault query">Send Query</a>
                     <form class="form-horizontal col-12" id="form1" action="{{route('product.send-query', $product->id)}}" method="POST">
                             {{ csrf_field() }}

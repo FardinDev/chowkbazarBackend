@@ -30,17 +30,43 @@ class UserController extends Controller
      */
     public function home()
     {   
-        $cats = $this->getCat();
-        $products = Product::orderBy('views', 'desc')->take(8)->get();
-        $sliders = SliderInfo::where('is_active', 1)->get();
-        $brands = Product::select('brand', DB::raw('count(*) as count'))->groupBy('brand')->get();
 
+        $parent_id = 14;
+        $check = [$parent_id];
+        $first = [];
+
+       $pro = ProductCategory::with('childs')->where('parent_id', $parent_id)->get();
+
+       foreach ($pro as $k) {
+           array_push($check, $k->id);
+           if($k->childs){
+
+               foreach ($k->childs as $c) {
+                   array_push($check, $c->id);
+               }
+           }
+       }
+
+       foreach ($check as $c) {
+           $product = Product::where('category_id', $c)->where('is_featured', 1)->get();
+           if(sizeof($product)){
+
+               array_push($first, $product);
+           }
+
+    }
+
+        $cats = $this->getCat();
+        $products = Product::where('is_featured', 1)->get();
+        $sliders = SliderInfo::where('is_active', 1)->get();
+        
+        
         return view('user.home')->with(
             [
                 'sliders' => $sliders,
                 'cats' => $cats,
                 'products' => $products,
-                'brands' => $brands
+                'first' => $first,
                 ]);
     }
     /**
@@ -417,21 +443,21 @@ return redirect()->back()->with('success', 'Query Sent Successfully! We will con
     }
     
     public function tags(Request $request){
-$data = Product::select('tags')->inRandomOrder()->take(10)->get();
-$string = '';
-        foreach($data as $item){
-            if($item->tags != null){
-                $string .= $item->tags.',';
-            }
-        }
-        $string = rtrim($string,',');
+        $data = Product::select('tags')->inRandomOrder()->take(10)->get();
+        $string = '';
+                foreach($data as $item){
+                    if($item->tags != null){
+                        $string .= $item->tags.',';
+                    }
+                }
+                $string = rtrim($string,',');
 
-        $stringArray = explode(',', $string);
-$finalString = '';
-for ($i=0; $i < sizeof($stringArray); $i++) { 
-    $finalString .= ' <a href="'.route('product.all',['search_query' => $stringArray[$i]]).'"><label class="label label-warning text-light" style="color:white !important; background-color:#FE980F !important; cursor:pointer">'.$stringArray[$i].'</label></a> ';
-}
-        return $finalString;
-    }
+                $stringArray = explode(',', $string);
+        $finalString = '';
+        for ($i=0; $i < sizeof($stringArray); $i++) { 
+            $finalString .= ' <a href="'.route('product.all',['search_query' => $stringArray[$i]]).'"><label class="label label-warning text-light" style="color:white !important; background-color:#FE980F !important; cursor:pointer">'.$stringArray[$i].'</label></a> ';
+        }
+                return $finalString;
+            }
 
 }
