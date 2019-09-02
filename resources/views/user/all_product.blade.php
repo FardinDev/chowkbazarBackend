@@ -201,7 +201,7 @@
         $.ajax({
             type: "GET",
             url: "{{route('get.recommended.data')}}",
-            data: "data",
+            data: {'page': 'search'},
             success: function (response) {
                 $('#active-r').html(response);
             }

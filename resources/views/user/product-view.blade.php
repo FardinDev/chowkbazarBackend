@@ -76,10 +76,10 @@
 
 
 
-            <div class="col-sm-12 padding-right">
+            <div class="col-sm-10 padding-right">
                 <div class="product-details">
                     <!--product-details-->
-                    <div class="col-sm-5">
+                    <div class="col-sm-6">
                         <div class="view-product">
                             {{-- <div class="d-img" style="background-image:url('{{voyager::image($product->primary_image) }}');">
                         </div> --}}
@@ -109,7 +109,7 @@
                     </div>
                 </div>
 
-                <div class="col-sm-5">
+                <div class="col-sm-6">
                     <div class="product-information">
                         <!--/product-information-->
                         @php
@@ -222,9 +222,9 @@
 
                 </div>
                 
-                <div class="col-sm-2">
-                        @include('components.recomended')
-                </div>
+              
+                       
+                
             </div>
             <!--/product-details-->
 
@@ -292,6 +292,9 @@
 
         </div>
 
+        <div class="col-2">
+            @include('components.recomended')
+        </div>
     </div>
 
     </div>
@@ -346,7 +349,7 @@
         $.ajax({
             type: "GET",
             url: "{{route('get.recommended.data')}}",
-            data: "data",
+            data: {'page': 'product'},
             success: function (response) {
                 $('#active-r').html(response);
             }

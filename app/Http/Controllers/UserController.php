@@ -103,25 +103,50 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function recommended()
+    public function recommended(Request $request)
     {
-        $products = Product::inRandomOrder()->take(6)->get();
-        $string = '';
+        
+if($request->page == 'product'){
+    $products = Product::inRandomOrder()->take(6)->get();
+    $string = '<div class="row">';
 
-        foreach ($products as $product) {
-            $string .= '<div class="col-sm-2">
-            <div class="product-image-wrapper-r" onclick="window.location.href=`'.route('product', $product->id).'`">
-                <div class="single-products">
-                    <div class="productinfo text-center">
-                        <img src="'.$product->primary_image.'" alt="" />
-                        <h4>'.$product->start_price.'-'.$product->end_price.'<small> BDT</small></h4>
-                        <p class="ellipsis">'.$product->name.'</p>
-                    </div>
+    foreach ($products as $product) {
+        $string .= '<div class="col">
+        <div class="product-image-wrapper-r" style="margin:25px" onclick="window.location.href=`'.route('product', $product->id).'`">
+            <div class="single-products">
+                <div class="productinfo text-center">
+                    <img src="'.$product->primary_image.'" alt="" />
+                    <h4>'.$product->start_price.'-'.$product->end_price.'<small> BDT</small></h4>
+                    <p class="">'.$product->name.'</p>
                 </div>
             </div>
-        </div>';
-        }
-        return $string;
+        </div>
+    </div>';
+    }
+    $string .= '</div>';
+    return $string;
+    
+}else{
+
+    $products = Product::inRandomOrder()->take(6)->get();
+    $string = '<div class="row">';
+
+    foreach ($products as $product) {
+        $string .= '<div class="col-sm-2">
+        <div class="product-image-wrapper-r" onclick="window.location.href=`'.route('product', $product->id).'`">
+            <div class="single-products">
+                <div class="productinfo text-center">
+                    <img src="'.$product->primary_image.'" alt="" />
+                    <h4>'.$product->start_price.'-'.$product->end_price.'<small> BDT</small></h4>
+                    <p class="ellipsis">'.$product->name.'</p>
+                </div>
+            </div>
+        </div>
+    </div>';
+    }
+    $string .= '</div>';
+    return $string;
+}
     }
 
     /**
