@@ -628,8 +628,12 @@ ul li a:hover .price{
 
     animation: fadeInUp 400ms;
 } */
+.sub-menu .dropdown a{
+    font-size: 14px !important
+}
+
 .sub-menu>li, .sub-sub-menu>li, .sub-sub-sub-menu>li{
-    height: 45px;
+    height: auto;
     padding: auto !important;
 }
 .sub-menu>li:hover, .sub-sub-menu>li:hover, .sub-sub-sub-menu>li:hover{
@@ -646,7 +650,7 @@ ul.sub-menu {
 
     left: 0;
 
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.8);
 
     list-style: none;
 
@@ -654,7 +658,7 @@ ul.sub-menu {
 
     margin: 0;
 
-    width: 320px;
+    width: 270px;
 
     -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
 
@@ -675,9 +679,9 @@ ul.sub-sub-menu {
 
     top: 0px;
 
-    left: 320px;
+    left: 270px;
 
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.8);
 
     list-style: none;
 
@@ -685,7 +689,7 @@ ul.sub-sub-menu {
 
     margin: 0;
 
-    width: 320px;
+    width: 270px;
 
     -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
 
@@ -703,9 +707,9 @@ ul.sub-sub-sub-menu {
 
     top: 0px;
 
-    left: 320px;
+    left: 270px;
 
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.8);
 
     list-style: none;
 
@@ -713,7 +717,7 @@ ul.sub-sub-sub-menu {
 
     margin: 0;
 
-    width: 320px;
+    width: 270px;
 
     -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
 
@@ -738,7 +742,7 @@ ul.sub-sub-sub-menu {
 
 .navbar-nav li ul.sub-menu li {
 
-    padding: 10px 20px 0;
+    padding: 10px 10px;
 
 }
 
@@ -746,7 +750,7 @@ ul.sub-sub-sub-menu {
 
 .navbar-nav li ul.sub-menu li:last-child {
 
-    padding-bottom: 20px;
+    padding-bottom: 10px;
 
 }
 
@@ -760,11 +764,7 @@ ul.sub-sub-sub-menu {
 
 
 
-.navbar-nav li ul.sub-menu li a:hover {
 
-    /* color: #FDB45E; */
-
-}
 
 
 

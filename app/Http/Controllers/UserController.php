@@ -30,31 +30,33 @@ class UserController extends Controller
      */
     public function home()
     {   
-
-        $parent_id = 14;
-        $check = [$parent_id];
-        $first = [];
-
-       $pro = ProductCategory::with('childs')->where('parent_id', $parent_id)->get();
-
-       foreach ($pro as $k) {
-           array_push($check, $k->id);
-           if($k->childs){
-
-               foreach ($k->childs as $c) {
-                   array_push($check, $c->id);
+        $cat_id = [1,3,4,10,11];
+        $list = [];
+        for ($i=0; $i < sizeof($cat_id); $i++) { 
+            $parent_id = $cat_id[$i];
+            $check = [$parent_id];
+           $pro = ProductCategory::with('childs')->where('parent_id', $parent_id)->get();
+    
+           foreach ($pro as $k) {
+               array_push($check, $k->id);
+               if($k->childs){
+    
+                   foreach ($k->childs as $c) {
+                       array_push($check, $c->id);
+                   }
                }
            }
-       }
-
-       foreach ($check as $c) {
-           $product = Product::where('category_id', $c)->where('is_featured', 1)->get();
-           if(sizeof($product)){
-
-               array_push($first, $product);
-           }
-
-    }
+            $list[$cat_id[$i]] = [];
+           foreach ($check as $c) {
+               $product = Product::where('category_id', $c)->where('is_featured', 1)->get();
+               if(sizeof($product)){
+    
+                   array_push($list[$cat_id[$i]], $product);
+               }
+    
+        }
+        }
+        // dd($list);
 
         $cats = $this->getCat();
         $products = Product::where('is_featured', 1)->get();
@@ -66,7 +68,7 @@ class UserController extends Controller
                 'sliders' => $sliders,
                 'cats' => $cats,
                 'products' => $products,
-                'first' => $first,
+                'list' => $list,
                 ]);
     }
     /**

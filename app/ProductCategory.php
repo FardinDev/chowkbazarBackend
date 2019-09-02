@@ -21,4 +21,6 @@ class ProductCategory extends Model
             'parent_id', 'id'
         );
     }
+
 }
+
