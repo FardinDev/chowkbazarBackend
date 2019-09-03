@@ -12,12 +12,19 @@ $add = is_null($dataTypeContent->getKey());
 @stop
 
 
-@section('page_title', __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->display_name_singular)
+@section('page_title', __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->display_name_singular) 
 
 @section('page_header')
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 <h1 class="page-title">
     <i class="{{ $dataType->icon }}"></i>
     {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->display_name_singular }}
+    @if (!$edit)
+    <input type="checkbox" id="toggle-event" data-on="With Alibaba Link" data-off="Add Manually" data-width="200" data-on="Enabled" checked data-toggle="toggle">
+    @endif
+    
+    
 </h1>
 @include('voyager::multilingual.language-selector')
 @stop
@@ -53,10 +60,10 @@ $add = is_null($dataTypeContent->getKey());
                             </ul>
                         </div>
                         @endif
-                        <div class="form-group  col-md-12 ">
+                        <div class="form-group  col-md-12 " id="url">
 
                             <label class="control-label" for="name">URL (Only alibaba.com's product URL)</label>
-                            <input type="text" class="form-control" name="url" required="true" step="any"
+                            <input type="text" class="form-control" name="url" step="any"
                                 placeholder="Enter URL"
                                 value="{{$dataTypeContent->web_url != null ? $dataTypeContent->web_url : ''}}"
                                 {{$edit ? 'readonly' : ''}}>
@@ -197,9 +204,11 @@ $add = is_null($dataTypeContent->getKey());
 <script>
 
 </script>
+
 @section('javascript')
 <script type="text/javascript" src="{{asset('js/microplugin.js')}}"></script>
 <script type="text/javascript" src="{{asset('js/selectize.js')}}"></script>
+
 <script>
     $(function () {
         $('#input-tags').selectize({
@@ -289,4 +298,23 @@ $add = is_null($dataTypeContent->getKey());
     });
 
 </script>
+@if (!$edit)
+<script>
+    $(function() {
+        $('#name').hide();
+        $('#primary_image').hide();
+        $('#other_images').hide();
+        $('#description').hide();
+      $('#toggle-event').change(function() {
+        $('#name').toggle();
+        $('#primary_image').toggle();
+        $('#other_images').toggle();
+        $('#description').toggle();
+        $('#url').toggle();
+        // alert('hi');
+      })
+    })
+</script>
+    
+@endif
 @stop

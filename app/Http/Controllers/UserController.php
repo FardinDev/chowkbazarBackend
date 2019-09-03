@@ -107,8 +107,21 @@ class UserController extends Controller
     {
         
 if($request->page == 'product'){
-    $products = Product::inRandomOrder()->take(6)->get();
-    $string = '<div class="row">';
+    if($request->tags != ''){
+
+        $tags = explode(',', $request->tags);
+        // return $tags;
+    
+        $products = Product::Where(function ($query) use($tags) {
+            for ($i = 0; $i < count($tags); $i++){
+               $query->orwhere('tags', 'like',  '%' . $tags[$i] .'%');
+            }      
+       })->inRandomOrder()->get();
+
+    }else{
+        $products = Product::where('is_featured', 1)->inRandomOrder()->take(6)->get();
+    }
+    $string = '<div class="row"><h2 class="title text-center">You may also like</h2>';
 
     foreach ($products as $product) {
         $string .= '<div class="col">
@@ -129,7 +142,7 @@ if($request->page == 'product'){
 }else{
 
     $products = Product::inRandomOrder()->take(6)->get();
-    $string = '<div class="row">';
+    $string = '<div class="row"><h2 class="title text-center">You may also like</h2>';
 
     foreach ($products as $product) {
         $string .= '<div class="col-sm-2">
@@ -138,7 +151,7 @@ if($request->page == 'product'){
                 <div class="productinfo text-center">
                     <img src="'.$product->primary_image.'" alt="" />
                     <h4>'.$product->start_price.'-'.$product->end_price.'<small> BDT</small></h4>
-                    <p class="ellipsis">'.$product->name.'</p>
+                    <p class="">'.$product->name.'</p>
                 </div>
             </div>
         </div>

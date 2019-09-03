@@ -35,6 +35,7 @@ class productsController extends VoyagerBaseController
     public function index(Request $request)
     {
         
+        
         // GET THE SLUG, ex. 'posts', 'pages', etc.
         $slug = $this->getSlug($request);
 
@@ -364,40 +365,6 @@ class productsController extends VoyagerBaseController
 
         
         
-        include_once('simple_html_dom.php');
-
-        $url = $request->url;
-
-        $html = file_get_html($url);
-$articles=[];
-$pics[] = '';
-$otherImages = [];
-$name = $html->find('h1.ma-title', 0)->innertext;
-
-foreach($html->find('img.pic') as $pic) {
- 
-
-   $primaryImage = str_replace("_350x350.jpg", '', $pic->src);
-    
-}
-
-foreach($html->find('div.thumb') as $thumb) {
- 
-    foreach($thumb->find('img') as $item){
-
-        array_push($otherImages, str_replace("50x50","350x350", $item->src));
-    }
-        
-    }
-        
-        
-$description = $html->find('div.module-productSpecification', 0);
-
-for ($i=0; $i < sizeof($description->find('img'))-1; $i++) { 
-    
-        $description->find('img', $i)->src = $description->find('img', $i+1)->src;
-    
-}
 
 // $description = $html->find('div.scc-wrapper.detail-module.module-productSpecification', 0);
 
@@ -444,20 +411,80 @@ for ($i=0; $i < sizeof($description->find('img'))-1; $i++) {
         // Validate fields with ajax
         $val = $this->validateBread($request->all(), $dataType->addRows)->validate();
         $data = $this->insertUpdateData($request, $slug, $dataType->addRows, new $dataType->model_name());
-
         $id = $data->id;
+// dd($request->url);
+        if($request->url != null){
 
-        $getData = DB::table('products')->where('id', $id)->update([
-            'web_url' => $url,
-            'name' => $name,
-            'primary_image' => $primaryImage,
-            'other_images' => json_encode($otherImages),
-            'description' => $description,
-            'tags' => $request->tags
-        ]);
+            include_once('simple_html_dom.php');
 
+            $url = $request->url;
+    
+            $html = file_get_html($url);
+            $articles=[];
+            $pics[] = '';
+            $otherImages = [];
+            $name = $html->find('h1.ma-title', 0)->innertext;
+    
+            foreach($html->find('img.pic') as $pic) {
+            
+            
+            $primaryImage = str_replace("_350x350.jpg", '', $pic->src);
+                
+            }
+    
+            foreach($html->find('div.thumb') as $thumb) {
+            
+                foreach($thumb->find('img') as $item){
+            
+                    array_push($otherImages, str_replace("50x50","350x350", $item->src));
+                }
+                    
+                }
+                    
+                    
+            $description = $html->find('div.module-productSpecification', 0);
+            
+            for ($i=0; $i < sizeof($description->find('img'))-1; $i++) { 
+                
+                    $description->find('img', $i)->src = $description->find('img', $i+1)->src;
+                
+            }
+
+
+//   dd('hit');
+            $getData = DB::table('products')->where('id', $id)->update([
+                'web_url' => $url,
+                'name' => $name,
+                'primary_image' => $primaryImage,
+                'other_images' => json_encode($otherImages),
+                'description' => $description,
+                'tags' => $request->tags,
+                'type' => 1
+            ]);
+        }else{
+            
+        }
         
-
+        
+        
+        $getData = DB::table('products')->where('id', $id)->first();
+        if($getData->type == 0){
+            $images = json_decode($getData->other_images);
+            $newImages = [];
+            foreach ($images as $image) {
+                $image = Voyager::image($image);
+                array_push($newImages, $image);
+            }
+            $newImages = json_encode($newImages);
+            DB::table('products')->where('id', $id)->update([
+                
+                'primary_image' => Voyager::image($getData->primary_image),
+                'other_images' => $newImages
+                
+                ]);
+            }
+            
+            dd('done');
         event(new BreadDataAdded($dataType, $data));
 
         return redirect()

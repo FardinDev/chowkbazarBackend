@@ -233,7 +233,7 @@
             <div class="category-tab shop-details-tab">
                 <!--category-tab-->
 
-                <div class="col-sm-12">
+                {{-- <div class="col-sm-12">
 
                     <ul class="nav nav-tabs">
 
@@ -247,7 +247,7 @@
 
                     </ul>
 
-                </div>
+                </div> --}}
 
                 <div class="tab-content">
 
@@ -257,28 +257,6 @@
 
 
                     </div>
-
-
-
-
-                    <div class="tab-pane fade" id="tag">
-
-                        @if ($product->tags)
-
-                        @php
-                            $tags = explode(',', $product->tags)
-                            @endphp
-                            @foreach ($tags as $tag)
-                            <a href="{{route('product.all', ['search_query' => $tag])}}"><label class="label label-warning text-light"
-                                style="color:white !important; background-color:#FE980F !important; cursor:pointer">{{$tag}}</label></a>
-                            @endforeach
-                            @endif
-
-                    </div>
-
-
-
-
                 </div>
 
             </div>
@@ -346,11 +324,13 @@
 
 <script>
     $(document).ready(function () {
+        var tags = "{{$product->tags}}"
         $.ajax({
             type: "GET",
             url: "{{route('get.recommended.data')}}",
-            data: {'page': 'product'},
+            data: {'page': 'product', 'tags': tags},
             success: function (response) {
+                console.log(response);
                 $('#active-r').html(response);
             }
         });
