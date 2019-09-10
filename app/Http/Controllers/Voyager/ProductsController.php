@@ -451,16 +451,16 @@ class productsController extends VoyagerBaseController
             }
 
 
-//   dd('hit');
-            $getData = DB::table('products')->where('id', $id)->update([
-                'web_url' => $url,
-                'name' => $name,
-                'primary_image' => $primaryImage,
-                'other_images' => json_encode($otherImages),
-                'description' => $description,
-                'tags' => $request->tags,
-                'type' => 1
-            ]);
+    
+                $getData = DB::table('products')->where('id', $id)->update([
+                    'web_url' => $url,
+                    'name' => $name,
+                    'primary_image' => $primaryImage,
+                    'other_images' => json_encode($otherImages),
+                    'description' => $description,
+                    'tags' => $request->tags,
+                    'type' => 1
+                ]);
         }else{
             
         }
@@ -479,12 +479,13 @@ class productsController extends VoyagerBaseController
             DB::table('products')->where('id', $id)->update([
                 
                 'primary_image' => Voyager::image($getData->primary_image),
-                'other_images' => $newImages
+                'other_images' => $newImages,
+                'tags' => $request->tags,
                 
                 ]);
             }
             
-            dd('done');
+            // dd('done');
         event(new BreadDataAdded($dataType, $data));
 
         return redirect()

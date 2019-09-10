@@ -23,6 +23,9 @@ $add = is_null($dataTypeContent->getKey());
     @if (!$edit)
     <input type="checkbox" id="toggle-event" data-on="With Alibaba Link" data-off="Add Manually" data-width="200" data-on="Enabled" checked data-toggle="toggle">
     @endif
+    @if ($edit)
+    <a href="#" class="badge badge-info">{{$dataTypeContent->type == 0 ? 'Manualy Added Product' : 'Alibaba Product'}}</a>
+    @endif
     
     
 </h1>
@@ -67,7 +70,6 @@ $add = is_null($dataTypeContent->getKey());
                                 placeholder="Enter URL"
                                 value="{{$dataTypeContent->web_url != null ? $dataTypeContent->web_url : ''}}"
                                 {{$edit ? 'readonly' : ''}}>
-
 
                         </div>
                         <div class="form-group  col-md-12 ">
