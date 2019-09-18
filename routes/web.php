@@ -26,7 +26,7 @@ Route::get('/tags', 'UserController@tags')->name('get.tags');
 Route::get('/eloquent', 'UserController@eloquent');
 Route::get('/order-by', 'UserController@orderBy')->name('get.order.by');
 
-
+ 
 Route::get('/notification', function(){
 return view('notification');
 });
