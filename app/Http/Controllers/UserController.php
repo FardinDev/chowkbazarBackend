@@ -35,7 +35,7 @@ class UserController extends Controller
         for ($i=0; $i < sizeof($cat_id); $i++) { 
             $parent_id = $cat_id[$i];
             $check = [$parent_id];
-           $pro = ProductCategory::with('childs')->where('parent_id', $parent_id)->get();
+            $pro = ProductCategory::with('childs')->where('parent_id', $parent_id)->get();
     
            foreach ($pro as $k) {
                array_push($check, $k->id);
@@ -106,60 +106,60 @@ class UserController extends Controller
     public function recommended(Request $request)
     {
         
-if($request->page == 'product'){
-    if($request->tags != ''){
+        if($request->page == 'product'){
+            if($request->tags != ''){
 
-        $tags = explode(',', $request->tags);
-        // return $tags;
-    
-        $products = Product::Where(function ($query) use($tags) {
-            for ($i = 0; $i < count($tags); $i++){
-               $query->orwhere('tags', 'like',  '%' . $tags[$i] .'%');
-            }      
-       })->inRandomOrder()->get();
+                $tags = explode(',', $request->tags);
+                // return $tags;
+            
+                $products = Product::Where(function ($query) use($tags) {
+                    for ($i = 0; $i < count($tags); $i++){
+                    $query->orwhere('tags', 'like',  '%' . $tags[$i] .'%');
+                    }      
+            })->inRandomOrder()->get();
 
-    }else{
-        $products = Product::where('is_featured', 1)->inRandomOrder()->take(6)->get();
-    }
-    $string = '<div class="row"><h2 class="title text-center">You may also like</h2>';
+            }else{
+                $products = Product::where('is_featured', 1)->inRandomOrder()->take(6)->get();
+            }
+            $string = '<div class="row"><h2 class="title text-center">You may also like</h2>';
 
-    foreach ($products as $product) {
-        $string .= '<div class="col">
-        <div class="product-image-wrapper-r" style="margin:25px" onclick="window.location.href=`'.route('product', $product->id).'`">
-            <div class="single-products">
-                <div class="productinfo text-center">
-                    <img src="'.$product->primary_image.'" alt="" />
-                    <h4>'.$product->start_price.'-'.$product->end_price.'<small> BDT</small></h4>
-                    <p class="">'.$product->name.'</p>
+            foreach ($products as $product) {
+                $string .= '<div class="col">
+                <div class="product-image-wrapper-r" style="margin:25px" onclick="window.location.href=`'.route('product', $product->id).'`">
+                    <div class="single-products">
+                        <div class="productinfo text-center">
+                            <img src="'.$product->primary_image.'" alt="" />
+                            <h4>'.$product->start_price.'-'.$product->end_price.'<small> BDT</small></h4>
+                            <p class="">'.$product->name.'</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>';
-    }
-    $string .= '</div>';
-    return $string;
-    
-}else{
+            </div>';
+            }
+            $string .= '</div>';
+            return $string;
+            
+        }else{
 
-    $products = Product::inRandomOrder()->take(6)->get();
-    $string = '<div class="row"><h2 class="title text-center">You may also like</h2>';
+            $products = Product::inRandomOrder()->take(6)->get();
+            $string = '<div class="row"><h2 class="title text-center">You may also like</h2>';
 
-    foreach ($products as $product) {
-        $string .= '<div class="col-sm-2">
-        <div class="product-image-wrapper-r" onclick="window.location.href=`'.route('product', $product->id).'`">
-            <div class="single-products">
-                <div class="productinfo text-center">
-                    <img src="'.$product->primary_image.'" alt="" />
-                    <h4>'.$product->start_price.'-'.$product->end_price.'<small> BDT</small></h4>
-                    <p class="">'.$product->name.'</p>
+            foreach ($products as $product) {
+                $string .= '<div class="col-sm-2">
+                <div class="product-image-wrapper-r" onclick="window.location.href=`'.route('product', $product->id).'`">
+                    <div class="single-products">
+                        <div class="productinfo text-center">
+                            <img src="'.$product->primary_image.'" alt="" />
+                            <h4>'.$product->start_price.'-'.$product->end_price.'<small> BDT</small></h4>
+                            <p class="">'.$product->name.'</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>';
-    }
-    $string .= '</div>';
-    return $string;
-}
+            </div>';
+            }
+            $string .= '</div>';
+            return $string;
+        }
     }
 
     /**
@@ -245,14 +245,14 @@ if($request->page == 'product'){
             'product_query' => 'required|max:1000'
         ]);
 
-$data['product_id'] = $id;
-$data['user_name'] = $request->user_name;
-$data['phone_number'] = $request->phone_number;
-$data['product_query'] = $request->product_query;
+        $data['product_id'] = $id;
+        $data['user_name'] = $request->user_name;
+        $data['phone_number'] = $request->phone_number;
+        $data['product_query'] = $request->product_query;
 
-Product_query::create($data);
+        Product_query::create($data);
 
-return redirect()->back()->with('success', 'Query Sent Successfully! We will contact you at the given contact info.');
+        return redirect()->back()->with('success', 'Query Sent Successfully! We will contact you at the given contact info.');
 
     }
 
@@ -299,7 +299,57 @@ return redirect()->back()->with('success', 'Query Sent Successfully! We will con
            ->orWhere('name', 'like', "%{$this->query}%")
            ->orWhere('tags', 'like', "%{$this->query}%")
            ->paginate(12);
-        }else{
+        }else if(isset($request->category)){
+            $this->query = $request->category;
+
+        //     $products = Product::whereHas('category', function (Builder $q) {
+        //        $q->where('name', 'like', "%{$this->query}%");
+        //    })
+        //    ->orWhere('name', 'like', "%{$this->query}%")
+        //    ->orWhere('tags', 'like', "%{$this->query}%")
+        //    ->paginate(12);
+// $check = [];
+//         $pro = ProductCategory::with('childs')->where('name','like', "%{$this->query}%")->get();
+//         // dd($pro);
+        
+//         foreach ($pro as $k) {
+//             array_push($check, $k->id);
+//             if($k->childs){
+ 
+//                 foreach ($k->childs as $c) {
+//                     array_push($check, $c->id);
+//                 }
+//             }
+//         }
+
+$products = [];
+$firstChild = [];
+$secondChild = [];
+$thirdChild = [];
+$allChild = [];
+$category = ProductCategory::with('childs')->where('name','like', "%{$this->query}%")->first();
+$childs = $category->childs;
+
+foreach ($childs as $fc) {
+    array_push($firstChild, $fc->id);
+    if($fc->childs){
+        foreach ($fc->childs as $sc) {
+            array_push($secondChild, $sc->id);
+        }
+    }
+}
+
+
+$allChild = array_merge($firstChild, $secondChild);
+array_push($allChild, $category->id);
+
+
+$products = Product::whereIn('category_id', $allChild)->paginate(12);
+
+
+
+        }
+        else{
 
             $products = Product::inRandomOrder()->paginate(12);
         }

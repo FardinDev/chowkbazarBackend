@@ -42,7 +42,7 @@
         </div>
         <div class="pull-right" id="links">
 
-            {{$products->links()}}
+            {{$products->appends($_GET)->links()}}
         </div>
     </div>
 </div>

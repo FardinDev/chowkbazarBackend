@@ -167,17 +167,17 @@
                                     <ul role="menu" class="sub-menu">
                                         @foreach ($cats as $cat)
                                         <li class="dropdown"><a
-                                                href="{{route('product.all', ['search_query' => $cat->name])}}">{{$cat->name}}</a>
+                                                href="{{route('product.all', ['category' => $cat->name])}}">{{$cat->name}}</a>
                                             @if(count($cat->childs))
                                             <ul role="menu" class="sub-sub-menu">
                                                 @foreach ($cat->childs as $c)
                                                 <li class="dropdown"><a
-                                                        href="{{route('product.all', ['search_query' => $c->name])}}">{{$c->name}}</a>
+                                                        href="{{route('product.all', ['category' => $c->name])}}">{{$c->name}}</a>
                                                     @if(count($c->childs))
                                                     <ul role="menu" class="sub-sub-sub-menu">
                                                         @foreach ($c->childs as $csub)
                                                         <li><a
-                                                                href="{{route('product.all', ['search_query' => $csub->name])}}">{{$csub->name}}</a>
+                                                                href="{{route('product.all', ['category' => $csub->name])}}">{{$csub->name}}</a>
                                                         </li>
                                                         @endforeach
                                                     </ul>
