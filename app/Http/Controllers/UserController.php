@@ -19,8 +19,35 @@ class UserController extends Controller
 
     private $sourceFileLocation = 'images/source-product-files/';
     public $query = '';
+    private $selectArray = ['id', 'name', 'start_price', 'end_price', 'primary_image', 'views'];
     private function getCat(){
         return ProductCategory::where('parent_id', NULL)->orderBy('name')->get();
+    }
+    private function categoryChild($id){
+        $category = ProductCategory::with('childs')->where('id', $id)->first();
+        $childs = $category->childs;
+        $firstChild = [];
+        $secondChild = [];
+        foreach ($childs as $fc) {
+            array_push($firstChild, $fc->id);
+            if($fc->childs){
+                foreach ($fc->childs as $sc) {
+                    array_push($secondChild, $sc->id);
+                }
+            }
+        }
+        $allChild = array_merge($firstChild, $secondChild);
+        array_push($allChild, $category->id);
+
+
+
+        $return = Product::whereIn('category_id', $allChild)
+        ->select($this->selectArray)
+        ->take(4)
+        ->inRandomOrder()
+        ->get();
+
+        return $return;
     }
 
      /**
@@ -31,35 +58,19 @@ class UserController extends Controller
     public function home()
     {   
         $cat_id = [1,3,4,10,11];
-        $list = [];
-        for ($i=0; $i < sizeof($cat_id); $i++) { 
-            $parent_id = $cat_id[$i];
-            $check = [$parent_id];
-            $pro = ProductCategory::with('childs')->where('parent_id', $parent_id)->get();
-    
-           foreach ($pro as $k) {
-               array_push($check, $k->id);
-               if($k->childs){
-    
-                   foreach ($k->childs as $c) {
-                       array_push($check, $c->id);
-                   }
-               }
-           }
-            $list[$cat_id[$i]] = [];
-           foreach ($check as $c) {
-               $product = Product::where('category_id', $c)->where('is_featured', 1)->get();
-               if(sizeof($product)){
-    
-                   array_push($list[$cat_id[$i]], $product);
-               }
-    
-        }
-        }
-        // dd($list);
+      
+        
+        
+        $apparels = $this->categoryChild(1);
+        $bags = $this->categoryChild(3);
+        $electronics = $this->categoryChild(4);
+        $machineries = $this->categoryChild(10);
+        $packagings = $this->categoryChild(11);
+
+
 
         $cats = $this->getCat();
-        $products = Product::where('is_featured', 1)->get();
+        $products = Product::where('is_featured', 1)->select($this->selectArray)->get();
         $sliders = SliderInfo::where('is_active', 1)->get();
         
         
@@ -68,7 +79,12 @@ class UserController extends Controller
                 'sliders' => $sliders,
                 'cats' => $cats,
                 'products' => $products,
-                'list' => $list,
+                'apparels' => $apparels,
+                'bags' => $bags,
+                'electronics' => $electronics,
+                'machineries' => $machineries,
+                'packagings' => $packagings
+
                 ]);
     }
     /**
@@ -82,7 +98,7 @@ class UserController extends Controller
         $product = Product::where('id', $id)->first();
         $product->increment('views');
         $products = Product::orderBy('id')->get();
-        $brands = Product::select('brand', DB::raw('count(*) as count'))->groupBy('brand')->get();
+      
 
     
         return view('user.product-view')->with(
@@ -91,7 +107,6 @@ class UserController extends Controller
                 'cats' => $cats,
                 'product' => $product,
                 'products' => $products,
-                'brands' => $brands
             
                 ]);;
     }
@@ -116,10 +131,10 @@ class UserController extends Controller
                     for ($i = 0; $i < count($tags); $i++){
                     $query->orwhere('tags', 'like',  '%' . $tags[$i] .'%');
                     }      
-            })->inRandomOrder()->get();
+            })->inRandomOrder()->select($this->selectArray)->get();
 
             }else{
-                $products = Product::where('is_featured', 1)->inRandomOrder()->take(6)->get();
+                $products = Product::where('is_featured', 1)->inRandomOrder()->select($this->selectArray)->take(6)->get();
             }
             $string = '<div class="row"><h2 class="title text-center">You may also like</h2>';
 
@@ -141,7 +156,7 @@ class UserController extends Controller
             
         }else{
 
-            $products = Product::inRandomOrder()->take(6)->get();
+            $products = Product::inRandomOrder()->take(6)->select($this->selectArray)->get();
             $string = '<div class="row"><h2 class="title text-center">You may also like</h2>';
 
             foreach ($products as $product) {
@@ -221,16 +236,7 @@ class UserController extends Controller
        return redirect()->back()->with('success','Your request is submitted! We will contact you at the given contact info.');;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+
     /**
      * Display the specified resource.
      *
@@ -298,60 +304,39 @@ class UserController extends Controller
            })
            ->orWhere('name', 'like', "%{$this->query}%")
            ->orWhere('tags', 'like', "%{$this->query}%")
+           ->select($this->selectArray)
            ->paginate(12);
         }else if(isset($request->category)){
             $this->query = $request->category;
 
-        //     $products = Product::whereHas('category', function (Builder $q) {
-        //        $q->where('name', 'like', "%{$this->query}%");
-        //    })
-        //    ->orWhere('name', 'like', "%{$this->query}%")
-        //    ->orWhere('tags', 'like', "%{$this->query}%")
-        //    ->paginate(12);
-// $check = [];
-//         $pro = ProductCategory::with('childs')->where('name','like', "%{$this->query}%")->get();
-//         // dd($pro);
-        
-//         foreach ($pro as $k) {
-//             array_push($check, $k->id);
-//             if($k->childs){
- 
-//                 foreach ($k->childs as $c) {
-//                     array_push($check, $c->id);
-//                 }
-//             }
-//         }
 
-$products = [];
-$firstChild = [];
-$secondChild = [];
-$thirdChild = [];
-$allChild = [];
-$category = ProductCategory::with('childs')->where('name','like', "%{$this->query}%")->first();
-$childs = $category->childs;
+            $category = ProductCategory::with('childs')->where('name','like', "%{$this->query}%")->first();
+            $childs = $category->childs;
+            
+            $firstChild = [];
+            $secondChild = [];
+            foreach ($childs as $fc) {
+                array_push($firstChild, $fc->id);
+                if($fc->childs){
+                    foreach ($fc->childs as $sc) {
+                        array_push($secondChild, $sc->id);
+                    }
+                }
+            }
 
-foreach ($childs as $fc) {
-    array_push($firstChild, $fc->id);
-    if($fc->childs){
-        foreach ($fc->childs as $sc) {
-            array_push($secondChild, $sc->id);
-        }
-    }
-}
+            $allChild = array_merge($firstChild, $secondChild);
+            array_push($allChild, $category->id);
 
 
-$allChild = array_merge($firstChild, $secondChild);
-array_push($allChild, $category->id);
 
-
-$products = Product::whereIn('category_id', $allChild)->paginate(12);
+            $products = Product::whereIn('category_id', $allChild)->select($this->selectArray)->paginate(12);
 
 
 
         }
         else{
 
-            $products = Product::inRandomOrder()->paginate(12);
+            $products = Product::inRandomOrder()->select($this->selectArray)->paginate(12);
         }
 
         $cats = $this->getCat();
@@ -393,7 +378,7 @@ $products = Product::whereIn('category_id', $allChild)->paginate(12);
         elseif ($request->data) {
             $data = $request->data;
             
-            $products = Product::select('id', 'name', 'primary_image', 'start_price', 'end_price', 'views')->whereIn('category_id', $data)->get();
+            $products = Product::select($this->selectArray)->whereIn('category_id', $data)->get();
 
            return response()->json($products);
 
@@ -450,34 +435,9 @@ $products = Product::whereIn('category_id', $allChild)->paginate(12);
            })
            ->orWhere('name', 'like', "%{$this->query}%")
            ->orWhere('tags', 'like', "%{$this->query}%")
+           ->select($this->selectArray)
            ->get();
 
-
-        //    if(sizeof($data) == 0){
-
-        //     $data = DB::table('product_categories')
-        //     ->where('name', 'LIKE', "%{$query}%")
-        //     ->take(5)
-        //     ->get();
-            
-        //     if(sizeof($data) > 0){
-        //     $id = [];
-        //     foreach($data as $row)
-        //     {
-        //         array_push($id, $row->id);
-        //     }
-        //     $data = DB::table('products')
-        //     ->whereIn('category_id', $id)
-        //     ->take(5)
-        //     ->get();
-            
-               
-        //     }
-
-
-        //    }
-
-          
            if(sizeof($data) > 0){
 
                $output = '<ul class="dropdown-menu" style="display:block; position:relative width:293px;">';
@@ -521,6 +481,7 @@ $products = Product::whereIn('category_id', $allChild)->paginate(12);
         })
         ->orWhere('name', 'like', "%{$this->query}%")
         ->orWhere('tags', 'like', "%{$this->query}%")
+        ->select($this->selectArray)
         ->get();
 
         dd($data);
@@ -533,7 +494,7 @@ $products = Product::whereIn('category_id', $allChild)->paginate(12);
     }
     
     public function tags(Request $request){
-        $data = Product::select('tags')->inRandomOrder()->take(10)->get();
+        $data = Product::select('tags')->inRandomOrder()->select('tags')->take(10)->get();
         $string = '';
                 foreach($data as $item){
                     if($item->tags != null){

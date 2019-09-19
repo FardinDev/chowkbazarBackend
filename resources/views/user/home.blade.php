@@ -108,9 +108,9 @@
 				
 				<!--Apparel,Textiles & Accessories-->
 				<div class="features_items">
-						<h2 class="title text-center" > <span onclick="window.location.href='{{route('product.all', ['search_query' => 'Apparel,Textiles & Accessories'])}}'" style="cursor:pointer">Apparel,Textiles & Accessories</span> </h2>
-						@foreach ($list[1] as $f)
-							@foreach ($f as $product)
+						<h2 class="title text-center" > <span onclick="window.location.href='{{route('product.all', ['category' => 'Apparel,Textiles & Accessories'])}}'" style="cursor:pointer">Apparel,Textiles & Accessories</span> </h2>
+					
+							@foreach ($apparels as $product)
 							<div class="col-sm-3">
 									<div class="product-image-wrapper"
 										onclick="window.location.href='{{route('product', $product->id)}}'">
@@ -129,16 +129,18 @@
 									</div>
 								</div>
 							@endforeach
-						
-						@endforeach
+
 					</div>
 				<!--Apparel,Textiles & Accessories-->
 
 				<!--Bags, Shoes & Accessories-->
 				<div class="features_items">
-						<h2 class="title text-center" > <span onclick="window.location.href='{{route('product.all', ['search_query' => 'Bags, Shoes & Accessories'])}}'" style="cursor:pointer">Bags, Shoes & Accessories</span> </h2>
-						@foreach ($list[3] as $f)
-							@foreach ($f as $product)
+					<h2 class="title text-center" > 
+						<span onclick="window.location.href='{{route('product.all', ['category' => 'Bags, Shoes & Accessories'])}}'" style="cursor:pointer">
+								Bags, Shoes & Accessories
+						</span> </h2>
+					
+							@foreach ($bags as $product)
 							<div class="col-sm-3">
 									<div class="product-image-wrapper"
 										onclick="window.location.href='{{route('product', $product->id)}}'">
@@ -157,39 +159,95 @@
 									</div>
 								</div>
 							@endforeach
-						
-						@endforeach
 				</div>
 				<!--Bags, Shoes & Accessories-->
 
 				<!--Electronics & Engineering-->
 				<div class="features_items">
-						<h2 class="title text-center" > <span onclick="window.location.href='{{route('product.all', ['search_query' => 'Electronics & Engineering'])}}'" style="cursor:pointer">Electronics & Engineering</span> </h2>
-						@foreach ($list[4] as $f)
-							@foreach ($f as $product)
-							<div class="col-sm-3">
-									<div class="product-image-wrapper"
-										onclick="window.location.href='{{route('product', $product->id)}}'">
-										<div class="single-products">
-											<div class="productinfo text-center">
-												<img src="{{  $product->primary_image  }}" alt="">
+						<h2 class="title text-center" > 
+								<span onclick="window.location.href='{{route('product.all', ['category' => 'Electronics & Engineering'])}}'" style="cursor:pointer">
+										Electronics & Engineering
+								</span> </h2>
+							
+									@foreach ($electronics as $product)
+									<div class="col-sm-3">
+											<div class="product-image-wrapper"
+												onclick="window.location.href='{{route('product', $product->id)}}'">
+												<div class="single-products">
+													<div class="productinfo text-center">
+														<img src="{{  $product->primary_image  }}" alt="">
+													</div>
+												</div>
+												<span class="product-price">
+													<b style="color: #FE980F;">{{number_format($product->start_price).'-'.number_format($product->end_price)}}
+														<small>BDT</small></b> <br>
+												</span>
+												<div class="product-info">
+													<small>{{$product->name}}</small>
+												</div>
 											</div>
 										</div>
-										<span class="product-price">
-											<b style="color: #FE980F;">{{number_format($product->start_price).'-'.number_format($product->end_price)}}
-												<small>BDT</small></b> <br>
-										</span>
-										<div class="product-info">
-											<small>{{$product->name}}</small>
-										</div>
-									</div>
-								</div>
-							@endforeach
-						
-						@endforeach
+									@endforeach
 				</div>
 				<!--Electronics & Engineering-->
 
+				<!--Machinery, Industrial Parts & Tools-->
+				<div class="features_items">
+						<h2 class="title text-center" > 
+								<span onclick="window.location.href='{{route('product.all', ['category' => 'Machinery, Industrial Parts & Tools'])}}'" style="cursor:pointer">
+										Machinery, Industrial Parts & Tools
+								</span> </h2>
+							
+									@foreach ($machineries as $product)
+									<div class="col-sm-3">
+											<div class="product-image-wrapper"
+												onclick="window.location.href='{{route('product', $product->id)}}'">
+												<div class="single-products">
+													<div class="productinfo text-center">
+														<img src="{{  $product->primary_image  }}" alt="">
+													</div>
+												</div>
+												<span class="product-price">
+													<b style="color: #FE980F;">{{number_format($product->start_price).'-'.number_format($product->end_price)}}
+														<small>BDT</small></b> <br>
+												</span>
+												<div class="product-info">
+													<small>{{$product->name}}</small>
+												</div>
+											</div>
+										</div>
+									@endforeach
+				</div>
+				<!--Machinery, Industrial Parts & Tools-->
+
+				<!--Packaging, Ad. & Office Supplies-->
+				<div class="features_items">
+					<h2 class="title text-center" > 
+							<span onclick="window.location.href='{{route('product.all', ['category' => 'Packaging, Ad. & Office Supplies'])}}'" style="cursor:pointer">
+									Packaging, Ad. & Office Supplies
+							</span> </h2>
+						
+								@foreach ($packagings as $product)
+								<div class="col-sm-3">
+										<div class="product-image-wrapper"
+											onclick="window.location.href='{{route('product', $product->id)}}'">
+											<div class="single-products">
+												<div class="productinfo text-center">
+													<img src="{{  $product->primary_image  }}" alt="">
+												</div>
+											</div>
+											<span class="product-price">
+												<b style="color: #FE980F;">{{number_format($product->start_price).'-'.number_format($product->end_price)}}
+													<small>BDT</small></b> <br>
+											</span>
+											<div class="product-info">
+												<small>{{$product->name}}</small>
+											</div>
+										</div>
+									</div>
+								@endforeach
+				</div>
+				<!--Packaging, Ad. & Office Supplies-->
             </div>
 
         </div>

@@ -64,18 +64,6 @@
     @endif
         <div class="row">
 
-            {{-- sidebar --}}
-
-
-
-            {{-- @include('components.sidebar') --}}
-
-
-
-            {{-- sidebar --}}
-
-
-
             <div class="col-sm-10 padding-right">
                 <div class="product-details">
                     <!--product-details-->
@@ -123,23 +111,23 @@
                       
                         @if ($product->category->parent)
                             @if ($product->category->parent->parent)
-                            <a href="{{route("product.all", ["search_query" => $product->category->parent->parent->name])}}">
+                            <a href="{{route("product.all", ["category" => $product->category->parent->parent->name])}}">
                                 {{$product->category->parent->parent->name}}
                             </a>
                             🡆 
-                            <a href="{{route("product.all", ["search_query" => $product->category->parent->name])}}">
+                            <a href="{{route("product.all", ["category" => $product->category->parent->name])}}">
                                 {{$product->category->parent->name}}
                             </a>
                             🡆 
-                            <a href="{{route("product.all", ["search_query" => $product->category->name])}}">
+                            <a href="{{route("product.all", ["category" => $product->category->name])}}">
                                 {{$product->category->name}}
                             </a>
                             @else
-                            <a href="{{route("product.all", ["search_query" => $product->category->parent->name])}}">
+                            <a href="{{route("product.all", ["category" => $product->category->parent->name])}}">
                                 {{$product->category->parent->name}}
                             </a>
                             🡆 
-                            <a href="{{route("product.all", ["search_query" => $product->category->name])}}">
+                            <a href="{{route("product.all", ["category" => $product->category->name])}}">
                                     {{$product->category->name}}
                             </a>
          
