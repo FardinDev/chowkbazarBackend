@@ -1883,6 +1883,15 @@ margin: 10px 5px;
 bottom: 0;
 }
 
+.product-info > small{
+    display: block;
+    display: -webkit-box;
+    max-width: auto;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .product-price{
     position: absolute;
     top: 75%;
@@ -1972,6 +1981,17 @@ bottom: 0;
     font-size: 24px;
 
     font-weight: 700;
+
+}
+.productinfo > p {
+
+    display: block;
+    display: -webkit-box;
+    max-width: auto;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
 }
 
@@ -2876,7 +2896,7 @@ bottom: 0;
 
     font-family: 'Roboto', sans-serif;
 
-    font-size: 30px;
+    font-size: 24px;
 
     font-weight: 700;
 

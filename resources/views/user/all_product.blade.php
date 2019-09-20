@@ -27,7 +27,7 @@
                         </div>
                     </div>
                     <span class="product-price">
-                        <b style="color: #FE980F;">{{number_format($product->start_price).'-'.number_format($product->end_price)}}
+                        <b style="color: #FE980F;">{{($product->start_price).'-'.($product->end_price)}}
                             <small>BDT</small></b> <br>
                     </span>
                     <div class="product-info">

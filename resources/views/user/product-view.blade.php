@@ -139,23 +139,28 @@
                         @endif
                         </p>
                         <span>
-                            <span>Range :
-                                {{number_format($product->start_price).' BDT - '.number_format($product->end_price)}}
-								BDT
-							</span>
-
-                            <br>
-                            @if ($product->tags)
-
-                            @php
-                            $tags = explode(',', $product->tags)
-                            @endphp
-                            @foreach ($tags as $tag)
-                            <a href="{{route('product.all', ['search_query' => $tag])}}"><label class="label label-warning text-light"
-                                style="color:white !important; background-color:#FE980F !important; cursor:pointer">{{$tag}}</label></a>
-                            @endforeach
-                            @endif
+                            
+                                <span>Unit Price :
+                                    {{($product->start_price).' BDT - '.($product->end_price)}}
+                                    BDT
+                                </span>
+                           
                         </span>
+<p>
+
+    @if ($product->tags)
+
+    @php
+    $tags = explode(',', $product->tags)
+    @endphp
+    @foreach ($tags as $tag)
+    <a href="{{route('product.all', ['search_query' => $tag])}}"><label class="label label-warning text-light"
+        style="color:white !important; background-color:#FE980F !important; cursor:pointer">{{$tag}}</label></a>
+    @endforeach
+    @endif
+</p>
+                          
+                            
 
                         <p><b>Minimum Orders :</b> {{$product->minimum_orders}} {{$product->unit}}</p>
 
