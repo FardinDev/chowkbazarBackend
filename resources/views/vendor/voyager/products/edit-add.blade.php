@@ -66,9 +66,9 @@ $add = is_null($dataTypeContent->getKey());
                         <div class="form-group  col-md-12 " id="url">
 
                             <label class="control-label" for="name">URL (Only alibaba.com's product URL)</label>
-                            <input type="text" class="form-control" name="url" step="any"
+                            <input type="text" class="form-control" name="web_url" step="any"
                                 placeholder="Enter URL"
-                                value="{{$dataTypeContent->web_url != null ? $dataTypeContent->web_url : ''}}"
+                                value="{{$dataTypeContent->web_url != null ? $dataTypeContent->web_url :  old('web_url') }}"
                                 {{$edit ? 'readonly' : ''}}>
 
                         </div>
@@ -78,7 +78,7 @@ $add = is_null($dataTypeContent->getKey());
                             {{-- <input type="text" class="form-control" name="url" required="true" step="any" placeholder="Enter URL" value="{{$dataTypeContent->web_url != null ? $dataTypeContent->web_url : ''}}">
                             --}}
                             <input type="text" id="input-tags" name="tags" class="demo-default selectized"
-                                value="{{$dataTypeContent->tags != null ? $dataTypeContent->tags : ''}}">
+                                value="{{$dataTypeContent->tags != null ? $dataTypeContent->tags : old('tags')}}">
 
 
                         </div>

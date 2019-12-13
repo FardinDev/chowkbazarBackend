@@ -16,6 +16,7 @@ use TCG\Voyager\Http\Controllers\VoyagerBaseController;
 use TCG\Voyager\Http\Controllers\Traits\BreadRelationshipParser;
 
 
+
 class productsController extends VoyagerBaseController
 {
     use BreadRelationshipParser;
@@ -364,7 +365,11 @@ class productsController extends VoyagerBaseController
     {
 
         
-        
+        $validatedData = $request->validate([
+            'web_url' => 'unique:products',
+        ], ['web_url.unique' => 'Looks Like Product From This URL is Already Added!!']);
+
+
 
 // $description = $html->find('div.scc-wrapper.detail-module.module-productSpecification', 0);
 
@@ -409,17 +414,18 @@ class productsController extends VoyagerBaseController
         $this->authorize('add', app($dataType->model_name));
 
         // Validate fields with ajax
+        // dd($dataType->addRows);
         $val = $this->validateBread($request->all(), $dataType->addRows)->validate();
         $data = $this->insertUpdateData($request, $slug, $dataType->addRows, new $dataType->model_name());
         $id = $data->id;
-// dd($request->url);
-        if($request->url != null){
+// dd($request->web_url);
+        if($request->web_url != null){
 
             include_once('simple_html_dom.php');
 
-            $url = $request->url;
+            $web_url = $request->web_url;
     
-            $html = file_get_html($url);
+            $html = file_get_html($web_url);
             $articles=[];
             $pics[] = '';
             $otherImages = [];
@@ -429,6 +435,7 @@ class productsController extends VoyagerBaseController
             
             
             $primaryImage = str_replace("_350x350.jpg", '', $pic->src);
+            $primaryImage = str_replace("_50x50.jpg", '', $pic->src);
                 
             }
     
@@ -453,7 +460,7 @@ class productsController extends VoyagerBaseController
 
     
                 $getData = DB::table('products')->where('id', $id)->update([
-                    'web_url' => $url,
+                    'web_url' => $web_url,
                     'name' => $name,
                     'primary_image' => $primaryImage,
                     'other_images' => json_encode($otherImages),

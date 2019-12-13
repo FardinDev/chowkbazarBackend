@@ -19,7 +19,7 @@ class UserController extends Controller
 
     private $sourceFileLocation = 'images/source-product-files/';
     public $query = '';
-    private $selectArray = ['id', 'name', 'start_price', 'end_price', 'primary_image', 'views'];
+    private $selectArray = ['id', 'name', 'start_price', 'end_price', 'primary_image', 'views', 'minimum_orders', 'unit'];
     private function getCat(){
         return ProductCategory::where('parent_id', NULL)->orderBy('name')->get();
     }
@@ -140,7 +140,8 @@ class UserController extends Controller
 
             foreach ($products as $product) {
                 $string .= '<div class="col">
-                <div class="product-image-wrapper-r" style="margin:25px" onclick="window.location.href=`'.route('product', $product->id).'`">
+                <a href="'.route('product', $product->id).'" target="_blank" style="color:black !important">
+                <div class="product-image-wrapper-r" style="margin:25px" >
                     <div class="single-products">
                         <div class="productinfo text-center">
                             <img src="'.$product->primary_image.'" alt="" />
@@ -149,6 +150,7 @@ class UserController extends Controller
                         </div>
                     </div>
                 </div>
+                </a>
             </div>';
             }
             $string .= '</div>';
@@ -161,7 +163,8 @@ class UserController extends Controller
 
             foreach ($products as $product) {
                 $string .= '<div class="col-sm-2">
-                <div class="product-image-wrapper-r" onclick="window.location.href=`'.route('product', $product->id).'`">
+                <a href="'.route('product', $product->id).'" target="_blank" style="color:black !important">
+                <div class="product-image-wrapper-r" >
                     <div class="single-products">
                         <div class="productinfo text-center">
                             <img src="'.$product->primary_image.'" alt="" />
@@ -170,6 +173,7 @@ class UserController extends Controller
                         </div>
                     </div>
                 </div>
+                </a>
             </div>';
             }
             $string .= '</div>';

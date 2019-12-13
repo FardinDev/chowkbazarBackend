@@ -162,6 +162,8 @@
 
                                 <li><a href="{{route('home')}}" class="{{ Route::is('home') ? 'active' : '' }}">Home</a>
                                 </li>
+                                @if (!Route::is('home'))
+                                    
                                 <li class="dropdown"><a href="#">Categories<i class="fa fa-angle-down"></i></a>
 
                                     <ul role="menu" class="sub-menu">
@@ -191,6 +193,7 @@
                                     </ul>
 
                                 </li>
+                                @endif
                                 <li><a href="{{route('product.all')}}"
                                         class="{{ Route::is('product') ? 'active' : '' }} {{ Route::is('product.all') ? 'active' : '' }}">Products</a>
                                 </li>
@@ -254,7 +257,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <div class="single-widget">
                             <h2>Social</h2>
                             <div class="social-icons">
@@ -276,20 +279,19 @@
 
                     </div>
 
-                    <div class="col-sm-4">
+                    <div class="col-sm-5">
                         <div class="single-widget">
                             <h2>Address</h2>
                             <table>
                                 <tr>
-                                    <td><b>Office:</b></td>
-                                    <td>House - 91, Road - 9/A (New), <br> Dhanmondi (Star Kabab er goli), Dhaka - 1209
-                                    </td>
+                                    <td><b>Office:</b> House - 91, Road - 9/A (New), Dhanmondi, Dhaka - 1209</td>
+                            
                                 </tr>
 
 
                                 <tr>
-                                    <td><b>Hotline:</b></td>
-                                    <td>01727288419</td>
+                                    <td><b>Hotline:</b> 01727288419</td>
+                            
 
                                 </tr>
                             </table>
@@ -309,7 +311,7 @@
 
                 <div class="row">
 
-                    <p class="pull-left">Copyright © 2019 chowkbazarbd.com All rights reserved.</p>
+                    <p class="pull-left">Copyright © 2019 chowkbazarbd.com is owned by Chowkbazar Digital Enterprise. All rights reserved.</p>
 
 
 

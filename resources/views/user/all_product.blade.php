@@ -13,28 +13,32 @@
             @if (count($products) == 0)
             <div style="position: relative;height: 50vh;">
                 <span style="position: absolute;top: 45%;width: -webkit-fill-available;text-align: -webkit-center;">
-                    <h1>No Products Found! :(</h1>
+                    <h1>This category is under construction. Meanwhile, please use our "Source Product" option to source your required product through us</h1>
                 </span>
             </div>
             @else
             @foreach ($products as $product)
 
             <div class="col-sm-3">
-                <div class="product-image-wrapper" onclick="window.location.href='{{route('product', $product->id)}}'">
-                    <div class="single-products">
-                        <div class="productinfo text-center">
-                            <img src="{{  $product->primary_image  }}" alt="">
+                <a href="{{route('product', $product->id)}}" style="color:black !important">
+                    <div class="product-image-wrapper" >
+                        <div class="single-products">
+                            <div class="productinfo text-center">
+                                <img src="{{  $product->primary_image  }}" alt="">
+                            </div>
+                        </div>
+                        <span class="product-price">
+                            <b style="color: #FE980F;">{{($product->start_price).'-'.($product->end_price)}}
+                                <small>BDT</small></b> <br>
+                                <small style="color: #FE980F;">Minimum Order: {{$product->minimum_orders.' '.$product->unit}}</small>
+                        </span>
+                 
+                        <div class="product-info">
+                            <small>{{$product->name}}</small>
+    
                         </div>
                     </div>
-                    <span class="product-price">
-                        <b style="color: #FE980F;">{{($product->start_price).'-'.($product->end_price)}}
-                            <small>BDT</small></b> <br>
-                    </span>
-                    <div class="product-info">
-                        <small>{{$product->name}}</small>
-
-                    </div>
-                </div>
+                </a>
             </div>
             @endforeach
             @endif
@@ -86,7 +90,7 @@
                 if (data.length == 0) {
                     $('#mainrow').html(`<div style="position: relative;height: 50vh;">
                     <span style="position: absolute;top: 45%;width: -webkit-fill-available;text-align: -webkit-center;">
-                        <h1>No Products Found! :(</h1>
+                        <h1>This category is under construction. Meanwhile, please use our "Source Product" option to source your required product through us</h1>
                     </span> 
                     </div>`);
                     var card = onload;
@@ -101,8 +105,8 @@
                     $.each(data, function (index, value) {
                         var card =
                             `<div class="col-sm-3"> 
-                                    <div class="product-image-wrapper" onclick="window.location.href='{{url("/product/` +
-                            value.id + `")}}'">
+                                    <a href="{{url("/product/` +  value.id + `")}}" style="color:black !important">
+                                    <div class="product-image-wrapper" onclick="window.location.href='{{url("/product/")}}'">
                                         <div class="single-products"> 
                                             <div class="productinfo text-center">
                                                 <img src="` + value.primary_image + `" alt="">
@@ -110,12 +114,15 @@
                                         </div>
                                         <span class="product-price">
                                             <b style="color: #FE980F;">` + Number(value.start_price) + `-` + Number(
-                                value.end_price) + ` <small>BDT</small></b>
+                                value.end_price) + ` <small>BDT</small></b> </br>
+                                <small style="color: #FE980F;">Minimum Order: ` + value.minimum_orders + ` `+ value.unit +` </small>
                                         </span>
                                         <div class="product-info">
                                                 <small>` + value.name + `</small>
                                         </div>
                                     </div>
+                                    </a>
+
                                 </div>`;
                         $('#mainrow').append(card).hide();
                     });
@@ -239,9 +246,9 @@
             $('#mainrow').html('');
             $.each(livedata, function (index, value) {
                 var card =
-                    `<div class="col-sm-3"> 
-                                    <div class="product-image-wrapper" onclick="window.location.href='{{url("/product/` +
-                    value.id + `")}}'">
+                `<div class="col-sm-3"> 
+                                    <a href="{{url("/product/` +  value.id + `")}}" style="color:black !important">
+                                    <div class="product-image-wrapper" onclick="window.location.href='{{url("/product/")}}'">
                                         <div class="single-products"> 
                                             <div class="productinfo text-center">
                                                 <img src="` + value.primary_image + `" alt="">
@@ -249,12 +256,15 @@
                                         </div>
                                         <span class="product-price">
                                             <b style="color: #FE980F;">` + Number(value.start_price) + `-` + Number(
-                        value.end_price) + ` <small>BDT</small></b>
+                                value.end_price) + ` <small>BDT</small></b> </br>
+                                <small style="color: #FE980F;">Minimum Order: ` + value.minimum_orders + ` `+ value.unit +` </small>
                                         </span>
                                         <div class="product-info">
                                                 <small>` + value.name + `</small>
                                         </div>
                                     </div>
+                                    </a>
+
                                 </div>`;
                 $('#mainrow').append(card).hide();
             });
