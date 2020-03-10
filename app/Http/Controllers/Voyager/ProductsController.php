@@ -15,6 +15,7 @@ use TCG\Voyager\Facades\Voyager;
 use TCG\Voyager\Http\Controllers\VoyagerBaseController;
 use TCG\Voyager\Http\Controllers\Traits\BreadRelationshipParser;
 
+use Storage;
 
 
 class productsController extends VoyagerBaseController
@@ -369,43 +370,6 @@ class productsController extends VoyagerBaseController
             'web_url' => 'unique:products',
         ], ['web_url.unique' => 'Looks Like Product From This URL is Already Added!!']);
 
-
-
-// $description = $html->find('div.scc-wrapper.detail-module.module-productSpecification', 0);
-
-// foreach ($description->find('noscript') as $pic) {
-    
-//     array_push($pics, $pic->innertext);
-// }
-
-// foreach ($description->find('img') as $pic) {
-    
-//     $pic->src = '';
-// }
-// $c = 0;
-
-// $count = 0;
-// foreach ($pics as $p) {
-
-//   if($count < sizeof($pics)-1){
-
-//         $description->find('img[data-src]', $count)->innertext = $p;
-//         $count++;
-//   }
-
-    
-// }
-
-// echo $name .'<br>';
-// echo $primaryImage .'<br>';
-
-
-// echo $description .'<br>';
-
-// dd($otherImages);
-
-// die();
-
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -418,7 +382,7 @@ class productsController extends VoyagerBaseController
         $val = $this->validateBread($request->all(), $dataType->addRows)->validate();
         $data = $this->insertUpdateData($request, $slug, $dataType->addRows, new $dataType->model_name());
         $id = $data->id;
-// dd($request->web_url);
+
         if($request->web_url != null){
 
             include_once('simple_html_dom.php');
@@ -435,19 +399,32 @@ class productsController extends VoyagerBaseController
             
             
             $primaryImage = str_replace("_350x350.jpg", '', $pic->src);
-            $primaryImage = str_replace("_50x50.jpg", '', $pic->src);
-                
+            $primaryImage = str_replace("_50x50.jpg", '', $primaryImage);
+            $primaryImage = str_replace("_350x350.png", '', $primaryImage);
+            $primaryImage = str_replace("_50x50.png", '', $primaryImage);
+            $url = ''.$primaryImage;
+            $contents = file_get_contents('https:'.$url);
+            $primaryImage = 'products/primary-images/'.substr($url, strrpos($url, '/') + 1);
+            Storage::put('public/'.$primaryImage, $contents);
             }
-    
+            $i = 0;
             foreach($html->find('div.thumb') as $thumb) {
             
                 foreach($thumb->find('img') as $item){
+
+                    $thumbImage = str_replace("_350x350.jpg", '', $item->src);
+                    $thumbImage = str_replace("_50x50.jpg", '', $thumbImage);
+                    $thumbImage = str_replace("_350x350.png", '', $thumbImage);
+                    $thumbImage = str_replace("_50x50.png", '', $thumbImage);
+                    $url = ''.$thumbImage;
+                    $contents = file_get_contents('https:'.$url);
+                    $thumbImage = 'products/thumbs/'.time().++$i.'.jpg';
+                    Storage::put('public/'.$thumbImage, $contents);
             
-                    array_push($otherImages, str_replace("50x50","350x350", $item->src));
+                    array_push($otherImages, $thumbImage);
                 }
                     
                 }
-                    
                     
             $description = $html->find('div.module-productSpecification', 0);
             
@@ -492,7 +469,7 @@ class productsController extends VoyagerBaseController
                 ]);
             }
             
-            // dd('done');
+            dd('done');
         event(new BreadDataAdded($dataType, $data));
 
         return redirect()
