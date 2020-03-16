@@ -19,3 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 Route::get('/categories', 'API\CategoryController@getCategories');
+Route::get('/sliders', 'API\SliderController@getSliders');
+
+Route::get('/featured', 'API\ProductController@getFeatured');

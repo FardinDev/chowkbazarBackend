@@ -15,13 +15,23 @@ class ItemResource extends JsonResource
     public function toArray($request)
     {
      
-            return [
+            return count($this->childs) ? [
                 'size' => 4,
                 'items' => [
                     [
                     'label' => $this->name,
                     'url' => 'shop/catalog/'.$this->id,
-                    'items' =>  count($this->childs) ? SubCategoryResource::collection($this->childs) : [],
+                    'items' =>   SubCategoryResource::collection($this->childs),
+                ]
+                ]
+            ] : 
+            [
+                'size' => 4,
+                'items' => [
+                    [
+                    'label' => $this->name,
+                    'url' => 'shop/catalog/'.$this->id
+                   
                 ]
                 ]
             ];
