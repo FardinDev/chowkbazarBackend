@@ -7,9 +7,9 @@ use TCG\Voyager\Facades\Voyager;
 
 class ProductCategoryResource extends JsonResource
 {
-    function generateSlug($name){
+    function generateSlug($slug){
 
-        return str_replace(' ', '-', strtolower($name));
+        return str_replace(' ', '-', strtolower($slug));
 
     }
 
@@ -20,7 +20,7 @@ class ProductCategoryResource extends JsonResource
             'id'=>  $this->id,
             'type'=>  'shop',
             'name' => $this->name,
-            'slug' => $this->generateSlug($this->name),
+            'slug' => $this->slug,
             'path'=>  $this->generateSlug($this->name),
             'image'=> voyager::image($this->image) ?? null,
             'items'=>  [],

@@ -12,7 +12,7 @@ class SliderController extends Controller
 {
     public function getSliders(Request $request){
 
-        $sliders = SliderInfo::where('is_active', 1)->inRandomOrder()->get();
+        $sliders = SliderInfo::where('is_active', 1)->latest()->get();
 
         // return voyager::image($sliders->thumbnail('mobile'));
 

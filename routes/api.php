@@ -19,6 +19,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 Route::get('/categories', 'API\CategoryController@getCategories');
+
+Route::get('/gen-slugs', 'API\CategoryController@genSlugs');
+
+Route::get('/category-by-slugs/{slugs}/{depth}', 'API\CategoryController@getCategoryBySlugs');
+
 Route::get('/sliders', 'API\SliderController@getSliders');
 
 Route::get('/featured', 'API\ProductController@getFeatured');
+Route::get('/most-viewed', 'API\ProductController@getMostViewed');

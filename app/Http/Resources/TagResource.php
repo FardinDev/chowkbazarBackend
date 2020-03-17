@@ -14,6 +14,9 @@ class TagResource extends JsonResource
      */
     public function toArray($request)
     {
-        return array_slice( explode(',', $this->tags), 0, 3, true);
+        $tags = explode(',', $this->tags);
+        usort($tags, function ($a, $b) { return (strlen($a) <=> strlen($b)); });
+        return $tags;
+        // return array_slice( explode(',', $this->tags), 0, 3, true);
     }
 }
