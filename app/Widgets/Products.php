@@ -27,7 +27,7 @@ class Products extends BaseDimmer
         return view('voyager::dimmer', array_merge($this->config, [
             'icon'   => 'voyager-truck',
             'title'  => "{$count} {$string}",
-            'text'   => 'You have '.$count.' Products in your database. Click on button below to view all '.$string,
+            'text'   => 'You have '.$count.' Products in your database.',
             'button' => [
                 'text' => 'View All Products',
                 'link' => route('voyager.products.index'),

@@ -26,7 +26,7 @@ class Users extends BaseDimmer
         return view('voyager::dimmer', array_merge($this->config, [
             'icon'   => 'voyager-group',
             'title'  => "{$count} {$string}",
-            'text'   => __('voyager::dimmer.user_text', ['count' => $count, 'string' => Str::lower($string)]),
+            'text'   =>"You have ".$count." users in your database.",
             'button' => [
                 'text' => __('voyager::dimmer.user_link_text'),
                 'link' => route('voyager.users.index'),

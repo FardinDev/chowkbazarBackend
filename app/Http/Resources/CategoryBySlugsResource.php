@@ -20,11 +20,11 @@ class CategoryBySlugsResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'path' => $this->slug,
-            'image' =>  voyager::image($this->thumbnail('medium')),
+            'image' =>  voyager::image($this->thumbnail('cropped')),
             'items' => count($this->products),
             'customFields' => '',
             // 'parents' => $this->parent ? new CategoryBySlugsResource($this->parent) : null,
-            'children' => $this->childs ? CategoryBySlugsResource::collection($this->childs) : null,
+            'children' => $this->childs ? CategoryBySlugsResource::collection($this->childs->take(4)) : null,
         ];
     }
 }

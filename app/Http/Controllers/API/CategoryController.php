@@ -19,11 +19,9 @@ class CategoryController extends Controller
         return response()->json( $categories );
         
     }
-    public function getCategoryBySlugs(Request $request, $slugs, $depth){
+    public function getCategoryBySlugs(Request $request){
 
-        $slugs = \json_decode($slugs);
-
-        $categories = ProductCategory::whereIn('slug', $slugs)->orderBy('name')->get();
+        $categories = ProductCategory::where('is_popular', 1)->orderBy('name')->take(6)->get();
 
         $categories = CategoryBySlugsResource::collection($categories);
 

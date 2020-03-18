@@ -25,7 +25,7 @@ class ProductQueries extends BaseDimmer
         return view('voyager::dimmer', array_merge($this->config, [
             'icon'   => 'voyager-question',
             'title'  => "{$count} {$string}",
-            'text'   => 'You have '.$count.' Queries in your database. Click on button below to view all '.$string,
+            'text'   => 'You have '.$count.' Queries in your database.',
             'button' => [
                 'text' => 'View All Queries',
                 'link' => route('voyager.product-queries.index'),
