@@ -238,7 +238,7 @@
 
                                                 @elseif($row->type == 'image')
 
-                                                    <img src="@if( !filter_var($data->{$row->field}, FILTER_VALIDATE_URL)){{  $data->{$row->field}  }}@else{{ $data->{$row->field} }}@endif" style="width:100px">
+                                                    <img src="@if( !filter_var($data->{$row->field}, FILTER_VALIDATE_URL)){{  Voyager::image( $data->{$row->field} )  }}@else{{ $data->{$row->field} }}@endif" style="width:100px">
 
                                                 @elseif($row->type == 'relationship')
 
@@ -400,7 +400,7 @@
 
                                                         @foreach($images as $image)
 
-                                                            <img src="@if( !filter_var($image, FILTER_VALIDATE_URL)){{  $image  }}@else{{ $image }}@endif" style="width:50px">
+                                                            <img src="@if( !filter_var($image, FILTER_VALIDATE_URL)){{  Voyager::image( $image )  }}@else{{ Voyager::image( $image ) }}@endif" style="width:50px">
 
                                                         @endforeach
 

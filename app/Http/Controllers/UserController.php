@@ -11,6 +11,7 @@ use App\Product;
 use App\Product_query;
 use App\Source_product;
 use DB;
+use Storage;
 use App\Source_product_file;
 use Pusher\Pusher;
 use Illuminate\Database\Eloquent\Builder;
@@ -23,6 +24,8 @@ class UserController extends Controller
     private function getCat(){
         return ProductCategory::where('parent_id', NULL)->orderBy('name')->get();
     }
+
+
     private function categoryChild($id){
         $category = ProductCategory::with('childs')->where('id', $id)->first();
         $childs = $category->childs;
@@ -48,6 +51,92 @@ class UserController extends Controller
         ->get();
 
         return $return;
+    }
+
+    public function storePrimary(){
+        ini_set('max_execution_time', 180);
+        $products = Product::select('id', 'primary_image')->where('primary_image', 'like', '%//sc%')->get();
+        $ldate = date('FY');
+    //  dd( count($products) );
+          foreach ($products as $product) {
+              # code...
+              $url = 'http:'.$product->primary_image;
+            //   $contents = file_get_contents($url);
+            if(false === ($contents = @file_get_contents($url))){
+                echo "err ".$product->id;
+                #error
+              }else{
+
+                  $name = 'products/'.$ldate.'/'.substr($url, strrpos($url, '/') + 1);
+        
+                  Storage::put('public/'.$name, $contents);
+          
+                  Product::where('id', $product->id)->update(['primary_image' => str_replace('/', '\\', $name  )]);
+          
+                  echo "<pre>";
+                  echo str_replace('/', '\\', $name  );
+                  echo "<pre>";
+              }
+              
+              
+          }
+        
+
+    }
+
+    public function storeOthers(){
+        ini_set('max_execution_time', 600);
+        $ldate = date('FY');
+        $products = Product::select('id', 'other_images')->where('id', '>', 170)->get();
+
+  
+          foreach ($products as $product) {
+              $images = json_decode($product->other_images);
+
+            echo "<pre>";
+            print_r  ($images) ;
+            echo "<pre>";
+
+                foreach ($images as $key => $image) {
+                    if (strpos($image, 'video.') !== false) {
+                        unset($images[$key]);
+                        // array_shift($images);
+                    }
+
+                    $url = 'http:'.$image;
+
+                    if(false === ($contents = @file_get_contents($url))){
+                        unset($images[$key]);
+                        // array_shift($images);
+                    }
+                }
+                array_shift($images);
+
+                foreach ($images as $key => $image) {
+
+                        $url = 'http:'.$image;
+                        $contents = file_get_contents($url);
+                        $n = explode("/", $url);
+                        $name = $n[sizeof($n) - 2].'-'.$n[sizeof($n) - 1]  ;
+                        $name = 'products/'.$ldate.'/other_images/'.$name;
+                        Storage::put('public/'.$name, $contents);
+                        $images[$key] = str_replace('/', '\\', $name  );
+                        
+                }
+
+                $images = json_encode($images);
+                Product::where('id', $product->id)->update(['other_images' => $images]);
+
+                echo "<pre>";
+                print_r  ($images) ;
+                echo "<pre>";
+                echo "<pre>";
+                echo "===================done====================== ".$product->id;
+                echo "<pre>";
+
+          }
+        
+
     }
 
      /**

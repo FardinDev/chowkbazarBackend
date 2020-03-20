@@ -25,6 +25,8 @@ Route::get('/recommended-data', 'UserController@recommended')->name('get.recomme
 Route::get('/tags', 'UserController@tags')->name('get.tags');
 Route::get('/eloquent', 'UserController@eloquent');
 Route::get('/order-by', 'UserController@orderBy')->name('get.order.by');
+Route::get('/store-primary', 'UserController@storePrimary');
+Route::get('/store-others', 'UserController@storeOthers');
 
  
 Route::get('/notification', function(){
