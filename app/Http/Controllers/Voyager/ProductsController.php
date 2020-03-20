@@ -14,6 +14,7 @@ use TCG\Voyager\Events\BreadImagesDeleted;
 use TCG\Voyager\Facades\Voyager;
 use TCG\Voyager\Http\Controllers\VoyagerBaseController;
 use TCG\Voyager\Http\Controllers\Traits\BreadRelationshipParser;
+use App\Product;
 
 use Storage;
 
@@ -390,95 +391,161 @@ class productsController extends VoyagerBaseController
             $web_url = $request->web_url;
     
             $html = file_get_html($web_url);
+            
+            
             $articles=[];
             $pics[] = '';
             $otherImages = [];
-            $name = $html->find('h1.ma-title', 0)->innertext;
-    
-            foreach($html->find('img.pic') as $pic) {
-            
-            
-            $primaryImage = str_replace("_350x350.jpg", '', $pic->src);
-            $primaryImage = str_replace("_50x50.jpg", '', $primaryImage);
-            $primaryImage = str_replace("_350x350.png", '', $primaryImage);
-            $primaryImage = str_replace("_50x50.png", '', $primaryImage);
-            $url = ''.$primaryImage;
-            $contents = file_get_contents('https:'.$url);
-            $primaryImage = 'products/primary-images/'.substr($url, strrpos($url, '/') + 1);
-            Storage::put('public/'.$primaryImage, $contents);
-            }
-            $i = 0;
-            foreach($html->find('div.thumb') as $thumb) {
-            
-                foreach($thumb->find('img') as $item){
-
-                    $thumbImage = str_replace("_350x350.jpg", '', $item->src);
-                    $thumbImage = str_replace("_50x50.jpg", '', $thumbImage);
-                    $thumbImage = str_replace("_350x350.png", '', $thumbImage);
-                    $thumbImage = str_replace("_50x50.png", '', $thumbImage);
-                    $url = ''.$thumbImage;
-                    $contents = file_get_contents('https:'.$url);
-                    $thumbImage = 'products/thumbs/'.time().++$i.'.jpg';
-                    Storage::put('public/'.$thumbImage, $contents);
-            
-                    array_push($otherImages, $thumbImage);
+            $name = $html->find('.ma-title', 0)->innertext;
+           
+            foreach($html->find('img.pic') as $pic) {     
+                // $primaryImage = str_replace("_350x350.jpg", '', $pic->src);
+                $str = explode('_', $pic->src);
+                array_pop($str);
+                $primaryImage = implode('_', $str);  
                 }
-                    
-                }
-                    
-            $description = $html->find('div.module-productSpecification', 0);
-            
-            for ($i=0; $i < sizeof($description->find('img'))-1; $i++) { 
+
+                foreach($html->find('div.thumb') as $thumb) {
                 
-                    $description->find('img', $i)->src = $description->find('img', $i+1)->src;
+                    foreach($thumb->find('img') as $item){
+                        $str = explode('_', $item->src);
+                        array_pop($str);
+                        $otherImage = implode('_', $str);
+                        array_push($otherImages, $otherImage);
+                    }
+                        
+                    }
+                               
+                $description = $html->find('div.module-productSpecification', 0);
+                
+                for ($i=0; $i < sizeof($description->find('img'))-1; $i++) { 
+                    
+                        $description->find('img', $i)->src = $description->find('img', $i+1)->src;
+                }
+    
+    
+        
+                    $getData = DB::table('products')->where('id', $id)->update([
+                        'web_url' => $web_url,
+                        'name' => $name,
+                        'primary_image' => $primaryImage,
+                        'other_images' => json_encode($otherImages),
+                        'description' => $description,
+                        'tags' => $request->tags,
+                        'type' => 1
+                    ]);
+            }else{
                 
             }
-
-
-    
-                $getData = DB::table('products')->where('id', $id)->update([
-                    'web_url' => $web_url,
-                    'name' => $name,
-                    'primary_image' => $primaryImage,
-                    'other_images' => json_encode($otherImages),
-                    'description' => $description,
+            
+            
+            
+            $getData = DB::table('products')->where('id', $id)->first();
+            if($getData->type == 0){
+                $images = json_decode($getData->other_images);
+                $newImages = [];
+                foreach ($images as $image) {
+                    $image = Voyager::image($image);
+                    array_push($newImages, $image);
+                }
+                $newImages = json_encode($newImages);
+                DB::table('products')->where('id', $id)->update([
+                    
+                    'primary_image' => Voyager::image($getData->primary_image),
+                    'other_images' => $newImages,
                     'tags' => $request->tags,
-                    'type' => 1
-                ]);
-        }else{
-            
-        }
-        
-        
-        
-        $getData = DB::table('products')->where('id', $id)->first();
-        if($getData->type == 0){
-            $images = json_decode($getData->other_images);
-            $newImages = [];
-            foreach ($images as $image) {
-                $image = Voyager::image($image);
-                array_push($newImages, $image);
-            }
-            $newImages = json_encode($newImages);
-            DB::table('products')->where('id', $id)->update([
-                
-                'primary_image' => Voyager::image($getData->primary_image),
-                'other_images' => $newImages,
-                'tags' => $request->tags,
-                
-                ]);
-            }
-            
-            dd('done');
-        event(new BreadDataAdded($dataType, $data));
+                    
+                    ]);
+                }
 
-        return redirect()
-        ->route("voyager.{$dataType->slug}.index")
-        ->with([
-                'message'    => __('voyager::generic.successfully_added_new')." {$dataType->display_name_singular}",
-                'alert-type' => 'success',
-            ]);
+                $this->storeImages($id);
+                
+                // dd('done');
+            event(new BreadDataAdded($dataType, $data));
+    
+            return redirect()
+            ->route("voyager.{$dataType->slug}.index")
+            ->with([
+                    'message'    => __('voyager::generic.successfully_added_new')." {$dataType->display_name_singular}",
+                    'alert-type' => 'success',
+                ]);
     }
+
+    //***************************************
+    //Store image on our server
+    //****************************************
+
+
+    public function storeImages($id){
+        $ldate = date('FY');
+        $product = DB::table('products')->select('id', 'name', 'primary_image', 'other_images')->where('id', $id)->first();
+        $url = 'http:'.$product->primary_image;
+        
+            if(false === ($contents = @file_get_contents($url))){
+            
+            }else{
+
+                $name = 'products/'.$ldate.'/'.substr($url, strrpos($url, '/') + 1);
+                Storage::put('public/'.$name, $contents);
+                Product::where('id', $product->id)->update(['primary_image' => str_replace('/', '\\', $name  )]);
+            }
+
+        $images = json_decode($product->other_images);
+
+            foreach ($images as $key => $image) {
+                if (strpos($image, 'video.') !== false) {
+                    unset($images[$key]);
+                }
+                $url = 'http:'.$image;
+                if(false === ($contents = @file_get_contents($url))){
+                    unset($images[$key]);
+                }
+            }
+            array_shift($images);
+
+            foreach ($images as $key => $image) {
+                    $url = 'http:'.$image;
+                    $contents = file_get_contents($url);
+                    $n = explode("/", $url);
+                    $name = $n[sizeof($n) - 2].'-'.$n[sizeof($n) - 1]  ;
+                    $name = 'products/'.$ldate.'/other_images/'.$name;
+                    Storage::put('public/'.$name, $contents);
+                    $images[$key] = str_replace('/', '\\', $name  );
+            }
+
+            $images = json_encode($images);
+            $slug = $this->slugify($product->name);
+            Product::where('id', $product->id)->update(['other_images' => $images, 'slug' => $slug]);
+            return true;
+
+    }
+
+    public function slugify($text)
+{
+  // replace non letter or digits by -
+  $text = preg_replace('~[^\pL\d]+~u', '-', $text);
+
+  // transliterate
+  $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+
+  // remove unwanted characters
+  $text = preg_replace('~[^-\w]+~', '', $text);
+
+  // trim
+  $text = trim($text, '-');
+
+  // remove duplicate -
+  $text = preg_replace('~-+~', '-', $text);
+
+  // lowercase
+  $text = strtolower($text);
+
+  if (empty($text)) {
+    return 'n-a';
+  }
+
+  return $text;
+}
 
     //***************************************
     //                _____

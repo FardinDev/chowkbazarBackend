@@ -19,10 +19,11 @@ class ProductController extends Controller
 
     public function getFeatured(Request $request){
 
-        $products = Product::with('category')->where('is_featured', 1)->select($this->selectArray)->inRandomOrder()->take($request->take)->get();
-        foreach ($products as $product) {
-            $product->badge = 'featured';
-        }
+        $products = Product::with('category')->whereHas('badges', function($q){
+            $q->where('name', 'featured');
+        })
+        ->select($this->selectArray)->inRandomOrder()->take($request->take)->get();
+        
         $products = ProductResource::collection( $products );
         
         return response()->json( $products );
@@ -32,9 +33,7 @@ class ProductController extends Controller
     public function getMostViewed(Request $request){
 
         $products = Product::with('category')->select($this->selectArray)->orderBy('views', 'desc')->take($request->take)->get();
-        foreach ($products as $product) {
-            $product->badge = 'view';
-        }
+        
         $products = ProductResource::collection( $products );
         
         return response()->json( $products );
@@ -44,11 +43,8 @@ class ProductController extends Controller
     public function getNewArrival(Request $request){
 
         $products = Product::with('category')->select($this->selectArray)->orderBy('id', 'desc')->take($this->take)->get();
-        foreach ($products as $product) {
-            $product->badge = 'new';
-        }
 
-        $products = ProductResource::collection( $products , 'new');
+        $products = ProductResource::collection( $products );
         
         return response()->json( $products );
 

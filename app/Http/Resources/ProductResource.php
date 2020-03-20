@@ -6,7 +6,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\ProductCategoryResource;
 use App\Http\Resources\TagResource;
 use App\Http\Resources\AttributeResource;
-
+use TCG\Voyager\Facades\Voyager;
+use App\Product;
 class ProductResource extends JsonResource
 {
     
@@ -23,19 +24,48 @@ class ProductResource extends JsonResource
     
     function generateImages($Primary, $other){
 
+
         $other = json_decode($other);
-        array_unshift($other,$Primary);
+        if($other){
 
-        return $other;
-    }
-    function badges($product){
-       $badges = [];
+            array_unshift($other,$Primary);
+            $images = $other;
+        }else{
 
-       if($product->is_featured == true ){
-           array_push($badges, 'featured');
+            $images = [$Primary];
         }
 
-return $badges;
+        foreach ($images as $key => $image) {
+            $images[$key] = voyager::image($image);
+        }
+
+        return $images;
+    }
+    function getBadges($badges, $id){
+       $newBadges = [];
+
+
+
+       $newProducts = Product::select('id')->orderBy('id', 'desc')->take(24)->get();
+      foreach ($newProducts as $newProduct) {
+        if ($newProduct->id == $id) {
+            array_push($newBadges, 'new');
+        }
+      }
+      $viewedProducts = Product::select('id')->orderBy('views', 'desc')->take(24)->get();
+      foreach ($viewedProducts as $newProduct) {
+        if ($newProduct->id == $id) {
+            array_push($newBadges, 'view');
+        }
+      }
+
+      if($badges){
+        foreach ($badges as $badge) {
+            array_push($newBadges, $badge->name);
+        }
+       }
+
+        return $newBadges;
         
     }
     public function toArray($request)
@@ -73,7 +103,7 @@ return $badges;
             'minimum_orders' => $this->minimum_orders.' '.$this->unit,
             'compareAtPrice' => null,
             'images' => $this->generateImages($this->primary_image, $this->other_images),
-            'badges' => [$this->badge, ($this->is_featured ? 'featured' : '')],
+            'badges' => $this->getBadges($this->badges, $this->id),
             'rating' => $this->wasRecentlyCreated,
             'reviews' =>'1564',
             'availability' =>'in-stock',
