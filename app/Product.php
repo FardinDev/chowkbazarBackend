@@ -12,4 +12,7 @@ class Product extends Model
     public function badges(){
         return $this->belongsToMany("App\Badge", "product_badges");
     }
+    public function attributes(){
+        return $this->hasMany("App\Attribute");
+    }
 }

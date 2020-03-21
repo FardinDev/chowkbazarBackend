@@ -43,7 +43,7 @@ $add = is_null($dataTypeContent->getKey());
                 <!-- form start -->
                 <form role="form" class="form-edit-add"
                     action="{{ $edit ? route('voyager.'.$dataType->slug.'.update', $dataTypeContent->getKey()) : route('voyager.'.$dataType->slug.'.store') }}"
-                    method="POST" enctype="multipart/form-data">
+                    method="POST" enctype="multipart/form-data" autocomplete="off">
                     <!-- PUT Method if we are editing -->
                     @if($edit)
                     {{ method_field("PUT") }}
@@ -63,25 +63,16 @@ $add = is_null($dataTypeContent->getKey());
                             </ul>
                         </div>
                         @endif
-                        <div class="form-group  col-md-12 " id="url">
+                        <div class="form-group  col-md-6 " id="url">
 
                             <label class="control-label" for="name">URL (Only alibaba.com's product URL)</label>
                             <input type="text" class="form-control" name="web_url" step="any"
                                 placeholder="Enter URL"
                                 value="{{$dataTypeContent->web_url != null ? $dataTypeContent->web_url :  old('web_url') }}"
-                                {{$edit ? 'readonly' : ''}}>
+                                {{$edit ? "readonly" : ""}}>
 
                         </div>
-                        <div class="form-group  col-md-12 ">
-
-                            <label class="control-label" for="name">Tags</label>
-                            {{-- <input type="text" class="form-control" name="url" required="true" step="any" placeholder="Enter URL" value="{{$dataTypeContent->web_url != null ? $dataTypeContent->web_url : ''}}">
-                            --}}
-                            <input type="text" id="input-tags" name="tags" class="demo-default selectized"
-                                value="{{$dataTypeContent->tags != null ? $dataTypeContent->tags : old('tags')}}">
-
-
-                        </div>
+                        
 
                         
                         {{-- @foreach ($dataTypeContent->other_images as $item)
@@ -132,7 +123,7 @@ $add = is_null($dataTypeContent->getKey());
                             style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">
                             {{ $row->details->legend->text }}</legend>
                         @endif
-                        <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 12 }} {{ $errors->has($row->field) ? 'has-error' : '' }}"
+                        <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 6 }} {{ $errors->has($row->field) ? 'has-error' : '' }}"
                             @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
                             {{ $row->slugify }} 
                             <label class="control-label" for="name">{{ $row->display_name }}</label>
@@ -160,25 +151,66 @@ $add = is_null($dataTypeContent->getKey());
 
 
 
+                        <div class="form-group  col-md-6 ">
+                                <label class="control-label" for="name">Tags</label>
+                                <input type="text" id="input-tags" name="tags" class="demo-default selectized"
+                                    value="{{$dataTypeContent->tags != null ? $dataTypeContent->tags : old('tags')}}">
+                        </div>
                     </div><!-- panel-body -->
                     <div class="panel-body">
                     <div class="container1">
-                    
                             <div class="row">
-                                <div class="form-group  col-md-2 text-info">
-                                    <label class="control-label" for="name">Attribute Title 1</label>
-                                    <input type="text" class="form-control" name="atribute_title[]" placeholder="Attribute Title 1" value="">
+                                <div class="col-md-10">
+                                    <h3 class="card-title">Attributes Section</h3>
                                 </div>
-                                <div class="form-group  col-md-2 text-info">
-                                    <label class="control-label" for="name">Attribute Value 1</label>
-                                    <input type="text" class="form-control" name="atribute_value[]" placeholder="Attribute Value 1" value="">
+                                <div class="col-md-2">
+                                    <button class="add_form_field btn btn-primary mb-2">Add New Attribute &nbsp; 
+                                        <span style="font-size:16px; font-weight:bold;">+ </span>
+                                    </button>
                                 </div>
                             </div>
+                            @if (!$edit)
+                                <div class="row" style="display: flex; align-items: flex-end;">
+                                    <div class="form-group  col-md-4 text-info">
+                                        <label class="control-label" for="name">Attribute Title 1</label>
+                                        <input type="text" class="form-control" name="attribute_title[]" placeholder="Attribute Title 1" value="">
+                                    </div>
+                                    <div class="form-group  col-md-4 text-info">
+                                        <label class="control-label" for="name">Attribute Value 1</label>
+                                        <input type="text" class="form-control" name="attribute_value[]" placeholder="Attribute Value 1" value="">
+                                    </div>
+                                </div>
+                            @else
+                            @php
+                            $i = 1;
+                            @endphp
+                            @foreach($dataTypeContent->attributes as $attribute)
+
+                            <div class="row" style="display: flex; align-items: flex-end;">
+                                    <div class="form-group  col-md-4 text-info">
+                                        <label class="control-label" for="name">Attribute Title {{$i}}</label>
+                                        <input type="text" class="form-control" name="attribute_title[]" placeholder="Attribute Title ".{{$i}} value="{{$attribute->name}}">
+                                    </div>
+                                    <div class="form-group  col-md-4 text-info">
+                                        <label class="control-label" for="name">Attribute Value {{$i}}</label>
+                                        <input type="text" class="form-control" name="attribute_value[]" placeholder="Attribute Value ".{{$i}} value="{{$attribute->value}}">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                    
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="control-label" for="name"></br></label>
+                                    <button class="delete btn btn-danger my-auto">Delete Attribute &nbsp; 
+                                        <span > {{$i}} </span>
+                                    </button>
+                                </div>
+                                </div>
+                            @php
+                            $i++;
+                            @endphp
+                            @endforeach
+                            @endif
                     </div>
-                    
-                    <button class="add_form_field btn btn-primary mb-2">Add New Attribute &nbsp; 
-                        <span style="font-size:16px; font-weight:bold;">+ </span>
-                    </button>
                     </div>
                     
                     <div class="panel-footer">
@@ -303,6 +335,49 @@ $add = is_null($dataTypeContent->getKey());
             $('#confirm_delete_modal').modal('hide');
         });
         $('[data-toggle="tooltip"]').tooltip();
+
+
+        var max_fields = 10;
+    var wrapper = $(".container1");
+    var add_button = $(".add_form_field");
+
+    var x = "{{$dataTypeContent->attributes}}" ? "{{count($dataTypeContent->attributes)}}" : 1;
+    $(add_button).click(function(e) {
+        e.preventDefault();
+        if (x < max_fields) {
+            x++;
+            $(wrapper).append(` <div class="row" style="display: flex; align-items: flex-end;">
+                                    <div class="form-group  col-md-4 text-info">
+                                        <label class="control-label" for="name">Attribute Title `+x+`</label>
+                                        <input type="text" class="form-control" name="attribute_title[]" placeholder="Attribute Title `+x+`" value="">
+                                    </div>
+                                    <div class="form-group  col-md-4 text-info">
+                                        <label class="control-label" for="name">Attribute Value `+x+`</label>
+                                        <input type="text" class="form-control" name="attribute_value[]" placeholder="Attribute Value `+x+`" value="">
+                                    </div>
+                                <div class="form-group col-md-2">
+                                    
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="control-label" for="name"></br></label>
+                                    <button class="delete btn btn-danger my-auto">Delete Attribute &nbsp; 
+                                        <span >`+x+` </span>
+                                    </button>
+                                </div>
+                            </div>
+                            `); //add input box
+        } else {
+            alert('You Reached the limits')
+        }
+    });
+
+    $(wrapper).on("click", ".delete", function(e) {
+        e.preventDefault();
+        $(this).parent('div').parent('div').remove();
+        x--;
+    })
+    
+
     });
 </script>
 @if (!$edit)
@@ -320,37 +395,7 @@ $add = is_null($dataTypeContent->getKey());
         $('#url').toggle();
         // alert('hi');
       })
-      var max_fields = 10;
-    var wrapper = $(".container1");
-    var add_button = $(".add_form_field");
-
-    var x = 1;
-    $(add_button).click(function(e) {
-        e.preventDefault();
-        if (x < max_fields) {
-            x++;
-            $(wrapper).append(`<div class="row d-flex flex-column">
-                                <div class="form-group  col-md-2 text-info">
-                                    <label class="control-label" for="name">Attribute Title `+x+`</label>
-                                    <input type="text" class="form-control" name="atribute_title[]" placeholder="Attribute Title `+x+`" value="">
-                                </div>
-                                <div class="form-group  col-md-2 text-info">
-                                    <label class="control-label" for="name">Attribute Value `+x+`</label>
-                                    <input type="text" class="form-control" name="atribute_value[]" placeholder="Attribute Value `+x+`" value="">
-                                </div>
-                                
-                                <a href="#" class="delete align-self-end btn btn-danger mt-auto">Delete</a>
-                            </div>`); //add input box
-        } else {
-            alert('You Reached the limits')
-        }
-    });
-
-    $(wrapper).on("click", ".delete", function(e) {
-        e.preventDefault();
-        $(this).parent('div').remove();
-        x--;
-    })
+     
     })
 </script>
     

@@ -70,29 +70,7 @@ class ProductResource extends JsonResource
     }
     public function toArray($request)
     {
-        $attributes = [
-                        [
-                            'text' => $this->text_one_title,
-                            'value' => $this->text_one_text
-                        ],
-                        [
-                            'text' => $this->text_two_title,
-                            'value' => $this->text_two_text
-                        ],
-                        [
-                            'text' => $this->text_three_title,
-                            'value' => $this->text_three_text,
-                        ],
-                        [
-                            'text' => $this->text_four_title,
-                            'value' => $this->text_four_text
-                        ],
-                        [
-                            'text' => $this->text_five_title,
-                            'value' => $this->text_five_text
-                        ]
-        ];
-
+        
         return [
             'id' => $this->id,
             'slug' =>$this->slug,
@@ -109,7 +87,7 @@ class ProductResource extends JsonResource
             'availability' =>'in-stock',
             'brand' =>'null',
             'categories' =>[ new ProductCategoryResource($this->category)],
-            'attributes' => AttributeResource::collection( collect($attributes) ),
+            'attributes' => AttributeResource::collection( $this->attributes ),
             'tags' => new TagResource($this),
             'customFields' => '12.3647',
             'views' => $this->views
