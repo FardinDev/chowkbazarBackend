@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Widgets;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use TCG\Voyager\Facades\Voyager;
 
@@ -42,6 +42,6 @@ class Users extends BaseDimmer
      */
     public function shouldBeDisplayed()
     {
-        return app('VoyagerAuth')->user()->can('browse', Voyager::model('User'));
+        return Auth::user()->can('browse', Voyager::model('User'));
     }
 }

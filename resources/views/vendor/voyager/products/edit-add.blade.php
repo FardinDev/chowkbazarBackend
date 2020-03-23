@@ -181,34 +181,51 @@ $add = is_null($dataTypeContent->getKey());
                                     </div>
                                 </div>
                             @else
+                            @if (count($dataTypeContent->attributes) > 0)
                             @php
                             $i = 1;
+                            
                             @endphp
                             @foreach($dataTypeContent->attributes as $attribute)
 
                             <div class="row" style="display: flex; align-items: flex-end;">
-                                    <div class="form-group  col-md-4 text-info">
-                                        <label class="control-label" for="name">Attribute Title {{$i}}</label>
-                                        <input type="text" class="form-control" name="attribute_title[]" placeholder="Attribute Title ".{{$i}} value="{{$attribute->name}}">
-                                    </div>
-                                    <div class="form-group  col-md-4 text-info">
-                                        <label class="control-label" for="name">Attribute Value {{$i}}</label>
-                                        <input type="text" class="form-control" name="attribute_value[]" placeholder="Attribute Value ".{{$i}} value="{{$attribute->value}}">
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                    
+                                <div class="form-group  col-md-4 text-info">
+                                    <label class="control-label" for="name">Attribute Title {{$i}}</label>
+                                    <input type="text" class="form-control" name="attribute_title[]" placeholder="Attribute Title ".{{$i}} value="{{$attribute->name}}">
+                                </div>
+                                <div class="form-group  col-md-4 text-info">
+                                    <label class="control-label" for="name">Attribute Value {{$i}}</label>
+                                    <input type="text" class="form-control" name="attribute_value[]" placeholder="Attribute Value ".{{$i}} value="{{$attribute->value}}">
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <label class="control-label" for="name"></br></label>
-                                    <button class="delete btn btn-danger my-auto">Delete Attribute &nbsp; 
-                                        <span > {{$i}} </span>
-                                    </button>
-                                </div>
-                                </div>
+                                
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="control-label" for="name"></br></label>
+                                <button class="delete btn btn-danger my-auto">Delete Attribute &nbsp; 
+                                    <span > {{$i}} </span>
+                                </button>
+                            </div>
+                            </div>
                             @php
                             $i++;
                             @endphp
                             @endforeach
+                            @else
+                            <div class="row" style="display: flex; align-items: flex-end;">
+                                <div class="form-group  col-md-4 text-info">
+                                    <label class="control-label" for="name">Attribute Title 1</label>
+                                    <input type="text" class="form-control" name="attribute_title[]" placeholder="Attribute Title 1" value="">
+                                </div>
+                                <div class="form-group  col-md-4 text-info">
+                                    <label class="control-label" for="name">Attribute Value 1</label>
+                                    <input type="text" class="form-control" name="attribute_value[]" placeholder="Attribute Value 1" value="">
+                                </div>
+                            </div>
+                            @endif
+
+                            
+                            
                             @endif
                     </div>
                     </div>
@@ -318,8 +335,7 @@ $add = is_null($dataTypeContent->getKey());
         $('#confirm_delete').on('click', function () {
             console.log(params);
             console.log('hi');
-            $.post('{{ route('voyager.media.remove') }}', params,
-                function (response) {
+            $.post('{{ route('voyager.'.$dataType->slug.'.media.remove') }}', params, function (response) {
                     if (response &&
                         response.data &&
                         response.data.status &&

@@ -30,3 +30,12 @@ Route::get('/featured', 'API\ProductController@getFeatured');
 Route::get('/most-viewed', 'API\ProductController@getMostViewed');
 
 Route::get('/new-arrival', 'API\ProductController@getNewArrival');
+
+
+Route::get('/get-product/{slug}', 'API\ProductController@getProductBySlug');
+
+Route::get('/get-product-description/{slug}', 'API\ProductController@getProductDescriptionBySlug');
+
+Route::get('/get-related-products', 'API\ProductController@getRelatedProducts');
+
+Route::get('/get-product-list', 'API\ProductController@getproductList');

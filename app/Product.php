@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\Concerns\Filterable;
 class Product extends Model
 {
+    use Filterable;
+    
     public function category(){
         return $this->belongsTo("App\ProductCategory");
     }
