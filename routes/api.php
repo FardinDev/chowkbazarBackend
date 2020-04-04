@@ -38,4 +38,6 @@ Route::get('/get-product-description/{slug}', 'API\ProductController@getProductD
 
 Route::get('/get-related-products', 'API\ProductController@getRelatedProducts');
 
+Route::post('/store-query', 'API\ProductController@storeQuery');
+
 Route::get('/get-product-list', 'API\ProductController@getproductList');

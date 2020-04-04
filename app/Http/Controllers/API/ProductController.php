@@ -5,7 +5,8 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Product;
-use  App\Attribute;
+use App\Product_query as Query;
+use App\Attribute;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\ProductDescriptionResource;
 use App\Http\Resources\ProductListResource;
@@ -60,7 +61,7 @@ class ProductController extends Controller
     }
     public function getProductList(Request $request, ProductFilter $filter){
 
-        $paginate = $request->limit ?? 12;
+        $paginate = $request->params['limit'] ?? 12;
 
         $products = Product::filter($filter)->select($this->selectArray)->paginate($paginate);
 
@@ -89,6 +90,19 @@ class ProductController extends Controller
         $products = ProductResource::collection( $products );
         
         return response()->json( $products );
+
+
+    }
+    public function storeQuery(Request $request){
+        $data = [];
+        $data['product_id'] = $request->params['product_id'];
+        $data['user_name'] = $request->params['name'];
+        $data['phone_number'] = $request->params['phone_number'];
+        $data['product_query'] = $request->params['query'];
+
+        $Query = Query::create($data);
+        
+        return response()->json( ['status' => 'success'] );
 
 
     }

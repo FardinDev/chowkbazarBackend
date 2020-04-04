@@ -52,9 +52,10 @@
                             $images = $dataTypeContent->getProductInfo->other_images;
                             $images = json_decode($images);
                         @endphp
+                        <a href="{{route('product', $dataTypeContent->product_id)}}" target="_blanc"><img src="{{voyager::image($dataTypeContent->getProductInfo->primary_image)}}" alt="sdsd" style="height:200px"></a>
                         @foreach ($images as $image)
                             
-                    <a href="{{route('product', $dataTypeContent->product_id)}}"><img src="{{$image}}" alt="sdsd" style="height:200px"></a> 
+                        <a href="{{route('product', $dataTypeContent->product_id)}}" target="_blanc"><img src="{{voyager::image($image)}}" alt="sdsd" style="height:200px"></a> 
 
                         @endforeach
                     {{-- <img src="{{$dataTypeContent->getProductInfo->primary_image}}" alt="sdsd" style="height:200px"> --}}
