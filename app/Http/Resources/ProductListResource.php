@@ -17,35 +17,6 @@ class ProductListResource extends JsonResource
     {
         return [
             "items" => ProductResource::collection(collect($this->items())),
-            "page" => $this->currentPage(),
-            "limit" => (int) $this->perPage(),
-            "total" => $this->total(),
-            "pages" => $this->lastPage(),
-            "from" => $this->currentPage(),
-            "to" => $this->lastPage(),
-            "sort" => "default",
-            "filters" => [
-            [
-                "type" => "categories",
-                "slug" => "categories",
-                "name" => "Categories",
-                "root" => true,
-                "items" => []
-            ],
-            [
-                "type" => "range",
-                "slug" => "price",
-                "name" => "Price",
-                "value" => [
-                0,
-                3200
-                ],
-                "min"=> 0,
-                "max"=> 3200
-            ],
-        
-            ],
-            "filterValues" => []
         ];
     }
 }

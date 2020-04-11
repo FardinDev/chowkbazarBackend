@@ -23,7 +23,7 @@ class ColumnResource extends JsonResource
         return 
                     [
                     'label' => $this->name,
-                    'url' => 'shop/catalog/'.$this->id
+                    'url' => 'shop/catalog/'.$this->slug
 
 
             ];

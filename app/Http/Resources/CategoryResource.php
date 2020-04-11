@@ -18,7 +18,7 @@ class CategoryResource extends JsonResource
         return [
             // 'id' => $this->id,
             'label' => $this->name,
-            'url' => 'shop/catalog/'.$this->id,
+            'url' => 'shop/catalog/'.$this->slug,
             'menu' => $this->childs ? new MenuResource( $this ) : []
         ];
     }

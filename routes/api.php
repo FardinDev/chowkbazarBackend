@@ -22,6 +22,7 @@ Route::get('/categories', 'API\CategoryController@getCategories');
 
 Route::get('/gen-slugs', 'API\CategoryController@genSlugs');
 
+Route::get('/category-by-slug/{slug}', 'API\CategoryController@getCategoryBySlug');
 Route::get('/category-by-slugs', 'API\CategoryController@getCategoryBySlugs');
 
 Route::get('/sliders', 'API\SliderController@getSliders');
@@ -40,4 +41,6 @@ Route::get('/get-related-products', 'API\ProductController@getRelatedProducts');
 
 Route::post('/store-query', 'API\ProductController@storeQuery');
 
-Route::get('/get-product-list', 'API\ProductController@getproductList');
+Route::post('/store-source-product', 'API\ProductController@storeSourceProduct');
+
+Route::post('/get-product-list', 'API\ProductController@getproductList');

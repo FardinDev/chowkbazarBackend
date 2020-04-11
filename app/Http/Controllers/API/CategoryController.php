@@ -8,6 +8,7 @@ use App\ProductCategory;
 use App\Product;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\CategoryBySlugsResource;
+use App\Http\Resources\CategoryFilterResource;
 class CategoryController extends Controller
 {
     public function getCategories(Request $request){
@@ -27,6 +28,22 @@ class CategoryController extends Controller
 
 
         return response()->json( $categories );
+
+
+        // $categories = CategoryResource::collection( $categories );
+
+
+        
+    }
+
+    public function getCategoryBySlug($slug){
+
+        $category = ProductCategory::where('slug', $slug)->first();
+
+        $category = new CategoryFilterResource($category);
+
+
+        return response()->json( $category );
 
 
         // $categories = CategoryResource::collection( $categories );

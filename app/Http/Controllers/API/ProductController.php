@@ -7,12 +7,17 @@ use App\Http\Controllers\Controller;
 use App\Product;
 use App\Product_query as Query;
 use App\Attribute;
+use App\Source_product;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\ProductDescriptionResource;
 use App\Http\Resources\ProductListResource;
 use App\Http\Filters\ProductFilter;
+
+use App\ProductCategory;
+use App\Http\Resources\CategoryFilterResource;
 class ProductController extends Controller
 {
+    private $sourceFileLocation = 'images/source-product-files/';
     private $take = 24;
     private $selectArray = ['id', 'name', 'slug', 'category_id', 'start_price', 'end_price', 'primary_image', 'other_images', 'is_featured', 'views', 'minimum_orders', 'unit', 'tags'
 ];
@@ -61,13 +66,71 @@ class ProductController extends Controller
     }
     public function getProductList(Request $request, ProductFilter $filter){
 
-        $paginate = $request->params['limit'] ?? 12;
+        $minPrice = 0;
+        $maxPrice = 100000; 
+        $limit =  12;
+        $sort = 'default';
+        $category = null;
 
-        $products = Product::filter($filter)->select($this->selectArray)->paginate($paginate);
+      
+       if (!empty($request->params) ) {
+   
 
-        $products = new ProductListResource( $products );
+            if ( array_key_exists('category', $request->params)) {
+                $category = $request->params['category'];
+            }
+
+            if ( array_key_exists('sort', $request->params)) {
+                $request->sort = $request->params['sort'];
+            }
+
+            if ( array_key_exists('limit', $request->params)) {
+                $limit = $request->params['limit'];
+            }
+       }
+        // if ($request->params['filter_price']) {
+        //     $prices = \explode('-', $request->params['filter_price']);
+        //     $minPrice = $prices[0];
+        //     $maxPrice = $prices[1]; 
+        // }
+
+    
+            $products = Product::select($this->selectArray)->whereHas('category', function ($query) use ($category) {
+                $query->where('slug', 'smart-gadgets');
+            })->paginate($limit);
+        
+        // $products = $products->paginate($limit);
+
+
+        $categories = ProductCategory::where('parent_id', null)->orderBy('name')->get();
+
+        $categories = CategoryFilterResource::collection($categories);
+
+        // $products = new ProductListResource( $products );
+
+
+        $list = [
+            "items" => ProductResource::collection(collect($products->items())),
+            "page" =>  $request->page ? (int) $request->page : 1,
+            "limit" => (int) $limit,
+            "total" => $products->total(),
+            "pages" => $products->lastPage(),
+            "from" => $products->firstItem(),
+            "to" => $products->lastItem(),
+            "sort" => $sort,
+            "filters" => [
+            [
+                "type" => "categories",
+                "slug" => "categories",
+                "name" => "Categories",
+                "root" => true,
+                "items" =>  $categories
+            ],
+            ],
+            "filterValues" => []
+        ];
 // work needed
-        return response()->json( $products );
+        return response()->json( $list );
 
     }
     public function getFeatured(Request $request){
@@ -106,6 +169,53 @@ class ProductController extends Controller
 
 
     }
+
+    public function storeSourceProduct(Request $request){
+
+        $data['user_name'] = $request->name;
+        $data['user_phone'] = $request->phoneOrEmail;
+        $data['product_name'] = $request->productName;
+        $data['product_quantity'] = $request->productQuantity;
+        $data['product_description'] = $request->productDescription;
+        $data['product_url'] = $request->alibabaUrl ?? '';
+
+        $productImages = [];
+        
+        // return response()->json( $request->images );
+        if(!empty($request->images)){
+
+            $images =  $request->images ;
+  
+                foreach ($images as $key => $value) {
+   
+                    $image_parts = explode(";base64,", $value);
+                   
+                    $image_type_aux = explode("image/", $image_parts[0]);
+                   
+                    $image_type = $image_type_aux[1];
+                  
+                    $image_base64 = base64_decode($image_parts[1]);
+                  
+                    $image = $this->sourceFileLocation . uniqid() . '.'.$image_type;
+                  
+                    file_put_contents($image, $image_base64);
+
+                    array_push($productImages, $image);
+                }
+            
+        }
+            
+        $data['product_images'] = json_encode($productImages);
+
+        $source = Source_product::create($data);
+
+        if ($source) {
+            return response()->json( ['status' => 'success'] );
+        } else {
+            return response()->json( ['status' => 'error'] );
+        }
+    }
+
     public function getNewArrival(Request $request){
 
             // $products = Product::select($this->selectArray)->get();

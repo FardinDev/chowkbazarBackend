@@ -8,13 +8,6 @@ use Illuminate\Support\Facades\Schema;
 class ProductFilter extends Filter
 {
     
-
-    /**
-     * Filter the products by the given category.
-     *
-     * @param  string|null  $value
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
     public function category(string $value = null): Builder
     {
         return $this->builder->whereHas('category', function ($query) use ($value) {
@@ -22,12 +15,7 @@ class ProductFilter extends Filter
         });
     }
 
-    /**
-     * Sort the products by the given order and field.
-     *
-     * @param  array  $value
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
+    
     public function sort(string $value = null): Builder
     {
 
