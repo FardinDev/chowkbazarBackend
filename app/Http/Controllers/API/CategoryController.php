@@ -40,7 +40,7 @@ class CategoryController extends Controller
 
         $category = ProductCategory::where('slug', $slug)->first();
 
-        $category = new CategoryFilterResource($category);
+        $category = new CategoryBySlugsResource($category);
 
 
         return response()->json( $category );

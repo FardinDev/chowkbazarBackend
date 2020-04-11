@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use TCG\Voyager\Traits\Resizable;
+
 class ProductCategory extends Model
 {
     use Resizable;
@@ -17,10 +18,7 @@ class ProductCategory extends Model
 
     public function products()
     {
-        return $this->hasManyThrough(
-            'App\Product', 'App\ProductCategory',
-            'parent_id', 'id'
-        );
+        return $this->hasMany('App\Product', 'category_id');
     }
 
 }

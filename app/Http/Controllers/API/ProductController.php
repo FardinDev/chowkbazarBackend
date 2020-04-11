@@ -11,6 +11,7 @@ use App\Source_product;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\ProductDescriptionResource;
 use App\Http\Resources\ProductListResource;
+use App\Http\Resources\SingleCategoryFilterResource;
 use App\Http\Filters\ProductFilter;
 
 use App\ProductCategory;
@@ -21,6 +22,60 @@ class ProductController extends Controller
     private $take = 24;
     private $selectArray = ['id', 'name', 'slug', 'category_id', 'start_price', 'end_price', 'primary_image', 'other_images', 'is_featured', 'views', 'minimum_orders', 'unit', 'tags'
 ];
+
+private function formatCategory($category, $type){
+            return [
+                    
+                "slug" => $category->slug,
+                "name" => $category->name,
+                "type" => $type,
+                "category" => [
+                "id" => $category->id,
+                "type" => "shop",
+                "name" => $category->name,
+                "slug" => $category->slug,
+                "path" => $category->slug,
+                "image" => $category->image,
+                "items" => $this->getProductCount($category->slug),
+                "customFields" => [],
+                "parents" => null,
+                "children" => CategoryFilterResource::Collection($category->childs)
+                ],
+                "count" => $this->getProductCount($category->slug)
+            
+        ];
+
+}
+
+private function getProductCount($slug){
+
+    $category = ProductCategory::with('childs')->where('slug', $slug)->first();
+            $childs = $category->childs;
+            
+            $firstChild = [];
+            $secondChild = [];
+            foreach ($childs as $fc) {
+                array_push($firstChild, $fc->id);
+                if($fc->childs){
+                    foreach ($fc->childs as $sc) {
+                        array_push($secondChild, $sc->id);
+                    }
+                }
+            }
+
+            $allChild = array_merge($firstChild, $secondChild);
+            array_push($allChild, $category->id);
+
+
+
+            $products = Product::whereIn('category_id', $allChild)->select("id")->get();
+
+
+
+    return count($products);
+
+
+}
 
     public function getProductBySlug($slug){
 
@@ -33,6 +88,8 @@ class ProductController extends Controller
 
 
     }
+
+
 
     public function getRelatedProducts(Request $request){
 
@@ -71,11 +128,10 @@ class ProductController extends Controller
         $limit =  12;
         $sort = 'default';
         $category = null;
-
-      
+        $categories = CategoryFilterResource::collection(ProductCategory::where('parent_id', null)->orderBy('name')->get());
+        $root = true;
        if (!empty($request->params) ) {
    
-
             if ( array_key_exists('category', $request->params)) {
                 $category = $request->params['category'];
             }
@@ -88,26 +144,33 @@ class ProductController extends Controller
                 $limit = $request->params['limit'];
             }
        }
-        // if ($request->params['filter_price']) {
-        //     $prices = \explode('-', $request->params['filter_price']);
-        //     $minPrice = $prices[0];
-        //     $maxPrice = $prices[1]; 
-        // }
 
-    
-            $products = Product::select($this->selectArray)->whereHas('category', function ($query) use ($category) {
-                $query->where('slug', 'smart-gadgets');
-            })->paginate($limit);
+
+    if ($category != null) {
+        $products = Product::select($this->selectArray)->whereHas('category', function ($query) use ($category) {
+            $query->where('slug', $category);
+        })->paginate($limit);
+        $categories = [];
+        $current = ProductCategory::where('slug', $category)->with('products')->first();
+        $currentChilds = $current->childs;
+
+        if ($current->parent_id != null) {
+            $parent = $current->parent;
+            array_push($categories, $this->formatCategory($parent, 'parent'));
+        }
+        array_push($categories, $this->formatCategory($current, 'current'));
+
+        foreach ($currentChilds as $childs ) {
+            array_push($categories, $this->formatCategory($childs, 'child')); 
+        }
+        $root = false;
         
-        // $products = $products->paginate($limit);
 
+    }else{
+        $products = Product::select($this->selectArray)->inRandomOrder()->paginate($limit);
+    }
 
-        $categories = ProductCategory::where('parent_id', null)->orderBy('name')->get();
-
-        $categories = CategoryFilterResource::collection($categories);
-
-        // $products = new ProductListResource( $products );
-
+        
 
         $list = [
             "items" => ProductResource::collection(collect($products->items())),
@@ -123,7 +186,7 @@ class ProductController extends Controller
                 "type" => "categories",
                 "slug" => "categories",
                 "name" => "Categories",
-                "root" => true,
+                "root" => $root,
                 "items" =>  $categories
             ],
             ],

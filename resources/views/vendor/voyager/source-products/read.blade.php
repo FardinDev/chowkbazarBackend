@@ -37,14 +37,17 @@
                                 <img class="img-responsive"
                                      src="{{ filter_var($dataTypeContent->{$row->field}, FILTER_VALIDATE_URL) ? $dataTypeContent->{$row->field} : $dataTypeContent->{$row->field} }}">
                             @elseif($row->type == 'multiple_images')
-                                @if(json_decode($dataTypeContent->{$row->field}))
-                                    @foreach(json_decode($dataTypeContent->{$row->field}) as $file)
+                                @if ($dataTypeContent->{$row->field} != "[]")     
+                                    @if(json_decode($dataTypeContent->{$row->field}))
+                                    <div  class="bd-example bd-example-images mb-4">
+                                        @foreach(json_decode($dataTypeContent->{$row->field}) as $file)
+                                        <img src="{{asset($file)}}" class="img-thumbnail m-2" width="200px" > 
+                                        @endforeach
+                                    </div>
+                                    @else
                                         <img class="img-responsive"
-                                             src="{{asset($file)}}" style="width:50%">
-                                    @endforeach
-                                @else
-                                    <img class="img-responsive"
-                                         src="{{ filter_var($dataTypeContent->{$row->field}, FILTER_VALIDATE_URL) ? $dataTypeContent->{$row->field} : $dataTypeContent->{$row->field} }}">
+                                            src="{{ filter_var($dataTypeContent->{$row->field}, FILTER_VALIDATE_URL) ? $dataTypeContent->{$row->field} : $dataTypeContent->{$row->field} }}">
+                                    @endif
                                 @endif
                             @elseif($row->type == 'relationship')
                                  @include('voyager::formfields.relationship', ['view' => 'read', 'options' => $row->details])

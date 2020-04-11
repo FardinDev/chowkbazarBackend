@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "579c6ed80bada31164fbd465f792d165",
+    "content-hash": "e97f339468f3bde16da216f48e920a29",
     "packages": [
         {
             "name": "arrilot/laravel-widgets",
@@ -1347,6 +1347,7 @@
                     "email": "jakub.onderka@gmail.com"
                 }
             ],
+            "abandoned": "php-parallel-lint/php-console-color",
             "time": "2018-09-29T17:23:10+00:00"
         },
         {
@@ -1393,6 +1394,7 @@
                 }
             ],
             "description": "Highlight PHP code in terminal",
+            "abandoned": "php-parallel-lint/php-console-highlighter",
             "time": "2018-09-29T18:48:56+00:00"
         },
         {
@@ -3403,6 +3405,97 @@
                 "spatie"
             ],
             "time": "2019-02-27T21:00:08+00:00"
+        },
+        {
+            "name": "staudenmeir/laravel-adjacency-list",
+            "version": "v1.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/staudenmeir/laravel-adjacency-list.git",
+                "reference": "cfcdb3b787d7d43ee5e53e4e241736b11286ad17"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/staudenmeir/laravel-adjacency-list/zipball/cfcdb3b787d7d43ee5e53e4e241736b11286ad17",
+                "reference": "cfcdb3b787d7d43ee5e53e4e241736b11286ad17",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "~5.5.29|5.6.*|5.7.*",
+                "illuminate/support": "^5.5.14",
+                "php": ">=7.0",
+                "staudenmeir/laravel-cte": "^1.0.3"
+            },
+            "require-dev": {
+                "laravel/homestead": "^7.0",
+                "phpunit/phpunit": "~6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Staudenmeir\\LaravelAdjacencyList\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonas Staudenmeir",
+                    "email": "mail@jonas-staudenmeir.de"
+                }
+            ],
+            "description": "Recursive Laravel Eloquent relationships with CTEs",
+            "time": "2019-12-25T15:52:47+00:00"
+        },
+        {
+            "name": "staudenmeir/laravel-cte",
+            "version": "v1.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/staudenmeir/laravel-cte.git",
+                "reference": "639512a71fb10c0a49cb9888ac5b67939cc2b81e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/staudenmeir/laravel-cte/zipball/639512a71fb10c0a49cb9888ac5b67939cc2b81e",
+                "reference": "639512a71fb10c0a49cb9888ac5b67939cc2b81e",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "5.5.*|5.6.*|5.7.*",
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "laravel/homestead": "^7.0",
+                "orchestra/testbench": "^3.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Staudenmeir\\LaravelCte\\DatabaseServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Staudenmeir\\LaravelCte\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonas Staudenmeir",
+                    "email": "mail@jonas-staudenmeir.de"
+                }
+            ],
+            "description": "Laravel queries with common table expressions",
+            "time": "2019-07-17T22:17:04+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
