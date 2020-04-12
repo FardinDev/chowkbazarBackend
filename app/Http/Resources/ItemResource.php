@@ -30,7 +30,7 @@ class ItemResource extends JsonResource
                 'items' => [
                     [
                     'label' => $this->name,
-                    'url' => 'shop/catalog/'.$this->id
+                    'url' => 'shop/catalog/'.$this->slug
                    
                 ]
                 ]

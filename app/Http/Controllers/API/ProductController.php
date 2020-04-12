@@ -47,35 +47,11 @@ private function formatCategory($category, $type){
 
 }
 
-private function getProductCount($slug){
-
-    $category = ProductCategory::with('childs')->where('slug', $slug)->first();
-            $childs = $category->childs;
-            
-            $firstChild = [];
-            $secondChild = [];
-            foreach ($childs as $fc) {
-                array_push($firstChild, $fc->id);
-                if($fc->childs){
-                    foreach ($fc->childs as $sc) {
-                        array_push($secondChild, $sc->id);
-                    }
-                }
-            }
-
-            $allChild = array_merge($firstChild, $secondChild);
-            array_push($allChild, $category->id);
-
-
-
-            $products = Product::whereIn('category_id', $allChild)->select("id")->get();
-
-
-
-    return count($products);
-
-
-}
+    private function getProductCount($slug){
+        $allChild = getAllChildsBySlug( $slug );
+        $products = Product::whereIn('category_id', $allChild)->select("id")->get()->count();
+        return $products;
+    }
 
     public function getProductBySlug($slug){
 
@@ -128,6 +104,7 @@ private function getProductCount($slug){
         $limit =  12;
         $sort = 'default';
         $category = null;
+        $tag = null;
         $categories = CategoryFilterResource::collection(ProductCategory::where('parent_id', null)->orderBy('name')->get());
         $root = true;
        if (!empty($request->params) ) {
@@ -142,6 +119,9 @@ private function getProductCount($slug){
 
             if ( array_key_exists('limit', $request->params)) {
                 $limit = $request->params['limit'];
+            }
+            if ( array_key_exists('tag', $request->params)) {
+                $tag = $request->params['tag'];
             }
        }
 
@@ -167,7 +147,12 @@ private function getProductCount($slug){
         
 
     }else{
-        $products = Product::select($this->selectArray)->inRandomOrder()->paginate($limit);
+        if ($tag != null) {
+            $products = Product::select($this->selectArray)->where('tags', 'like', "%{$tag}%")->inRandomOrder()->paginate($limit);
+        }else{
+            $products = Product::select($this->selectArray)->inRandomOrder()->paginate($limit);
+        }
+
     }
 
         
@@ -176,6 +161,7 @@ private function getProductCount($slug){
             "items" => ProductResource::collection(collect($products->items())),
             "page" =>  $request->page ? (int) $request->page : 1,
             "limit" => (int) $limit,
+            "tag" => $tag ?? 'all',
             "total" => $products->total(),
             "pages" => $products->lastPage(),
             "from" => $products->firstItem(),

@@ -51,6 +51,19 @@ class CategoryController extends Controller
 
         
     }
+    public function getAllIds(Request $request){
+
+        
+$ids = getAllChildsBySlug( $request->slug );
+
+        return response()->json( $ids );
+
+
+        // $categories = CategoryResource::collection( $categories );
+
+
+        
+    }
 
     // function generateSlug($slug){
 

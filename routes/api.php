@@ -44,3 +44,6 @@ Route::post('/store-query', 'API\ProductController@storeQuery');
 Route::post('/store-source-product', 'API\ProductController@storeSourceProduct');
 
 Route::post('/get-product-list', 'API\ProductController@getproductList');
+
+
+Route::post('/get-all-category-slug', 'API\CategoryController@getAllIds');
