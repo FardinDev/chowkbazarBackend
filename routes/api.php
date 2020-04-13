@@ -47,3 +47,5 @@ Route::post('/get-product-list', 'API\ProductController@getproductList');
 
 
 Route::post('/get-all-category-slug', 'API\CategoryController@getAllIds');
+
+Route::post('/search-product', 'API\SearchController@search');
