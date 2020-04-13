@@ -147,7 +147,7 @@ private function formatCategory($category, $type){
         
 
     }else{
-        if ($tag != null) {
+        if ($tag != null && $tag != 'all') {
             $products = Product::select($this->selectArray)->where('tags', 'like', "%{$tag}%")->inRandomOrder()->paginate($limit);
         }else{
             $products = Product::select($this->selectArray)->inRandomOrder()->paginate($limit);
