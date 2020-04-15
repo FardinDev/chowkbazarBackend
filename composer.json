@@ -15,7 +15,7 @@
         "laravel/tinker": "^1.0",
         "pusher/pusher-php-server": "^4.0",
         "spatie/laravel-json-api-paginate": "1.4.3",
-        "tcg/voyager": "^1.2"
+        "tcg/voyager": "^1.1"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
