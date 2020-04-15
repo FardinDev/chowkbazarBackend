@@ -20,7 +20,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/categories', 'API\CategoryController@getCategories');
 
+Route::get('/get-mobile-menu', 'API\MenuController@getMobileMenu');
+
 Route::get('/gen-slugs', 'API\CategoryController@genSlugs');
+
 
 Route::get('/category-by-slug/{slug}', 'API\CategoryController@getCategoryBySlug');
 Route::get('/category-by-slugs', 'API\CategoryController@getCategoryBySlugs');
@@ -49,3 +52,6 @@ Route::post('/get-product-list', 'API\ProductController@getproductList');
 Route::post('/get-all-category-slug', 'API\CategoryController@getAllIds');
 
 Route::post('/search-product', 'API\SearchController@search');
+
+
+Route::get('/generate-product-count', 'API\CategoryController@generateProductCount');

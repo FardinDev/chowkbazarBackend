@@ -35,12 +35,12 @@ class CategoryFilterResource extends JsonResource
                   "slug" => $this->slug,
                   "path" => $this->slug,
                   "image" => $this->image,
-                  "items" => (integer) $this->getProductCount($this->slug),
+                  "items" => (integer) $this->item_count,
                   "customFields" => [],
                   "parents" => null,
                   "children" => CategoryFilterResource::Collection($this->childs)
                 ],
-                "count" => (integer) $this->getProductCount($this->slug)
+                "count" => (integer) $this->item_count
               
         ];
     }

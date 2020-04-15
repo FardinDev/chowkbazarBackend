@@ -36,12 +36,12 @@ private function formatCategory($category, $type){
                 "slug" => $category->slug,
                 "path" => $category->slug,
                 "image" => $category->image,
-                "items" => $this->getProductCount($category->slug),
+                "items" => $category->item_count,
                 "customFields" => [],
                 "parents" => null,
                 "children" => CategoryFilterResource::Collection($category->childs)
                 ],
-                "count" => $this->getProductCount($category->slug)
+                "count" => $category->item_count
             
         ];
 

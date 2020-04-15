@@ -44,18 +44,18 @@ class ProductResource extends JsonResource
     function getBadges($badges, $id){
        $newBadges = [];
 
-       $newProducts = Product::select('id')->orderBy('id', 'desc')->take(24)->get();
-      foreach ($newProducts as $newProduct) {
-        if ($newProduct->id == $id) {
-            array_push($newBadges, 'new');
-        }
-      }
-      $viewedProducts = Product::select('id')->orderBy('views', 'desc')->take(24)->get();
-      foreach ($viewedProducts as $newProduct) {
-        if ($newProduct->id == $id) {
-            array_push($newBadges, 'view');
-        }
-      }
+    //    $newProducts = Product::select('id')->orderBy('id', 'desc')->take(24)->get();
+    //   foreach ($newProducts as $newProduct) {
+    //     if ($newProduct->id == $id) {
+    //         array_push($newBadges, 'new');
+    //     }
+    //   }
+    //   $viewedProducts = Product::select('id')->orderBy('views', 'desc')->take(24)->get();
+    //   foreach ($viewedProducts as $newProduct) {
+    //     if ($newProduct->id == $id) {
+    //         array_push($newBadges, 'view');
+    //     }
+    //   }
 
       if($badges){
         foreach ($badges as $badge) {

@@ -90,4 +90,23 @@ $ids = getAllChildsBySlug( $request->slug );
     //     return response()->json( 'done' );
         
     // }
+    public function generateProductCount(){
+
+        
+        $categories = ProductCategory::select(['id', 'name', 'slug'])->get();
+
+        $i = 0 ;
+        foreach ($categories as $category) {
+            $allChild = getAllChildsBySlug( $category->slug );
+            $products = Product::whereIn('category_id', $allChild)->select("id")->get()->count();
+
+            ProductCategory::where('id', $category->id)->update(['item_count' => $products]);
+            echo ++$i.') '.$category->name.' => '.$products.'<br>';
+        }
+
+
+        
+
+    }
+
 }
