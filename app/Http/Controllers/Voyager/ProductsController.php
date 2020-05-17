@@ -15,17 +15,24 @@ use TCG\Voyager\Events\BreadDataUpdated;
 use TCG\Voyager\Events\BreadImagesDeleted;
 use TCG\Voyager\Facades\Voyager;
 use TCG\Voyager\Http\Controllers\Traits\BreadRelationshipParser;
-
+use App\Http\Controllers\API\CategoryController;
 use App\Product;
 use App\Attribute;
 use Validator;
 
+use Symfony\Component\HttpClient\HttpClient;
+
 use Storage;
+include_once('simple_html_dom.php');
+use Goutte\Client;
 
 
 class productsController extends VoyagerBaseController
 {
     use BreadRelationshipParser;
+
+    public $otherImages = [];
+    public $description = '';
 
     //***************************************
     //               ____
@@ -420,19 +427,8 @@ class productsController extends VoyagerBaseController
      */
     public function store(Request $request)
     {
+        ini_set('max_execution_time', 180); //3 minutes
 
-        $validator = Validator::make($request->all(), [
-            'web_url' => 'nullable|unique:products',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()
-                ->back()
-                ->with([
-                        'message'    => "Product Is Not Unique",
-                        'alert-type' => 'danger',
-                    ]);
-        }
         
         $slug = $this->getSlug($request);
 
@@ -442,25 +438,95 @@ class productsController extends VoyagerBaseController
         // Check permission
         $this->authorize('add', app($dataType->model_name));
 
-        // Validate fields with ajax
-        // dd($request->attribute_title, $request->attribute_value);
-
         $val = $this->validateBread($request->all(), $dataType->addRows)->validate();
-        
+
         $product = $this->insertUpdateData($request, $slug, $dataType->addRows, new $dataType->model_name());
-        
-        if ($product) {
 
-            $id = $product->id;
+        if ($product && $request->web_url != null) {
             
-                if($request->web_url != null){
-                    $this->myScrapper($request->web_url, $id); // scrape data
-                }
 
-            // update slug, tag, attributes
-            $this->finalUpdate($id, $request->tags, $request->attribute_title, $request->attribute_value);
+        
+              
+
+            $client = new Client(HttpClient::create(array(
+                'headers' => array(
+                    'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36', // will be forced using 'Symfony BrowserKit' in executing
+                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                    'Accept-Language' => 'en-US,en;q=0.5',
+                    'Referer' => 'https://google.com/',
+                    'Upgrade-Insecure-Requests' => '1',
+                    'Save-Data' => 'on',
+                    'Pragma' => 'no-cache',
+                    'Cache-Control' => 'no-cache',
+                ),
+            )));
+            $client->setServerParameter('HTTP_USER_AGENT', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36');
+            $crawler = $client->request('GET', $request->web_url);
+            dd($crawler);
+            ##name part
+            $name = $crawler->filter('h1.ma-title')->first()->text();
+            ##name part    
+            ##promary image part
+            $primaryImage = $crawler->filter('img.pic')->first()->attr('src');
+            $str = explode('_', $primaryImage);
+            array_pop($str);
+            $primaryImage = implode('_', $str);
+            $filename_from_url = parse_url($primaryImage);
+            $ext = pathinfo($filename_from_url['path'], PATHINFO_EXTENSION);
+            $primaryImage = $primaryImage.'_350x350.'.$ext;
+            ##promary image part
+            ##other images part
+            $crawler->filter('div.thumb > a > img')->each(function ($pic) {
+                $str = explode('_', $pic->attr('src'));
+                array_pop($str);
+                $otherImage = implode('_', $str);
+                $filename_from_url = parse_url($otherImage);
+                $ext = pathinfo($filename_from_url['path'], PATHINFO_EXTENSION);
+                array_push($this->otherImages, $otherImage.'_350x350.'.$ext);
+            });
+            ##other images part
+            #description part
+            $initialDesc = $crawler->filter('div.module-productSpecification')->first()->html();
+            $description = str_get_html( '<div id="cbzrmain">'.$initialDesc.'</div>');
+            for ($i=0; $i < sizeof($description->find('img'))-1; $i++) { 
+                $description->find('img', $i)->src = $description->find('img', $i+1)->src;
+            }
+            $description = $description->find('#cbzrmain', 0)->innertext;
+            #description part
+            ##update scrap data to DB
+            DB::table('products')->where('id', $product->id)->update([
+                'web_url' => $request->web_url,
+                'name' => $name,
+                'slug' => $this->slugify($name),
+                'primary_image' => $primaryImage,
+                'other_images' => json_encode($this->otherImages),
+                'description' => $description,
+                'type' => 1,
+            ]);
+            ##update scrap data to DB
+
+            $this->storeImages($product->id);
+        }
+        
+        $attributeTitles = $request->attribute_title;
+        $attributeValues = $request->attribute_value;
+        for ($i=0; $i < sizeof($attributeTitles); $i++) { 
+            if ($attributeTitles[$i] && $attributeValues[$i]) {
+                    $data = [
+                        'product_id' => $product->id,
+                        'name' => $attributeTitles[$i],
+                        'value' => $attributeValues[$i]
+                    ];
+                Attribute::create($data);
+            }
         }
 
+        DB::table('products')->where('id', $product->id)->update([
+            'tags' => $request->tags,
+        ]);
+
+        app('App\Http\Controllers\API\CategoryController')->generateProductCount();
+    
         event(new BreadDataAdded($dataType, $product));
         return redirect()
         ->route("voyager.{$dataType->slug}.index")
@@ -470,101 +536,72 @@ class productsController extends VoyagerBaseController
             ]);
     }
 
-    public function myScrapper($url, $id){
-        include_once('simple_html_dom.php');
-        
-        $articles=[];
-        $pics[] = '';
-        $otherImages = [];
+    // public function myScrapper($url, $id, $tags){
+    //     echo 'scrapper hit <br>';
 
-        if(false === ($html = @file_get_html($url))){
-
-            DB::table('products')->where('id', $id)->delete();
-
-            return redirect()
-            ->back()
-            ->with([
-                    'message'    => "Scrapping Error!!!",
-                    'alert-type' => 'danger',
-                ]);
-
-        }else{
-            //   dd($html->find('.ma-title', 0)->title);
-
-            if ($html->find('.ma-title', 0)) {
-
-                $name = $html->find('.ma-title', 0)->title;
-                $description = $html->find('div.module-productSpecification', 0);
-                   
-                    foreach($html->find('img.pic') as $pic) {     
-                        $str = explode('_', $pic->src);
-                        array_pop($str);
-                        $primaryImage = implode('_', $str);  
-                    }
-        
-                    foreach($html->find('div.thumb') as $thumb) {
-                        foreach($thumb->find('img') as $item){
-                            $str = explode('_', $item->src);
-                            array_pop($str);
-                            $otherImage = implode('_', $str);
-                            array_push($otherImages, $otherImage);
-                        }       
-                    }
-                   
-                    for ($i=0; $i < sizeof($description->find('img'))-1; $i++) { 
-                        $description->find('img', $i)->src = $description->find('img', $i+1)->src;
-                    }
+    //     $articles=[];
+    //     $pics[] = '';
+    //     $otherImages = [];
+    //     if(false === ($html = @file_get_html($url))){
+    //         echo 'scrapper html false <br>';
+    //         DB::table('products')->where('id', $id)->delete();
             
-                    $getData = DB::table('products')->where('id', $id)->update([
-                        'web_url' => $url,
-                        'name' => $name,
-                        'primary_image' => $primaryImage,
-                        'other_images' => json_encode($otherImages),
-                        'description' => $description,
-                        'type' => 1
-                    ]);
-                    if($getData){
-                        
-                        $this->storeImages($id);  // store images
-                    }
-            }else{
+    //         return redirect()
+    //         ->back()
+    //         ->with([
+    //             'message'    => "Scrapping Error!!!",
+    //             'alert-type' => 'danger',
+    //             ]);
+                
+    //         }else{
+                
+    //             echo 'scrapper html true <br>';
+            
+  
+    //             $name = $html->find('h1.ma-title', 0)->title;
+    //             // $description = $html->find('div.module-productSpecification')[0];
+    //             // for ($i=0; $i < sizeof($description->find('img'))-1; $i++) { 
+    //             //     $description->find('img', $i)->src = $description->find('img', $i+1)->src;
+    //             // }
+                   
+                
+    //                 foreach($html->find('img.pic') as $pic) {     
+    //                     $str = explode('_', $pic->src);
+    //                     array_pop($str);
+    //                     $primaryImage = implode('_', $str);  
+    //                 }
+        
+    //                 foreach($html->find('div.thumb') as $thumb) {
+    //                     foreach($thumb->find('img') as $item){
+    //                         $str = explode('_', $item->src);
+    //                         array_pop($str);
+    //                         $otherImage = implode('_', $str);
+    //                         array_push($otherImages, $otherImage);
+    //                     }       
+    //                 }
+   
+                    
+    //                 dd($name, $primaryImage, $otherImages);
+                    
+                    
+    //               return DB::table('products')->where('id', $id)->update([
+    //                     'web_url' => $url,
+    //                     'name' => $name,
+    //                     'slug' => $this->slugify($name),
+    //                     'primary_image' => $primaryImage,
+    //                     'other_images' => json_encode($otherImages),
+    //                     'description' => $description,
+    //                     'tags' => $tags,
+    //                     'type' => 1,
+    //                 ]);
 
-                DB::table('products')->where('id', $id)->delete();
-
-                return redirect()
-                ->back()
-                ->with([
-                        'message'    => "Scrapping Error!!!",
-                        'alert-type' => 'danger',
-                    ]);
-
-            }
+                    
+             
        
-        }
+    //     }
       
           
-       
-      
-
-
-                    // $getData = DB::table('products')->where('id', $id)->first();
-                    // if($getData->type == 0){
-                    //     $images = json_decode($getData->other_images);
-                    //     $newImages = [];
-                    //     foreach ($images as $image) {
-                    //         $image = Voyager::image($image);
-                    //         array_push($newImages, $image);
-                    //     }
-                    //     $newImages = json_encode($newImages);
-                    //     DB::table('products')->where('id', $id)->update([
-                            
-                    //         'primary_image' => Voyager::image($getData->primary_image),
-                    //         'other_images' => $newImages,
-                    //         'tags' => $request->tags,
-                            
-                    //         ]);
-                    //     }
-    }
+    // }
 
     public function storeImages($id){
 
@@ -573,7 +610,7 @@ class productsController extends VoyagerBaseController
         $primaryImageUrl = 'http:'.$product->primary_image;
         $otherImageNames = json_decode($product->other_images);
 
-            if(false === ($primaryContents = @file_get_contents($primaryImageUrl))){
+            if(false == ($primaryContents = @file_get_contents($primaryImageUrl))){
                 $primaryImageName = $primaryImageUrl;
             }else{
                 $primaryImageName = 'products/'.$ldate.'/'.substr($primaryImageUrl, strrpos($primaryImageUrl, '/') + 1);
@@ -587,7 +624,7 @@ class productsController extends VoyagerBaseController
                     unset($otherImageNames[$key]);
                 }
                 $otherImageUrl = 'http:'.$otherImage;
-                if(false === ($otherContents = @file_get_contents($otherImageUrl))){
+                if(false == ($otherContents = @file_get_contents($otherImageUrl))){
                     unset($otherImageNames[$key]);
                 }
             }
@@ -610,14 +647,10 @@ class productsController extends VoyagerBaseController
     }
 
 
-    public function finalUpdate($id, $tags, $attributeTitles, $attributeValues){
+    public function finalUpdate($id, $attributeTitles, $attributeValues){
 
         $finalProduct = DB::table('products')->where('id', $id)->select('id', 'name')->first();
 
-        DB::table('products')->where('id', $id)->update([
-            'slug' => $this->slugify($finalProduct->name),
-            'tags' => $tags,
-        ]);
 
         for ($i=0; $i < sizeof($attributeTitles); $i++) { 
             if ($attributeTitles[$i] && $attributeValues[$i]) {
@@ -945,7 +978,7 @@ public function slugify($text){
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
 
         foreach ($dataType->editRows as $key => $row) {
-            if ($row->field === $request->input('type')) {
+            if ($row->field == $request->input('type')) {
                 $options = $row->details;
                 $skip = $on_page * ($page - 1);
 

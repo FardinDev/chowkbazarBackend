@@ -22,7 +22,7 @@ class SliderResource extends JsonResource
             'title' => $this->title ?? '',
             'subtitle' => $this->subtitle ?? '',
             'text' => $this->short_description ?? '',
-            'image_classic' =>  voyager::image($this->getThumbnail($this->main_image, 'classic')),
+            'image_classic' =>  voyager::image($this->desktop_image),
             'image_full' => voyager::image($this->main_image) ?? '',
             'image_mobile' =>voyager::image($this->getThumbnail($this->main_image, 'mobile')),
             'url' => $this->button_url ?? ''

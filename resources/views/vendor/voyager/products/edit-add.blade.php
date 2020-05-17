@@ -9,6 +9,10 @@ $add = is_null($dataTypeContent->getKey());
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 <link rel="stylesheet" href="{{asset('css/selectize.default.css')}}">
+<link rel="stylesheet" href="{{asset('assets/js/skins/voyager/skin.min.css')}}">
+<link rel="stylesheet" href="{{asset('assets/js/skins/voyager/content.min.css')}}">
+<link rel="stylesheet" href="{{asset('assets/js/skins/voyager/fonts/tinymce.woff')}}">
+<link rel="stylesheet" href="{{asset('assets/js/skins/voyager/fonts/tinymce.ttf')}}">
 @stop
 
 

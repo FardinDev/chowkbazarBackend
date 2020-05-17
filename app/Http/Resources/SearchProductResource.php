@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use TCG\Voyager\Facades\Voyager;
+use Illuminate\Support\Facades\Storage;
 class SearchProductResource extends JsonResource
 {
     function generateName($name){
@@ -23,7 +24,7 @@ class SearchProductResource extends JsonResource
         return [
             'name' => $this->generateName($this->name),
             'slug' => $this->slug,
-            'image' =>  voyager::image($this->primary_image),
+            'image' => Storage::disk('public')->exists($this->primary_image) ? voyager::image($this->primary_image) : '/assets/images/products/default-image.jpg',
             'start_price' => \number_format($this->start_price),
             'end_price' => \number_format($this->end_price),
             'minimum_orders' => $this->minimum_orders.' '.$this->unit,

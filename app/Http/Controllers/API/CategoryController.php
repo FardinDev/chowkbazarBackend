@@ -92,7 +92,6 @@ $ids = getAllChildsBySlug( $request->slug );
     // }
     public function generateProductCount(){
 
-        
         $categories = ProductCategory::select(['id', 'name', 'slug'])->get();
 
         $i = 0 ;
@@ -101,11 +100,9 @@ $ids = getAllChildsBySlug( $request->slug );
             $products = Product::whereIn('category_id', $allChild)->select("id")->get()->count();
 
             ProductCategory::where('id', $category->id)->update(['item_count' => $products]);
-            echo ++$i.') '.$category->name.' => '.$products.'<br>';
+            // echo ++$i.') '.$category->name.' => '.$products.'<br>';
         }
-
-
-        
+        return true;
 
     }
 

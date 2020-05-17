@@ -55,3 +55,5 @@ Route::post('/search-product', 'API\SearchController@search');
 
 
 Route::get('/generate-product-count', 'API\CategoryController@generateProductCount');
+
+Route::get('/get-abouts', 'API\ExtraController@getAbouts');

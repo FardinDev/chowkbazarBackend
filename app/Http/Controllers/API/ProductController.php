@@ -97,6 +97,12 @@ private function formatCategory($category, $type){
 
 
     }
+
+    function myUrlEncode($string) {
+        $entities = array('%20', '%21', '%2A', '%27', '%28', '%29', '%3B', '%3A', '%40', '%26', '%3D', '%2B', '%24', '%2C', '%2F', '%3F', '%25', '%23', '%5B', '%5D');
+        $replacements = array(' ', '!', '*', "'", "(", ")", ";", ":", "@", "&", "=", "+", "$", ",", "/", "?", "%", "#", "[", "]");
+        return str_replace($entities, $replacements, $string);
+    }
     public function getProductList(Request $request, ProductFilter $filter){
 
         $minPrice = 0;
@@ -105,6 +111,8 @@ private function formatCategory($category, $type){
         $sort = 'default';
         $category = null;
         $tag = null;
+        $search = null;
+        $view = null;
         $categories = CategoryFilterResource::collection(ProductCategory::where('parent_id', null)->orderBy('name')->get());
         $root = true;
        if (!empty($request->params) ) {
@@ -122,6 +130,20 @@ private function formatCategory($category, $type){
             }
             if ( array_key_exists('tag', $request->params)) {
                 $tag = $request->params['tag'];
+
+                $tag = $this->myUrlEncode($tag);
+            }
+            if ( array_key_exists('search', $request->params)) {
+
+                $search = $request->params['search'];
+
+        
+            }
+            if ( array_key_exists('view', $request->params)) {
+
+                $view = $request->params['view'];
+
+        
             }
        }
 
@@ -148,9 +170,49 @@ private function formatCategory($category, $type){
 
     }else{
         if ($tag != null && $tag != 'all') {
-            $products = Product::select($this->selectArray)->where('tags', 'like', "%{$tag}%")->inRandomOrder()->paginate($limit);
-        }else{
+
+            $products = Product::select($this->selectArray)->where('tags', 'like', "%{$tag}%")->inRandomOrder()->paginate(100);
+
+        }else if ($search != null && $search != 'all') {
+
+            $products = Product::whereHas('category', function ($q) use ($search){
+                $q->where('name', 'like', "%{$search}%");
+            })
+            ->orWhere('name', 'like', "%{$search}%")
+            ->orWhere('tags', 'like', "%{$search}%")
+            ->select($this->selectArray)
+            ->inRandomOrder()
+            ->paginate(100);
+        
+        }else if ($view != null && $view != 'all') {
+
+            if ($view == 'featured') {
+                # code...
+                $products = Product::with('category')->whereHas('badges', function($q){
+                    $q->where('name', 'featured');
+                })
+                ->select($this->selectArray)
+                ->inRandomOrder()
+                ->paginate(100);
+
+            }else if ($view == 'most-viewed') {
+                # code...
+                $products = Product::with('category')
+                ->select($this->selectArray)
+                ->orderBy('views', 'desc')
+                ->inRandomOrder()
+                ->paginate(100);
+
+            }else{
+
+                $products = Product::select($this->selectArray)->inRandomOrder()->paginate($limit);
+            }
+
+        }
+        else{
+
             $products = Product::select($this->selectArray)->inRandomOrder()->paginate($limit);
+            
         }
 
     }
@@ -162,6 +224,8 @@ private function formatCategory($category, $type){
             "page" =>  $request->page ? (int) $request->page : 1,
             "limit" => (int) $limit,
             "tag" => $tag ?? 'all',
+            "search" => $tag ?? 'all',
+            "view" => $tag ?? 'all',
             "total" => $products->total(),
             "pages" => $products->lastPage(),
             "from" => $products->firstItem(),
@@ -175,6 +239,12 @@ private function formatCategory($category, $type){
                 "root" => $root,
                 "items" =>  $categories
             ],
+            [
+                "type" => "tag",
+                "slug" => "tag",
+                "name" => "Tags",
+                "items" =>  $this->generateTags()
+            ],
             ],
             "filterValues" => []
         ];
@@ -182,6 +252,22 @@ private function formatCategory($category, $type){
         return response()->json( $list );
 
     }
+
+    public function generateTags(){
+        $data = Product::select('tags')->inRandomOrder()->select('tags')->take(10)->get();
+        $tagString = '';
+                foreach($data as $item){
+                    if($item->tags != null){
+                        $tagString .= $item->tags.',';
+                    }
+                }
+                $tagString = rtrim($tagString,',');
+
+                $tagArray = explode(',', $tagString);
+
+                return  array_slice($tagArray, 0, 20);;
+        }
+
     public function getFeatured(Request $request){
 
         $products = Product::with('category')->whereHas('badges', function($q){

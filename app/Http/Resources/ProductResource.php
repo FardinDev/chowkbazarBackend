@@ -8,6 +8,9 @@ use App\Http\Resources\TagResource;
 use App\Http\Resources\AttributeResource;
 use TCG\Voyager\Facades\Voyager;
 use App\Product;
+use Illuminate\Support\Facades\Storage;
+
+
 class ProductResource extends JsonResource
 {
     
@@ -36,7 +39,12 @@ class ProductResource extends JsonResource
         }
 
         foreach ($images as $key => $image) {
-            $images[$key] = voyager::image($image);
+            if (Storage::disk('public')->exists($image)) {
+
+                $images[$key] = voyager::image($image);
+            } else {
+                $images[$key] = '/assets/images/products/default-image.jpg';
+            }    
         }
 
         return $images;

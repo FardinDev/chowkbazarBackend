@@ -20,7 +20,7 @@ class MenuResource extends JsonResource
         return [
             'type' => 'megamenu',
             'size' => 'xl',
-            'image' => voyager::image($this->thumbnail('medium')),
+            'image' => '', # voyager::image($this->thumbnail('medium')),
             'columns' =>  $this->childs ? ItemResource::collection($this->childs) : []
                 ];
     }
