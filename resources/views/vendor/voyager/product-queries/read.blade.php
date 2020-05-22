@@ -42,7 +42,9 @@
                         <h3 class="panel-title">Product Name</h3>
                     </div>
                     <div class="panel-body" style="padding-top:0;">
-                      {{$dataTypeContent->getProductInfo->name}}
+                     <a href="{{route('voyager.products.show', $dataTypeContent->product_id)}}" target="_blank">
+                        {{$dataTypeContent->getProductInfo->name}}
+                    </a> 
                     </div>
                     <div class="panel-heading" style="border-bottom:0;">
                         <h3 class="panel-title">Product images</h3>
@@ -52,10 +54,10 @@
                             $images = $dataTypeContent->getProductInfo->other_images;
                             $images = json_decode($images);
                         @endphp
-                        <a href="{{route('product', $dataTypeContent->product_id)}}" target="_blanc"><img src="{{voyager::image($dataTypeContent->getProductInfo->primary_image)}}" alt="sdsd" style="height:200px"></a>
+                        <a href="{{route('voyager.products.show', $dataTypeContent->product_id)}}" target="_blanc"><img src="{{voyager::image($dataTypeContent->getProductInfo->primary_image)}}" alt="sdsd" style="height:200px"></a>
                         @foreach ($images as $image)
                             
-                        <a href="{{route('product', $dataTypeContent->product_id)}}" target="_blanc"><img src="{{voyager::image($image)}}" alt="sdsd" style="height:200px"></a> 
+                        <a href="{{route('voyager.products.show', $dataTypeContent->product_id)}}" target="_blanc"><img src="{{voyager::image($image)}}" alt="sdsd" style="height:200px"></a> 
 
                         @endforeach
                     {{-- <img src="{{$dataTypeContent->getProductInfo->primary_image}}" alt="sdsd" style="height:200px"> --}}

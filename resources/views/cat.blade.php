@@ -7,7 +7,7 @@
   
     <div class="pull-right item_actions">
 
-        <a href="{{url('admin/product-categories/'.$child->id)}}" title="View" class="btn btn-sm btn-warning pull-right view">
+        <a href="{{url('product-categories/'.$child->id)}}" title="View" class="btn btn-sm btn-warning pull-right view">
         <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">View</span>
         </a>
     </div>

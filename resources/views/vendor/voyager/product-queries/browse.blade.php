@@ -252,7 +252,7 @@
                                             </td>
                                         @endforeach
                                         <td class="no-sort no-click" id="bread-actions">
-                                            <a href="{{url('/admin/product-queries/'.$data->id)}}" title="View" class="btn btn-lg btn-warning pull-right view">
+                                            <a href="{{url('product-queries/'.$data->id)}}" title="View" class="btn btn-lg btn-warning pull-right view">
                                                     <i class="voyager-eye"></i> 
                                                     <span class="hidden-xs hidden-sm">View</span>
                                             </a>

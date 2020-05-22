@@ -109,6 +109,7 @@ private function formatCategory($category, $type){
         $maxPrice = 100000; 
         $limit =  12;
         $sort = 'default';
+        $order = null;
         $category = null;
         $tag = null;
         $search = null;
@@ -122,7 +123,14 @@ private function formatCategory($category, $type){
             }
 
             if ( array_key_exists('sort', $request->params)) {
-                $request->sort = $request->params['sort'];
+
+                if ( $request->params['sort'] !== 'default') {
+                    # code...
+                    $sortparams = explode('_', $request->params['sort']);
+                    $sort = $sortparams[0];
+                    $order = $sortparams[1];
+                }
+
             }
 
             if ( array_key_exists('limit', $request->params)) {
@@ -149,9 +157,27 @@ private function formatCategory($category, $type){
 
 
     if ($category != null) {
-        $products = Product::select($this->selectArray)->whereHas('category', function ($query) use ($category) {
+        
+
+        if ($sort !== 'default' && $order !== null) {
+
+            $products = Product::select($this->selectArray)
+        ->whereHas('category', function ($query) use ($category) {
             $query->where('slug', $category);
-        })->paginate($limit);
+        })
+        ->orderBy($sort, $order)
+        ->paginate($limit);
+          
+        }else{
+
+            $products = Product::select($this->selectArray)
+        ->whereHas('category', function ($query) use ($category) {
+            $query->where('slug', $category);
+        })
+        ->paginate($limit);
+
+        }
+
         $categories = [];
         $current = ProductCategory::where('slug', $category)->with('products')->first();
         $currentChilds = $current->childs;
@@ -171,53 +197,138 @@ private function formatCategory($category, $type){
     }else{
         if ($tag != null && $tag != 'all') {
 
-            $products = Product::select($this->selectArray)->where('tags', 'like', "%{$tag}%")->inRandomOrder()->paginate(100);
+            if ($sort !== 'default' && $order !== null) {
+
+                $products = Product::select($this->selectArray)
+                ->where('tags', 'like', "%{$tag}%")
+                ->orderBy($sort, $order)
+                ->paginate(100);
+
+            } else {
+
+                $products = Product::select($this->selectArray)
+                ->where('tags', 'like', "%{$tag}%")
+                ->inRandomOrder()
+                ->paginate(100);
+            }
+            
+           
 
         }else if ($search != null && $search != 'all') {
 
-            $products = Product::whereHas('category', function ($q) use ($search){
-                $q->where('name', 'like', "%{$search}%");
-            })
-            ->orWhere('name', 'like', "%{$search}%")
-            ->orWhere('tags', 'like', "%{$search}%")
-            ->select($this->selectArray)
-            ->inRandomOrder()
-            ->paginate(100);
+
+            if ($sort !== 'default' && $order !== null) {
+
+                $products = Product::whereHas('category', function ($q) use ($search){
+                    $q->where('name', 'like', "%{$search}%");
+                })
+                ->orWhere('name', 'like', "%{$search}%")
+                ->orWhere('tags', 'like', "%{$search}%")
+                ->select($this->selectArray)
+                ->orderBy($sort, $order)
+                ->paginate(100);
+
+            } else {
+
+                $products = Product::whereHas('category', function ($q) use ($search){
+                    $q->where('name', 'like', "%{$search}%");
+                })
+                ->orWhere('name', 'like', "%{$search}%")
+                ->orWhere('tags', 'like', "%{$search}%")
+                ->select($this->selectArray)
+                ->inRandomOrder()
+                ->paginate(100);
+            }
+           
         
         }else if ($view != null && $view != 'all') {
 
             if ($view == 'featured') {
                 # code...
-                $products = Product::with('category')->whereHas('badges', function($q){
-                    $q->where('name', 'featured');
-                })
-                ->select($this->selectArray)
-                ->inRandomOrder()
-                ->paginate(100);
+
+               
+
+
+                if ($sort !== 'default' && $order !== null) {
+
+                    $products = Product::with('category')->whereHas('badges', function($q){
+                        $q->where('name', 'featured');
+                    })
+                    ->select($this->selectArray)
+                    ->orderBy($sort, $order)
+                    ->paginate(100);
+    
+                } else {
+    
+                    $products = Product::with('category')->whereHas('badges', function($q){
+                        $q->where('name', 'featured');
+                    })
+                    ->select($this->selectArray)
+                    ->inRandomOrder()
+                    ->paginate(100);
+                }
+
+                
 
             }else if ($view == 'most-viewed') {
                 # code...
-                $products = Product::with('category')
-                ->select($this->selectArray)
-                ->orderBy('views', 'desc')
-                ->inRandomOrder()
-                ->paginate(100);
+
+                if ($sort !== 'default' && $order !== null) {
+
+                    $products = Product::with('category')
+                    ->select($this->selectArray)
+                    ->where('views', '>', 20)
+                    ->orderBy('views', 'desc')
+                    ->orderBy($sort, $order)
+                    ->paginate(100);
+    
+                } else {
+    
+                    $products = Product::with('category')
+                    ->select($this->selectArray)
+                    ->where('views', '>', 20)
+                    ->orderBy('views', 'desc')
+                    ->inRandomOrder()
+                    ->paginate(100);
+                }
 
             }else{
 
-                $products = Product::select($this->selectArray)->inRandomOrder()->paginate($limit);
+                
+
+                if ($sort !== 'default' && $order !== null) {
+
+                $products = Product::select($this->selectArray)
+                            ->orderBy($sort, $order)
+                            ->paginate($limit);
+                } else {
+    
+                $products = Product::select($this->selectArray)
+                            ->inRandomOrder()
+                            ->paginate($limit);
+                }
             }
 
         }
         else{
 
-            $products = Product::select($this->selectArray)->inRandomOrder()->paginate($limit);
+            if ($sort !== 'default' && $order !== null) {
+
+                $products = Product::select($this->selectArray)
+                            ->orderBy($sort, $order)
+                            ->paginate($limit);
+                } else {
+    
+                $products = Product::select($this->selectArray)
+                            ->inRandomOrder()
+                            ->paginate($limit);
+                }
             
         }
 
     }
 
-        
+
 
         $list = [
             "items" => ProductResource::collection(collect($products->items())),
@@ -230,7 +341,7 @@ private function formatCategory($category, $type){
             "pages" => $products->lastPage(),
             "from" => $products->firstItem(),
             "to" => $products->lastItem(),
-            "sort" => $sort,
+            "sort" => $order != null ? $sort.'_'.$order : $sort,
             "filters" => [
             [
                 "type" => "categories",

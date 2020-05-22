@@ -27,6 +27,7 @@ class MenuController extends Controller
             ["type"=> 'link', "label"=> 'About Us',             "url"=> '/site/about-us'],
             ["type"=> 'link', "label"=> 'Contact Us',           "url"=> '/site/contact-us'],
             ["type"=> 'link', "label"=> 'Become a Seller',           "url"=> '/site/become-a-seller'],
+            ["type"=> 'link', "label"=> 'Earn by Reselling',           "url"=> '/site/re-seller'],
             ["type"=> 'link', "label"=> 'Privacy Policy', "url"=> '/site/privacy-policy'],
         
         

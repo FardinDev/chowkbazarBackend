@@ -74,7 +74,7 @@
                 <li class="dd-item" data-id="1">
                     <div class="pull-right item_actions">
     
-                        <a href="{{url('admin/product-categories/'.$category->id)}}" title="View" class="btn btn-sm btn-warning pull-right view">
+                        <a href="{{url('product-categories/'.$category->id)}}" title="View" class="btn btn-sm btn-warning pull-right view">
                         <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">View</span>
                         </a>
                     </div>
