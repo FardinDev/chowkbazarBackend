@@ -368,12 +368,12 @@ $add = is_null($dataTypeContent->getKey());
             x++;
             $(wrapper).append(` <div class="row" style="display: flex; align-items: flex-end;">
                                     <div class="form-group  col-md-4 text-info">
-                                        <label class="control-label" for="name">Attribute Title `+x+`</label>
-                                        <input type="text" class="form-control" name="attribute_title[]" placeholder="Attribute Title `+x+`" value="">
+                                        <label class="control-label" for="name">Attribute Title `+(x+1)+`</label>
+                                        <input type="text" class="form-control" name="attribute_title[]" placeholder="Attribute Title `+(x+1)+`" value="">
                                     </div>
                                     <div class="form-group  col-md-4 text-info">
-                                        <label class="control-label" for="name">Attribute Value `+x+`</label>
-                                        <input type="text" class="form-control" name="attribute_value[]" placeholder="Attribute Value `+x+`" value="">
+                                        <label class="control-label" for="name">Attribute Value `+(x+1)+`</label>
+                                        <input type="text" class="form-control" name="attribute_value[]" placeholder="Attribute Value `+(x+1)+`" value="">
                                     </div>
                                 <div class="form-group col-md-2">
                                     
@@ -381,7 +381,7 @@ $add = is_null($dataTypeContent->getKey());
                                 <div class="form-group col-md-2">
                                     <label class="control-label" for="name"></br></label>
                                     <button class="delete btn btn-danger my-auto">Delete Attribute &nbsp; 
-                                        <span >`+x+` </span>
+                                        <span >`+(x+1)+` </span>
                                     </button>
                                 </div>
                             </div>

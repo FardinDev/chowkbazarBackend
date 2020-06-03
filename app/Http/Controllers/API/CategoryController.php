@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\ProductCategory;
 use App\Product;
+use App\Badge;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\CategoryBySlugsResource;
 use App\Http\Resources\CategoryFilterResource;
@@ -18,6 +19,18 @@ class CategoryController extends Controller
 
 
         return response()->json( $categories );
+        
+    }
+    public function getCategoryList(Request $request){
+        $categories = ProductCategory::select('id', 'name')->orderBy('id')->get();
+        $badges = Badge::select('id', 'name')->orderBy('id')->get();
+
+        $data = [
+            'categories' => $categories,
+            'badges' => $badges
+        ];
+
+        return response()->json( $data );
         
     }
     public function getCategoryBySlugs(Request $request){

@@ -445,8 +445,6 @@ class productsController extends VoyagerBaseController
         if ($product && $request->web_url != null) {
             
 
-        
-              
 
             $client = new Client(HttpClient::create(array(
                 'headers' => array(
@@ -462,7 +460,7 @@ class productsController extends VoyagerBaseController
             )));
             $client->setServerParameter('HTTP_USER_AGENT', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36');
             $crawler = $client->request('GET', $request->web_url);
-            dd($crawler);
+            // dd($crawler);
             ##name part
             $name = $crawler->filter('h1.ma-title')->first()->text();
             ##name part    
@@ -494,7 +492,7 @@ class productsController extends VoyagerBaseController
             $description = $description->find('#cbzrmain', 0)->innertext;
             #description part
             ##update scrap data to DB
-            DB::table('products')->where('id', $product->id)->update([
+            $scrapData = [
                 'web_url' => $request->web_url,
                 'name' => $name,
                 'slug' => $this->slugify($name),
@@ -502,7 +500,11 @@ class productsController extends VoyagerBaseController
                 'other_images' => json_encode($this->otherImages),
                 'description' => $description,
                 'type' => 1,
-            ]);
+            ];
+
+            dd($scrapData);
+            
+            DB::table('products')->where('id', $product->id)->update($scrapData);
             ##update scrap data to DB
 
             $this->storeImages($product->id);

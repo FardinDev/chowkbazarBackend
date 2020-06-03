@@ -16,6 +16,8 @@ use App\Http\Filters\ProductFilter;
 
 use App\ProductCategory;
 use App\Http\Resources\CategoryFilterResource;
+
+use Storage;
 class ProductController extends Controller
 {
     private $sourceFileLocation = 'images/source-product-files/';
@@ -245,10 +247,6 @@ private function formatCategory($category, $type){
 
             if ($view == 'featured') {
                 # code...
-
-               
-
-
                 if ($sort !== 'default' && $order !== null) {
 
                     $products = Product::with('category')->whereHas('badges', function($q){
@@ -512,5 +510,91 @@ private function formatCategory($category, $type){
         return response()->json( $products );
 
 
+    }
+
+
+    public function store(Request $request){
+        
+        $images = $this->storeImages($request->primary_image, $request->other_images);
+
+        if ($images) {
+            $finalData = [];
+            $finalData["web_url"] = preg_replace('/[\x{FFFF}-\x{FFFF}]+/u','',$request->url);
+            $finalData["name"] = preg_replace('/[\x{FFFF}-\x{FFFF}]+/u','',$request->name);
+            $finalData["slug"] = preg_replace('/[\x{FFFF}-\x{FFFF}]+/u','',$request->slug);
+            $finalData["description" ] = preg_replace('/[\x{FFFF}-\x{FFFF}]+/u','',$request->description);
+            $finalData["category_id"] = $request->category;
+            $finalData["start_price"] = $request->start_price;
+            $finalData["end_price" ] = $request->end_price ;
+            $finalData["minimum_orders" ] = $request->minimum_orders;
+            $finalData["unit"] = $request->unit;
+            $finalData["primary_image"] = $images['primary_image'];
+            $finalData["other_images" ] =  $images['other_images'];
+            $finalData["tags"] =  implode (",", $request->tags);
+            $finalData["type"] =  1;
+    
+            $product = Product::create($finalData);
+    
+            for ($i=0; $i < sizeof($request->attribute_title); $i++) { 
+                if ($request->attribute_title[$i] && $request->attribute_value[$i]) {
+                        $attrData = [
+                            'product_id' => $product->id,
+                            'name' => $request->attribute_title[$i],
+                            'value' => $request->attribute_value[$i]
+                        ];
+                    Attribute::create($attrData);
+                }
+            }
+    
+            foreach ($request->badge as $badge) {
+               $product->badges()->attach($badge);
+            }
+    
+            return response()->json(  $product->id );
+        }
+
+    }
+
+
+    public function storeImages($primaryImage, $otherImages){
+
+        $ldate = date('FY');
+       
+        $primaryImageUrl = 'http:'.$primaryImage;
+        $otherImageNames = $otherImages;
+
+            if(false == ($primaryContents = @file_get_contents($primaryImageUrl))){
+                $primaryImageName = $primaryImageUrl;
+            }else{
+                $primaryImageName = 'products/'.$ldate.'/'.substr($primaryImageUrl, strrpos($primaryImageUrl, '/') + 1);
+                Storage::put('public/'.$primaryImageName, $primaryContents);
+                $primaryImageName = str_replace('/', '\\', $primaryImageName  );
+            }
+
+            foreach ($otherImageNames as $key => $otherImage) {
+                if (strpos($otherImage, 'video.') !== false) {
+                    unset($otherImageNames[$key]);
+                }
+                $otherImageUrl = 'http:'.$otherImage;
+                if(false == ($otherContents = @file_get_contents($otherImageUrl))){
+                    unset($otherImageNames[$key]);
+                }
+            }
+                array_shift($otherImageNames);
+
+            foreach ($otherImageNames as $key => $otherImage) {
+                    $otherImageUrl = 'http:'.$otherImage;
+                    $otherContents = file_get_contents($otherImageUrl);
+                    $n = explode("/", $otherImageUrl);
+                    $otherImageName = $n[sizeof($n) - 2].'-'.$n[sizeof($n) - 1]  ;
+                    $otherImageName = 'products/'.$ldate.'/other_images/'.$otherImageName;
+                    Storage::put('public/'.$otherImageName, $otherContents);
+                    $otherImageNames[$key] = str_replace('/', '\\', $otherImageName  );
+            }
+
+            $otherImageNames = json_encode($otherImageNames);
+
+            return ['primary_image' => $primaryImageName, 'other_images' => $otherImageNames];
+        
     }
 }
